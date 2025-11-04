@@ -31,7 +31,9 @@ const CreateCourse = () => {
     courseName: '',
     courseDescription: '',
     whatYouWillLearn: '',
-    price: '',
+    originalPrice: '',
+    discountedPrice: '',
+
     thumbnail: null,
     thumbnailImage: '',
     tags: [],
@@ -127,7 +129,7 @@ const CreateCourse = () => {
 
   // Stage 1: Create Course
   const handleStage1Submit = async () => {
-    if (!courseData.courseName || !courseData.price || courseData.tags.length === 0) {
+    if (!courseData.courseName ||  courseData.tags.length === 0) {
       toast.error("Please fill required fields: Course name, price, and at least one tag.");
       return;
     }
@@ -139,10 +141,12 @@ const CreateCourse = () => {
       formData.append('courseName', courseData.courseName);
       formData.append('courseDescription', courseData.courseDescription);
       formData.append('whatYouWillLearn', courseData.whatYouWillLearn);
-      formData.append('price', courseData.price);
+      formData.append('originalPrice', courseData.originalPrice );
+      formData.append('discountedPrice', courseData.discountedPrice );
+      
+      formData.append('tag', JSON.stringify(courseData.tags));
       formData.append('category', courseData.category);
       formData.append('status', 'Draft');
-      formData.append('tag', JSON.stringify(courseData.tags));
       formData.append('instructions', JSON.stringify(courseData.instructions));
       
       if (courseData.thumbnail) {
@@ -476,7 +480,7 @@ const CreateCourse = () => {
               <CardContent className="space-y-6">
                 
                 {/* Basic Info */}
-                <div className="grid md:grid-cols-2 gap-6">
+      
                   <div className="space-y-2">
                     <Label htmlFor="courseName">Course Name *</Label>
                     <Input
@@ -487,12 +491,26 @@ const CreateCourse = () => {
                       placeholder="Enter course title"
                     />
                   </div>
+                
+                
+
+                <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="price">Price *</Label>
+                    <Label htmlFor="originalPrice">Original Price</Label>
                     <Input
-                      id="price"
-                      name="price"
-                      value={courseData.price}
+                      id="originalPrice"
+                      name="originalPrice"
+                      value={courseData.originalPrice}
+                      onChange={handleCourseInputChange}
+                      placeholder="$149.99"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="discountedPrice">Discounted Price</Label>
+                    <Input
+                      id="discountedPrice"
+                      name="discountedPrice"
+                      value={courseData.discountedPrice}
                       onChange={handleCourseInputChange}
                       placeholder="$99.99"
                     />
@@ -979,10 +997,7 @@ const CreateCourse = () => {
                         <div className="text-2xl font-bold text-green-500">{courseData.tags.length}</div>
                         <div className="text-sm text-muted-foreground">Tags</div>
                       </div>
-                      <div className="p-3 bg-card/50 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-500">${courseData.price}</div>
-                        <div className="text-sm text-muted-foreground">Price</div>
-                      </div>
+                      
                     </div>
                     <div className="text-center p-4 bg-card/30 rounded-lg">
                       <h3 className="font-semibold text-lg">{courseData.courseName}</h3>

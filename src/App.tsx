@@ -38,6 +38,7 @@ import { TermsOfService } from "./pages/TermsOfService";
 import { FAQ } from "./pages/FAQ";
 import { Careers } from "./pages/Careers";
 
+
 const queryClient = new QueryClient();
 
 const App = () => (

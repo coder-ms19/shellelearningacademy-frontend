@@ -15,6 +15,9 @@ interface CourseCardProps {
   category: string;
   instructor: string;
   price: string | number;
+  originalPrice?: number;
+  discountedPrice?: number;
+  discountPercent?: number;
   level?: string;
 }
 
@@ -29,6 +32,9 @@ export const CourseCard = ({
   category,
   instructor,
   price,
+  originalPrice,
+  discountedPrice,
+  discountPercent,
   level,
 }: CourseCardProps) => {
   return (
@@ -101,23 +107,41 @@ export const CourseCard = ({
 
         {/* Price & CTA */}
         <div className="mt-auto">
-          <div className="mb-4 flex items-center justify-between">
-            <span className="text-lg font-bold text-primary">
-              ₹{price}
-            </span>
-            {price === "0" || price === "Free" ? (
-              <Badge variant="default" className="text-xs bg-green-600 hover:bg-green-700">
-                Free
-              </Badge>
-            ) : null}
+          <div className="mb-4">
+            {(price === 0 || price === "0" || price === "Free") ? (
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-bold text-primary">Free</span>
+                <Badge variant="default" className="text-xs bg-green-600 hover:bg-green-700">
+                  Free
+                </Badge>
+              </div>
+            ) : originalPrice && discountedPrice && originalPrice > discountedPrice ? (
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-lg font-bold text-primary">
+                  ₹{discountedPrice}
+                </span>
+                <span className="text-sm text-muted-foreground line-through">
+                  ₹{originalPrice}
+                </span>
+                {discountPercent && (
+                  <Badge variant="destructive" className="text-xs">
+                    {discountPercent}% OFF
+                  </Badge>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-bold text-primary">
+                  ₹{price}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* CTA */}
-          {/* <Link to={`/course/${id}`} className="block"> */}
           <Link to={`/course-detail/${id}`} className="block">
             <Button className="w-full smooth-transition group-hover:scale-105 bg-primary hover:bg-primary/90 text-primary-foreground">
               Enroll Now
-            
             </Button>
           </Link>
         </div>

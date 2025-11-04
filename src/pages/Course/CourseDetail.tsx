@@ -211,9 +211,7 @@ const CourseDetail = () => {
                     />
                   )}
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
-                  <div className="relative z-10 w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 smooth-transition">
-                    <Play className="w-10 h-10 text-white fill-white" />
-                  </div>
+                
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <p className="text-lg font-semibold">Continue Learning</p>
                     <p className="text-sm opacity-80">Resume your progress</p>
@@ -237,25 +235,14 @@ const CourseDetail = () => {
                   )}
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="relative z-10 w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 smooth-transition">
-                      <Play className="w-10 h-10 text-white fill-white" />
-                    </div>
+                   
                   </div>
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <p className="text-lg font-semibold">Enroll Now</p>
                     <p className="text-sm opacity-80">Click to start learning</p>
                   </div>
                 </div>
-                {!token && (
-                  <Dialog open={showSignupModal} onOpenChange={setShowSignupModal}>
-                    <DialogContent className="max-w-md">
-                      <DialogHeader>
-                        <DialogTitle>Create Account to Enroll</DialogTitle>
-                      </DialogHeader>
-                      <CourseSignupForm onSuccess={refreshCourse} />
-                    </DialogContent>
-                  </Dialog>
-                )}
+              
               </Card>
             )}
 

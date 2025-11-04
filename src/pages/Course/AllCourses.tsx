@@ -66,7 +66,10 @@ const AllCourses = () => {
         level: inferLevel(course.courseName) || "All Levels",
         category: course.category?.name || inferCategory(course.courseName) || "General",
         image: course.thumbnail,
-        price: course.price || "Free",
+        price: course.finalPrice || course.price || "Free",
+        originalPrice: course.originalPrice,
+        discountedPrice: course.discountedPrice,
+        discountPercent: course.discountPercent,
         // Use ObjectId for sorting proxy
         createdAt: new Date(objectIdToTimestamp(course._id)).toISOString(),
       }));

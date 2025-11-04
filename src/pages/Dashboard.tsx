@@ -512,9 +512,29 @@ const Dashboard = () => {
                     <Badge variant="outline" className="text-xs">
                       {course.category?.name}
                     </Badge>
-                    <span className="font-bold text-primary">
-                      ₹{course.price}
-                    </span>
+                    <div className="text-right">
+                      {course.originalPrice && course.discountedPrice && course.originalPrice > course.discountedPrice ? (
+                        <div className="flex flex-col items-end">
+                          <span className="font-bold text-primary">
+                            ₹{course.discountedPrice}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-muted-foreground line-through">
+                              ₹{course.originalPrice}
+                            </span>
+                            {course.discountPercent && (
+                              <Badge variant="destructive" className="text-xs px-1 py-0">
+                                {course.discountPercent}% OFF
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="font-bold text-primary">
+                          ₹{course.finalPrice || course.price}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Card>

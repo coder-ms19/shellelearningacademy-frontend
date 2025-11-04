@@ -56,7 +56,10 @@ const FeaturedCourses = () => {
         level: inferLevel(course.courseName) || "All Levels",
         category: course.category?.name || inferCategory(course.courseName) || "General",
         image: course.thumbnail,
-        price: course.price || "Free",
+        price: course.finalPrice || course.discountedPrice || course.price || 0,
+        originalPrice: course.originalPrice,
+        discountedPrice: course.discountedPrice,
+        discountPercent: course.discountPercent,
       }));
 
       // Sort by newest (createdAt)

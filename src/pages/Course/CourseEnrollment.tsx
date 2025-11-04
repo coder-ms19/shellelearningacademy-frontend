@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import { 
   CheckCircle, 
   CreditCard, 
@@ -10,13 +11,17 @@ import {
   Clock,
   Users,
   Award,
-  Loader2
+  Loader2,
+  Tag,
+  X
 } from "lucide-react";
 import useCustomToast from '@/hooks/use-custom-toast';
 import { useAppSelector } from '@/hooks/redux';
 import { useNavigate } from 'react-router-dom';
 import { paymentService } from '@/service/payment.service';
+// import { couponService } from '@/service/coupon.service';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import toast from 'react-hot-toast';
 
 interface CourseEnrollmentProps {
   course: any;
@@ -40,6 +45,10 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = ({
   const navigate = useNavigate();
   const [enrolling, setEnrolling] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
+  const [finalPrice, setFinalPrice] = useState(course.finalPrice || course.discountedPrice || course.price);
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -49,6 +58,43 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = ({
       script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
+  };
+
+  const handleApplyCoupon = async () => {
+    toast.success("ho gaya bro coupan apply")
+    // if (!couponCode.trim()) {
+    //   showToast('error', 'Invalid Coupon', 'Please enter a coupon code');
+    //   return;
+    // }
+
+    // if (!token) {
+    //   setShowSignupModal(true);
+    //   return;
+    // }
+
+    // try {
+    //   setApplyingCoupon(true);
+    //   const response = await couponService.applyCoupon(couponCode, course._id, token);
+      
+    //   if (response.success) {
+    //     setAppliedCoupon(response.data);
+    //     setFinalPrice(response.data.couponDiscountedPrice);
+    //     showToast('success', 'Coupon Applied!', `${response.data.coupon.discountPercent}% discount applied successfully`);
+    //   } else {
+    //     showToast('error', 'Invalid Coupon', response.message || 'Coupon could not be applied');
+    //   }
+    // } catch (error: any) {
+    //   showToast('error', 'Coupon Error', error?.response?.data?.message || 'Failed to apply coupon');
+    // } finally {
+    //   setApplyingCoupon(false);
+    // }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+    setFinalPrice(course.finalPrice || course.discountedPrice || course.price);
+    showToast('info', 'Coupon Removed', 'Coupon has been removed');
   };
 
   const handlePayment = async () => {
@@ -70,7 +116,7 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = ({
       
       console.log("Razorpay script loaded successfully");
 
-      // Create order
+      // Create order with final price
       console.log("Creating order for course:", course._id);
       const orderData = await paymentService.capturePayment([course._id], token);
       console.log("Order creation response:", orderData);
@@ -105,6 +151,15 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = ({
             }, token);
 
             if (verifyData.success) {
+              // Redeem coupon if applied
+              if (appliedCoupon) {
+                // try {
+                //   await couponService.redeemCoupon(appliedCoupon.coupon.code, token);
+                // } catch (error) {
+                //   console.error('Failed to redeem coupon:', error);
+                // }
+              }
+
               // Send success email
               await paymentService.sendPaymentSuccessEmail({
                 amount: orderData.amount,
@@ -193,10 +248,82 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = ({
       <Card className="bg-card/80 backdrop-blur-lg border-border sticky top-4 h-fit">
         <CardContent className="p-4 sm:p-6">
           <div className="text-center mb-4 sm:mb-6">
-            <div className="text-2xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2">
-              ₹{course.price}
+            <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">
+              ₹{finalPrice}
             </div>
+            {appliedCoupon && (
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-sm text-muted-foreground line-through">
+                  ₹{course.finalPrice || course.discountedPrice || course.price}
+                </span>
+                <Badge variant="destructive" className="text-xs">
+                  {appliedCoupon.coupon.discountPercent}% OFF
+                </Badge>
+              </div>
+            )}
+            {course.originalPrice && course.discountedPrice && course.originalPrice > course.discountedPrice && !appliedCoupon && (
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-sm text-muted-foreground line-through">
+                  ₹{course.originalPrice}
+                </span>
+                {course.discountPercent && (
+                  <Badge variant="destructive" className="text-xs">
+                    {course.discountPercent}% OFF
+                  </Badge>
+                )}
+              </div>
+            )}
             <p className="text-xs sm:text-sm text-muted-foreground">One-time payment</p>
+          </div>
+
+          {/* Coupon Section */}
+          <div className="mb-4 sm:mb-6">
+            {!appliedCoupon ? (
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Enter coupon code"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    className="flex-1 text-sm"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleApplyCoupon}
+                    disabled={applyingCoupon || !couponCode.trim()}
+                  >
+                    {applyingCoupon ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Tag className="w-4 h-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Tag className="w-4 h-4 text-green-600" />
+                    <span className="text-sm font-medium text-green-800">
+                      {appliedCoupon.coupon.code}
+                    </span>
+                    <Badge variant="secondary" className="text-xs">
+                      {appliedCoupon.coupon.discountPercent}% OFF
+                    </Badge>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleRemoveCoupon}
+                    className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
           
           <Button 
@@ -212,7 +339,7 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = ({
             ) : (
               <>
                 <CreditCard className="w-4 h-4 mr-2" />
-                Enroll Now
+                Enroll Now - ₹{finalPrice}
               </>
             )}
           </Button>
