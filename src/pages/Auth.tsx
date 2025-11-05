@@ -9,7 +9,7 @@ import { loginStart, loginSuccess, loginFailure } from "@/store/authSlice";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 
 interface LoginForm {
   email: string;
@@ -51,7 +51,7 @@ const Auth = () => {
       <Card className="w-full max-w-md p-8 backdrop-blur-sm bg-card/80 border-primary/20 relative z-10">
         <div className="text-center mb-8">
           <Link to="/" className="flex items-center justify-center gap-3 mb-4">
-            <img src={logo} alt="Shell Entertainment" className="h-12 w-12 rounded-full" />
+            <img src={logo} alt="Shell E-learning Academy" className="h-16 w-16 object-contain" />
             <span className="text-3xl font-bold text-gradient">Shell Entertainment</span>
           </Link>
           <p className="text-muted-foreground mt-2">Welcome back! Please enter your details.</p>

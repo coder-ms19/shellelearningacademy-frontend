@@ -11,26 +11,20 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email Us",
-      detail: "support@shellentertainment.com",
+      detail: "support@shellelearningacademy.com",
       description: "We'll respond within 24 hours",
     },
     {
       icon: Phone,
       title: "Call Us",
-      detail: "+1 (555) 123-4567",
-      description: "Mon-Fri, 9am-6pm EST",
+      detail: "+919406688303",
+      description: "Mon-Fri, 9am-6pm IST",
     },
     {
       icon: MapPin,
       title: "Visit Us",
-      detail: "123 Learning Street, San Francisco, CA 94102",
+      detail: "Vijay Nagar, Scheme No. 78, New Road, Indore MP 452010",
       description: "Stop by during business hours",
-    },
-    {
-      icon: MessageSquare,
-      title: "Live Chat",
-      detail: "Available on website",
-      description: "Instant support for quick questions",
     },
   ];
 
@@ -139,12 +133,19 @@ const Contact = () => {
             <div className="mx-auto max-w-4xl text-center">
               <h2 className="mb-4 font-display text-3xl font-bold">Visit Our Office</h2>
               <p className="mb-8 text-lg text-muted-foreground">
-                We're located in the heart of San Francisco. Drop by for a coffee and a chat!
+                We're located in Vijay Nagar, Indore. Drop by for a coffee and a chat!
               </p>
               <div className="overflow-hidden rounded-xl border border-border bg-muted">
-                <div className="flex h-64 items-center justify-center">
-                  <MapPin className="h-12 w-12 text-muted-foreground" />
-                </div>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.0!2d75.8917633!3d22.7684867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDQ2JzA2LjYiTiA3NcKwNTMnMzAuNCJF!5e0!3m2!1sen!2sin!4v1234567890"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Shell E-learning Academy Location"
+                />
               </div>
             </div>
           </div>

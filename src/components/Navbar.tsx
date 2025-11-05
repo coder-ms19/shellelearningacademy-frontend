@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import toast from "react-hot-toast";
-import logo from "../assets/logo.png"
+import logo from "../assets/logo1.png"
 
 export const Navigation = () => {
   const { theme, toggleTheme } = useTheme();
@@ -123,10 +123,10 @@ export const Navigation = () => {
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-1 sm:gap-2 smooth-transition hover:opacity-80 group">
-              <img loading="lazy" src={logo} alt="Logo" className="h-8 w-8 sm:h-12 sm:w-12 object-contain" />
+              <img loading="lazy" src={logo} alt="Logo" className="h-16 w-16 sm:h-40 sm:w-40 object-cover "/>
               <div className="flex flex-col">
-                <span className="font-display text-xs sm:text-sm font-bold text-foreground group-hover:text-primary transition-colors">Shell E-learning academy</span>
-                <span className="text-xs text-muted-foreground font-body hidden sm:block">MSME Verified</span>
+                <span className="font-display text-xs sm:text-sm font-bold group-hover:text-primary transition-colors" style={{color: '#38871E'}}>Shell E-learning academy</span>
+                <span className="text-xs font-body hidden sm:block" style={{color: '#38871E'}}>MSME Verified</span>
               </div>
             </Link>
       
@@ -138,33 +138,22 @@ export const Navigation = () => {
                   to={item.path}
                   className={`text-sm font-medium transition-all duration-300 ${
                     isActive(item.path)
-                      ? "text-primary bg-secondary"
-                      : "text-foreground smooth-transition hover:text-primary"
+                      ? "bg-secondary font-semibold"
+                      : "smooth-transition hover:opacity-80"
                   }`}
+                  style={{color: '#38871E'}}
                 >
                   {item.name}
                 </Link>
               ))}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                className="smooth-transition ml-2"
-                aria-label="Toggle theme"
-              >
-                {theme === "light" ? (
-                  <Moon className="h-5 w-5" />
-                ) : (
-                  <Sun className="h-5 w-5" />
-                )}
-              </Button>
+
               <AuthButtons />
             </div>
 
             {/* Mobile Menu Toggle */}
             <div className="lg:hidden flex items-center space-x-2">
               {token ? (
-                <>
+                <>                    
                   <Button
                     variant="ghost"
                     className="relative h-8 w-8 rounded-full p-0"
@@ -248,18 +237,7 @@ export const Navigation = () => {
                 </Link>
               ))}
               
-              {/* Theme Toggle */}
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  toggleTheme();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full justify-start px-4 py-4 text-left rounded-xl transition-all duration-300 hover:bg-accent"
-              >
-                {theme === 'light' ? <Moon className="w-5 h-5 mr-3" /> : <Sun className="w-5 h-5 mr-3" />}
-                {theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-              </Button>
+
 
               {/* Auth Section */}
               {!token ? (

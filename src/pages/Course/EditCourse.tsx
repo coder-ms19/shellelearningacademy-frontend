@@ -27,17 +27,17 @@ const EditCourse = () => {
   const [isLoadingCourse, setIsLoadingCourse] = useState(true);
   const [categories, setCategories] = useState([]);
 
-  // Stage 1: Course Data (adapted from first UI)
+  // Stage 1: Course Data (matched to CreateCourse fields)
   const [courseData, setCourseData] = useState({
-    title: '',
-    description: '',
-    category: '',
-    level: '',
-    duration: '',
-    price: '',
+    courseName: '',
+    courseDescription: '',
+    whatYouWillLearn: '',
+    originalPrice: '',
+    discountedPrice: '',
     thumbnail: null,
     thumbnailImage: '',
     tags: [],
+    category: '',
     instructions: [],
     status: 'Draft'
   });
@@ -59,7 +59,7 @@ const EditCourse = () => {
 
   const initialForm = { title: '', description: '', videoFile: null, videoPreview: '' };
 
-  // Fetch course details (adapted to first UI fields)
+  // Fetch course details (adapted to CreateCourse fields)
   const fetchCourseDetails = async () => {
     if (!courseId || !token) return;
     try {
@@ -68,15 +68,15 @@ const EditCourse = () => {
       const course = res.data.courseDetails;
       
       const courseDataObj = {
-        title: course.courseName || '',
-        description: course.courseDescription || '',
-        category: course.category?._id || '',
-        level: course.level || 'beginner', // Assuming level field exists or map from data
-        duration: course.duration || '',
-        price: course.price || '',
+        courseName: course.courseName || '',
+        courseDescription: course.courseDescription || '',
+        whatYouWillLearn: course.whatYouWillLearn || '',
+        originalPrice: course.originalPrice || '',
+        discountedPrice: course.discountedPrice || '',
         thumbnail: null,
         thumbnailImage: course.thumbnail || '',
         tags: course.tag || [],
+        category: course.category?._id || '',
         instructions: course.instructions || [],
         status: course.status || 'Draft'
       };
@@ -147,7 +147,7 @@ const EditCourse = () => {
     };
   }, [sections, sectionForms]);
 
-  // Stage 1 Handlers (adapted to first UI fields)
+  // Stage 1 Handlers (matched to CreateCourse)
   const handleCourseInputChange = (e) => {
     const { name, value } = e.target;
     setCourseData(prev => ({ ...prev, [name]: value }));
@@ -197,10 +197,10 @@ const EditCourse = () => {
     return JSON.stringify(courseData) !== JSON.stringify(originalCourseData) || courseData.thumbnail !== null;
   };
 
-  // Stage 1: Update Course (adapted)
+  // Stage 1: Update Course (matched to CreateCourse)
   const handleStage1Submit = async () => {
-    if (!courseData.title || !courseData.price || courseData.tags.length === 0) {
-      toast({ title: "Incomplete form", description: "Please fill required fields.", variant: "destructive" });
+    if (!courseData.courseName || courseData.tags.length === 0) {
+      toast({ title: "Incomplete form", description: "Please fill required fields: Course name and at least one tag.", variant: "destructive" });
       return;
     }
 
@@ -218,13 +218,13 @@ const EditCourse = () => {
       
       const formData = new FormData();
       formData.append('courseId', courseId);
-      formData.append('courseName', courseData.title);
-      formData.append('courseDescription', courseData.description);
-      formData.append('duration', courseData.duration);
-      formData.append('price', courseData.price);
-      formData.append('category', courseData.category);
-      formData.append('level', courseData.level);
+      formData.append('courseName', courseData.courseName);
+      formData.append('courseDescription', courseData.courseDescription);
+      formData.append('whatYouWillLearn', courseData.whatYouWillLearn);
+      formData.append('originalPrice', courseData.originalPrice);
+      formData.append('discountedPrice', courseData.discountedPrice);
       formData.append('tag', JSON.stringify(courseData.tags));
+      formData.append('category', courseData.category);
       formData.append('instructions', JSON.stringify(courseData.instructions));
       
       if (courseData.thumbnail) {
@@ -642,114 +642,118 @@ const EditCourse = () => {
       <main className="container mx-auto px-4 pt-8 pb-20">
         <div className="max-w-3xl mx-auto">
           
-          {/* Stage 1: Course Details (using first UI) */}
+          {/* Stage 1: Course Details (using CreateCourse fields and UI) */}
           {currentStage === 1 && (
-            <Card className="p-8">
-              <h2 className="text-2xl font-bold mb-6 text-gradient">Stage 1: Edit Course Details</h2>
-              <form onSubmit={(e) => { e.preventDefault(); handleStage1Submit(); }} className="space-y-6">
+            <Card className="bg-card/80 backdrop-blur-lg border-border">
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl font-bold">
+                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    Stage 1: Edit Your Course
+                  </span>
+                </CardTitle>
+                <p className="text-muted-foreground">Update the basic information for your course</p>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                
+                {/* Basic Info */}
                 <div className="space-y-2">
-                  <Label htmlFor="title">Course Title</Label>
+                  <Label htmlFor="courseName">Course Name *</Label>
                   <Input
-                    id="title"
-                    name="title"
-                    value={courseData.title}
+                    id="courseName"
+                    name="courseName"
+                    value={courseData.courseName}
                     onChange={handleCourseInputChange}
-                    required
+                    placeholder="Enter course title"
                   />
                 </div>
 
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="originalPrice">Original Price</Label>
+                    <Input
+                      id="originalPrice"
+                      name="originalPrice"
+                      value={courseData.originalPrice}
+                      onChange={handleCourseInputChange}
+                      placeholder="$149.99"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="discountedPrice">Discounted Price</Label>
+                    <Input
+                      id="discountedPrice"
+                      name="discountedPrice"
+                      value={courseData.discountedPrice}
+                      onChange={handleCourseInputChange}
+                      placeholder="$99.99"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="courseDescription">Course Description</Label>
                   <Textarea
-                    id="description"
-                    name="description"
-                    rows={5}
-                    value={courseData.description}
+                    id="courseDescription"
+                    name="courseDescription"
+                    value={courseData.courseDescription}
                     onChange={handleCourseInputChange}
-                    required
+                    placeholder="Describe your course..."
+                    rows={3}
                   />
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="category">Category</Label>
-                    <Select value={courseData.category} onValueChange={(value) => setCourseData({ ...courseData, category: value })}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((cat) => (
-                          <SelectItem key={cat._id} value={cat._id}>{cat.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="level">Level</Label>
-                    <Select value={courseData.level} onValueChange={(value) => setCourseData({ ...courseData, level: value })}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="beginner">Beginner</SelectItem>
-                        <SelectItem value="intermediate">Intermediate</SelectItem>
-                        <SelectItem value="advanced">Advanced</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="duration">Duration (hours)</Label>
-                    <Input
-                      id="duration"
-                      name="duration"
-                      type="number"
-                      value={courseData.duration}
-                      onChange={handleCourseInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="price">Price ($)</Label>
-                    <Input
-                      id="price"
-                      name="price"
-                      type="number"
-                      value={courseData.price}
-                      onChange={handleCourseInputChange}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Tags and Instructions (added for functionality) */}
                 <div className="space-y-2">
-                  <Label>Tags</Label>
+                  <Label htmlFor="whatYouWillLearn">What You Will Learn</Label>
+                  <Textarea
+                    id="whatYouWillLearn"
+                    name="whatYouWillLearn"
+                    value={courseData.whatYouWillLearn}
+                    onChange={handleCourseInputChange}
+                    placeholder="Key takeaways..."
+                    rows={3}
+                  />
+                </div>
+
+                {/* Category */}
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <Select value={courseData.category} onValueChange={(value) => setCourseData(prev => ({ ...prev, category: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat._id} value={cat._id}>{cat.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Tags */}
+                <div className="space-y-2">
+                  <Label>Tags *</Label>
                   <div className="flex space-x-2">
                     <Input
                       value={currentTag}
                       onChange={(e) => setCurrentTag(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addTag()}
                       placeholder="Add tag"
+                      className="flex-1"
                     />
                     <Button type="button" variant="outline" size="sm" onClick={addTag}>
                       <Plus className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2">
                     {courseData.tags.map((tag, index) => (
-                      <Badge key={index} variant="secondary">
+                      <Badge key={index} variant="secondary" className="flex items-center space-x-1">
                         {tag}
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => removeTag(index)}
-                          className="h-4 w-4 p-0 ml-1"
+                          className="h-4 w-4 p-0"
                         >
                           <X className="w-3 h-3" />
                         </Button>
@@ -758,6 +762,7 @@ const EditCourse = () => {
                   </div>
                 </div>
 
+                {/* Instructions */}
                 <div className="space-y-2">
                   <Label>Instructions</Label>
                   <div className="flex space-x-2">
@@ -766,21 +771,22 @@ const EditCourse = () => {
                       onChange={(e) => setCurrentInstruction(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addInstruction()}
                       placeholder="Add instruction"
+                      className="flex-1"
                     />
                     <Button type="button" variant="outline" size="sm" onClick={addInstruction}>
                       <Plus className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2">
                     {courseData.instructions.map((inst, index) => (
-                      <Badge key={index} variant="outline">
+                      <Badge key={index} variant="outline" className="flex items-center space-x-1">
                         {inst}
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => removeInstruction(index)}
-                          className="h-4 w-4 p-0 ml-1"
+                          className="h-4 w-4 p-0"
                         >
                           <X className="w-3 h-3" />
                         </Button>
@@ -789,30 +795,70 @@ const EditCourse = () => {
                   </div>
                 </div>
 
-                {/* Thumbnail (added for functionality) */}
+                {/* Thumbnail */}
                 <div className="space-y-2">
-                  <Label>Thumbnail</Label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleThumbnailChange}
-                    className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                  />
-                  {courseData.thumbnailImage && (
-                    <img src={courseData.thumbnailImage} alt="Thumbnail" className="mt-2 w-32 h-32 object-cover rounded" />
+                  <Label>Thumbnail Image</Label>
+                  {!courseData.thumbnailImage ? (
+                    <div className="relative border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer group">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleThumbnailChange}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      />
+                      <div className="space-y-2 pointer-events-none">
+                        <div className="w-16 h-16 mx-auto bg-secondary rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                          <Image className="w-8 h-8 text-muted-foreground group-hover:text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">Click to upload thumbnail</p>
+                          <p className="text-xs text-muted-foreground">PNG, JPG up to 10MB</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative group">
+                      <div className="aspect-video w-full max-w-md rounded-lg overflow-hidden border border-border">
+                        <img 
+                          src={courseData.thumbnailImage} 
+                          alt="Course Thumbnail" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => {
+                          if (courseData.thumbnailImage && courseData.thumbnailImage.startsWith('blob:')) URL.revokeObjectURL(courseData.thumbnailImage);
+                          setCourseData(prev => ({ ...prev, thumbnail: null, thumbnailImage: '' }));
+                        }}
+                        className="absolute top-2 right-2"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
                   )}
                 </div>
 
-                <div className="flex gap-4">
-                  <Button type="submit" className="flex-1" disabled={isLoading}>
-                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                    Update & Continue
-                  </Button>
-                  <Button type="button" variant="outline" className="flex-1" onClick={() => setCurrentStage(2)}>
-                    Skip to Content
-                  </Button>
-                </div>
-              </form>
+                <Button 
+                  onClick={handleStage1Submit}
+                  className="w-full bg-gradient-to-r from-primary to-accent"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Updating Course...
+                    </>
+                  ) : (
+                    <>
+                      Update Course & Continue
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </CardContent>
             </Card>
           )}
 

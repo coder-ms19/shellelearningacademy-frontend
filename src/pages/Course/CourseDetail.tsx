@@ -11,12 +11,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Clock, Users, Award, Star, ArrowLeft, Loader2, CheckCircle, Lock } from "lucide-react";
 import { courseService } from "@/service/course.service";
 import toast from "react-hot-toast";
-import { useAppSelector } from '@/hooks/redux';
+import { useAppSelector, useAppDispatch } from '@/hooks/redux';
+import { loginSuccess } from '@/store/authSlice';
 import CourseEnrollment from './CourseEnrollment';
 import CourseSignupForm from '../CourseSignupForm';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { useToast } from "@/components/ui/use-toast";
+import { authService } from "@/service/auth.service";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
@@ -235,11 +241,14 @@ const CourseDetail = () => {
                   )}
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                   
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <p className="text-lg font-semibold">Enroll Now</p>
-                    <p className="text-sm opacity-80">Click to start learning</p>
+                    <div className="text-center text-white">
+                      
+                        <>
+                          <p className="text-lg font-semibold mb-2">Enroll Now</p>
+                          <p className="text-sm opacity-80">Click to start learning</p>
+                        </>
+                    
+                    </div>
                   </div>
                 </div>
               
@@ -412,20 +421,23 @@ const CourseDetail = () => {
               </Card>
             ) : (
               <div data-enrollment-component>
-                <CourseEnrollment 
-                  course={course}
-                  isEnrolled={isEnrolled}
-                  onEnrollmentSuccess={() => {
-                    toast.success("🎉 Payment Successful! Welcome to the course! You can now start learning.");
-                    setIsEnrolled(true);
-                    setProgress(0);
-                    fetchCourseDetails();
-                    // Refresh the page after a short delay to show the success message
-                    setTimeout(() => {
-                      window.location.reload();
-                    }, 2000);
-                  }}
-                />
+                
+                  
+                  <CourseEnrollment 
+                    course={course}
+                    isEnrolled={isEnrolled}
+                    onEnrollmentSuccess={() => {
+                      toast.success("🎉 Payment Successful! Welcome to the course! You can now start learning.");
+                      setIsEnrolled(true);
+                      setProgress(0);
+                      fetchCourseDetails();
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 2000);
+                    }}
+                    />
+                
+              
               </div>
             )}
           </div>
@@ -433,6 +445,241 @@ const CourseDetail = () => {
       </main>
 
       <Footer />
+      
+      {/* Personal Info Modal for Non-Logged Users */}
+      <Dialog open={showSignupModal} onOpenChange={setShowSignupModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">Personal Information Required</DialogTitle>
+          </DialogHeader>
+          <EnrollmentSignupForm 
+            courseName={course?.courseName}
+            onSuccess={() => {
+              refreshCourse();
+              setTimeout(() => {
+                const enrollmentElement = document.querySelector('[data-enrollment-component]');
+                if (enrollmentElement) {
+                  enrollmentElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              }, 1000);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+// Personal info form component for course enrollment
+const EnrollmentSignupForm = ({ courseName, onSuccess }: { courseName?: string, onSuccess: () => void }) => {
+  const [step, setStep] = useState<'signup' | 'otp'>('signup');
+  const [formData, setFormData] = useState<any>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const dispatch = useAppDispatch();
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const sendOTP = async (data: any) => {
+    try {
+      setIsSubmitting(true);
+      await authService.sendOTP({ email: data.email });
+      setFormData(data);
+      setStep('otp');
+      toast({ 
+        title: "Verification code sent!", 
+        description: "Please check your email to complete verification." 
+      });
+    } catch (error: any) {
+      toast({ 
+        title: "Failed to send verification code", 
+        description: error?.response?.data?.message || "Please try again.", 
+        variant: "destructive" 
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const verifyAndSignup = async (data: any) => {
+    if (!formData || !data.otp) return;
+    
+    try {
+      setIsSubmitting(true);
+      const response = await authService.signup({
+        ...formData,
+        otp: data.otp,
+        accountType: "Student",
+        additionalDetails: {
+          contactNumber: formData.contactNumber
+        }
+      });
+      
+      // Auto-login the user with the returned token
+      if (response.token && response.user) {
+        dispatch(loginSuccess({ token: response.token, user: response.user }));
+        toast({ 
+          title: "Information completed!", 
+          description: "You can now enroll in the course." 
+        });
+      }
+      
+      onSuccess();
+    } catch (error: any) {
+      toast({ 
+        title: "Failed to complete information", 
+        description: error?.response?.data?.message || "Invalid verification code. Please try again.", 
+        variant: "destructive" 
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const onSubmit = step === 'signup' ? sendOTP : verifyAndSignup;
+
+  return (
+    <div className="space-y-4">
+      {step === 'signup' && (
+        <div className="text-center mb-4">
+          <p className="text-sm text-muted-foreground">
+            Please fill in your personal information to enroll in <strong>{courseName}</strong>
+          </p>
+        </div>
+      )}
+      
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {step === 'signup' ? (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="fullName">Full Name</Label>
+              <Input
+                id="fullName"
+                placeholder="Enter your full name"
+                {...register("fullName", {
+                  required: "Full name is required",
+                  minLength: { value: 2, message: "Name must be at least 2 characters" }
+                })}
+                className={errors.fullName ? "border-red-500" : ""}
+              />
+              {errors.fullName && (
+                <p className="text-sm text-red-500">{errors.fullName.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email address"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address"
+                  }
+                })}
+                className={errors.email ? "border-red-500" : ""}
+              />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Create Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Create a secure password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Password must be at least 6 characters" }
+                })}
+                className={errors.password ? "border-red-500" : ""}
+              />
+              {errors.password && (
+                <p className="text-sm text-red-500">{errors.password.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="contactNumber">Phone Number</Label>
+              <Input
+                id="contactNumber"
+                type="tel"
+                placeholder="Enter your phone number"
+                {...register("contactNumber", {
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^[0-9]{10}$/,
+                    message: "Please enter a valid 10-digit phone number"
+                  }
+                })}
+                className={errors.contactNumber ? "border-red-500" : ""}
+              />
+              {errors.contactNumber && (
+                <p className="text-sm text-red-500">{errors.contactNumber.message}</p>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="text-center mb-4">
+              <p className="text-sm text-muted-foreground">
+                Enter the 6-digit verification code sent to <strong>{formData?.email}</strong>
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="otp">Verification Code</Label>
+              <Input
+                id="otp"
+                placeholder="Enter 6-digit code"
+                maxLength={6}
+                {...register("otp", {
+                  required: "Verification code is required",
+                  pattern: {
+                    value: /^[0-9]{6}$/,
+                    message: "Please enter a valid 6-digit code"
+                  }
+                })}
+                className={`text-center text-lg tracking-widest ${errors.otp ? "border-red-500" : ""}`}
+              />
+              {errors.otp && (
+                <p className="text-sm text-red-500">{errors.otp.message}</p>
+              )}
+            </div>
+          </>
+        )}
+
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              {step === 'signup' ? 'Sending Verification...' : 'Completing Information...'}
+            </>
+          ) : (
+            step === 'signup' ? 'Send Verification Code' : 'Complete Information'
+          )}
+        </Button>
+        
+        {step === 'otp' && (
+          <Button 
+            type="button" 
+            variant="ghost" 
+            className="w-full" 
+            onClick={() => setStep('signup')}
+          >
+            Back to Details
+          </Button>
+        )}
+      </form>
     </div>
   );
 };

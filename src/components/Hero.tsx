@@ -93,7 +93,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Link, Play } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo1.png";
 
 export const Hero = () => {
   return (
@@ -134,7 +134,7 @@ export const Hero = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col gap-4 sm:flex-row mb-12">
+            {/* <div className="flex flex-col gap-4 sm:flex-row mb-12">
               <Button size="lg" className="group smooth-transition hover:scale-105">
                 Explore Programs
                 <ArrowRight className="ml-2 h-5 w-5 smooth-transition group-hover:translate-x-1" />
@@ -143,16 +143,16 @@ export const Hero = () => {
                 <Play className="mr-2 h-5 w-5" />
                 Watch Demo
               </Button>
-            </div>
+            </div> */}
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8">
               <div>
-                <div className="mb-1 font-display text-xl sm:text-3xl font-bold text-primary">10K+</div>
+                <div className="mb-1 font-display text-xl sm:text-3xl font-bold text-primary">1K+</div>
                 <div className="text-xs sm:text-sm text-muted-foreground">Active Students</div>
               </div>
               <div>
-                <div className="mb-1 font-display text-xl sm:text-3xl font-bold text-primary">500+</div>
+                <div className="mb-1 font-display text-xl sm:text-3xl font-bold text-primary">120+</div>
                 <div className="text-xs sm:text-sm text-muted-foreground">Expert Mentors</div>
               </div>
               <div>
@@ -167,7 +167,7 @@ export const Hero = () => {
             <img 
               src={logo} 
               alt="Shell E-learning Academy Logo" 
-              className="w-80 h-80 lg:w-96 lg:h-96 object-contain rounded-md "
+              className="w-96 h-96 lg:w-[500px] lg:h-[500px] object-contain rounded-md "
             />
           </div>
         </div>

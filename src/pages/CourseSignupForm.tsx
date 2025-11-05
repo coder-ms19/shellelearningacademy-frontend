@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { authService } from "@/service/auth.service";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 
 interface SignupForm {
   fullName: string;
@@ -122,7 +122,7 @@ const CourseSignupForm: React.FC<CourseSignupFormProps> = ({ onSuccess }) => {
         <div className="max-w-md mx-auto w-full">
           <div className="text-center mb-8 sm:mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <img src={logo} alt="Shell Entertainment" className="h-12 w-12 rounded-full" />
+              <img src={logo} alt="Shell E-learning Academy" className="h-16 w-16 object-contain" />
               <GraduationCap className="w-8 h-8 text-primary" />
             </div>
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4 text-gradient">

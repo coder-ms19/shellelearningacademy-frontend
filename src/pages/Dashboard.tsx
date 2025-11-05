@@ -480,7 +480,7 @@ const Dashboard = () => {
                 <GraduationCap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">No Courses Enrolled</h3>
                 <p className="text-muted-foreground mb-4">Start your learning journey by enrolling in a course.</p>
-                <Button onClick={() => navigate('/courses')}>Browse Courses</Button>
+                <Button onClick={() => navigate('/all-courses')}>Browse Courses</Button>
               </Card>
             )}
           </div>

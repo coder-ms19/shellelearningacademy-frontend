@@ -52,11 +52,11 @@ const Index = () => {
               <p className="mx-auto max-w-2xl text-sm sm:text-lg text-muted-foreground">
                 At Shell E-Learning Academy, we don’t just teach — we help you build your career.
 
-                •Practical, project-based learning
-                •Live sessions with industry experts
-                •Dual certification programs
-                •Job & internship assistance
-                •Affordable, high-value learning
+                Practical, project-based learning,
+                Live sessions with industry experts,
+                Dual certification programs,
+                Job & internship assistance,
+                Affordable, high-value learning,
               </p>
             </div>
 
@@ -92,8 +92,8 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <Card className="p-6 hover-lift smooth-transition">
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto ">
+              {/* <Card className="p-6 hover-lift smooth-transition">
                 <img 
                   src={certificate1} 
                   alt="Professional Certificate" 
@@ -103,7 +103,7 @@ const Index = () => {
                 <p className="text-muted-foreground text-sm">
                   Awarded upon successful completion of our comprehensive courses with practical projects.
                 </p>
-              </Card>
+              </Card> */}
               
               <Card className="p-6 hover-lift smooth-transition">
                 <img 
@@ -117,13 +117,13 @@ const Index = () => {
                 </p>
               </Card>
             </div>
-
+{/* 
             <div className="text-center mt-12">
               <Button size="lg" className="gap-2">
                 View Sample Certificate
                 <ArrowRight className="w-4 h-4" />
               </Button>
-            </div>
+            </div> */}
           </div>
         </section>
 

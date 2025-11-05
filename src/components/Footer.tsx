@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 
 export const Footer = () => {
   const footerLinks = {
@@ -35,11 +35,9 @@ export const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: Facebook, href: "https://facebook.com/shellelearning", label: "Facebook" },
-    { icon: Twitter, href: "https://twitter.com/shellelearning", label: "Twitter" },
-    { icon: Instagram, href: "https://instagram.com/shellelearning", label: "Instagram" },
-    { icon: Linkedin, href: "https://linkedin.com/company/shell-elearning", label: "LinkedIn" },
-    { icon: Youtube, href: "https://youtube.com/@shellelearning", label: "YouTube" },
+    { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61583112636861&mibextid=wwXIfr&rdid=XJJPGaN0Ttkd5y2I", label: "Facebook" },
+    { icon: Twitter, href: "https://x.com/shellelearning", label: "Twitter" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/shell-e-learning-academy-1180a538a/", label: "LinkedIn" },
   ];
 
   const contactInfo = [

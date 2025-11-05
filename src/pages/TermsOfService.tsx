@@ -10,33 +10,58 @@ export const TermsOfService = () => {
           </p>
           
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
+            <h2 className="text-2xl font-semibold mb-4">1. Course Access</h2>
             <p className="text-muted-foreground mb-4">
-              By accessing and using Shell E-learning Academy, you accept and agree to be bound 
-              by the terms and provision of this agreement.
+              Access to purchased courses is only for the registered user. Sharing credentials or materials is prohibited.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">2. Course Access and Usage</h2>
+            <h2 className="text-2xl font-semibold mb-4">2. Payments and Refunds</h2>
             <p className="text-muted-foreground mb-4">
-              Upon enrollment, you gain access to course materials for personal, non-commercial use. 
-              You may not redistribute or share course content without permission.
+              All fees are in INR. Payments are via secure gateways. Refunds available within 7 days for valid cases.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">3. Refund Policy</h2>
+            <h2 className="text-2xl font-semibold mb-4">3. Certification</h2>
             <p className="text-muted-foreground mb-4">
-              We offer a 30-day money-back guarantee for all courses. Refund requests must be 
-              submitted within 30 days of purchase.
+              Certificates are awarded after successful completion of all requirements.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">4. Contact Information</h2>
-            <p className="text-muted-foreground">
-              For questions about these Terms of Service, contact us at legal@shellelearning.com
+            <h2 className="text-2xl font-semibold mb-4">4. Intellectual Property</h2>
+            <p className="text-muted-foreground mb-4">
+              All materials are the intellectual property of Shell E-Learning Academy and cannot be reproduced or resold.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">5. User Conduct</h2>
+            <p className="text-muted-foreground mb-4">
+              Users must not use the site for illegal purposes or share harmful content.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">6. Limitation of Liability</h2>
+            <p className="text-muted-foreground mb-4">
+              We are not liable for damages due to technical errors or reliance on course content.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">7. Modifications</h2>
+            <p className="text-muted-foreground mb-4">
+              Terms may change without prior notice. Continued use indicates acceptance.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">8. Governing Law</h2>
+            <p className="text-muted-foreground mb-4">
+              These Terms are governed by Indian law. Disputes fall under the jurisdiction of [Your City, India].
             </p>
           </section>
         </div>

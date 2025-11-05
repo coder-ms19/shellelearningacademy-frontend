@@ -12,32 +12,49 @@ export const PrivacyPolicy = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">1. Information We Collect</h2>
             <p className="text-muted-foreground mb-4">
-              We collect information you provide directly to us, such as when you create an account, 
-              enroll in courses, or contact us for support.
+              We may collect personal details (name, email, phone number, billing information), usage data (IP, browser, pages visited), and communication data (messages, queries).
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">2. How We Use Your Information</h2>
             <p className="text-muted-foreground mb-4">
-              We use the information we collect to provide, maintain, and improve our services, 
-              process transactions, and communicate with you.
+              We use your data to provide services, send updates, process payments securely, and respond to inquiries.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">3. Information Sharing</h2>
+            <h2 className="text-2xl font-semibold mb-4">3. Data Protection</h2>
             <p className="text-muted-foreground mb-4">
-              We do not sell, trade, or otherwise transfer your personal information to third parties 
-              without your consent, except as described in this policy.
+              We use SSL encryption and secure gateways. Data is not shared or sold except to service providers or legal authorities.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">4. Contact Us</h2>
+            <h2 className="text-2xl font-semibold mb-4">4. Cookies</h2>
+            <p className="text-muted-foreground mb-4">
+              We use cookies for user experience and analytics. You may disable cookies from your browser.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">5. Your Rights</h2>
+            <p className="text-muted-foreground mb-4">
+              You can access, correct, or delete your data and withdraw consent for promotional messages.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">6. Changes to This Policy</h2>
+            <p className="text-muted-foreground mb-4">
+              We may update this Privacy Policy and post updates on this page.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">7. Contact Us</h2>
             <p className="text-muted-foreground">
-              If you have any questions about this Privacy Policy, please contact us at 
-              privacy@shellelearning.com
+              Email: support@shellelearningacademy.com
             </p>
           </section>
         </div>

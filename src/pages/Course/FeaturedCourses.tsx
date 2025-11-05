@@ -88,7 +88,7 @@ const FeaturedCourses = () => {
   // Loading State
   if (isLoading) {
     return (
-      <section className="py-20 bg-white dark:bg-gray-900">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4 text-center">
           <p className="text-lg text-muted-foreground">Loading courses...</p>
         </div>
@@ -99,7 +99,7 @@ const FeaturedCourses = () => {
   // Empty State (optional)
   if (!courses.length && !isLoading) {
     return (
-      <section className="py-20 bg-white dark:bg-gray-900">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4 text-center">
           <p className="text-lg text-muted-foreground">No courses available at the moment.</p>
         </div>
@@ -108,11 +108,11 @@ const FeaturedCourses = () => {
   }
 
   return (
-    <section className="py-20 bg-white dark:bg-gray-900">
+    <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
             Featured Courses
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -132,7 +132,7 @@ const FeaturedCourses = () => {
           <Link to="/all-courses">
             <Button
               size="lg"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-6 transition-all duration-300"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 transition-all duration-300"
             >
               View All Courses
             </Button>
