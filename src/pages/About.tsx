@@ -27,12 +27,12 @@ const About = () => {
     },
   ];
 
-  const stats = [
-    { value: "50K+", label: "Students Worldwide" },
-    { value: "1000+", label: "Expert Instructors" },
-    { value: "500+", label: "Courses Available" },
-    { value: "98%", label: "Satisfaction Rate" },
-  ];
+  // const stats = [
+  //   { value: "50K+", label: "Students Worldwide" },
+  //   { value: "1000+", label: "Expert Instructors" },
+  //   { value: "500+", label: "Courses Available" },
+  //   { value: "98%", label: "Satisfaction Rate" },
+  // ];
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -61,16 +61,21 @@ const About = () => {
               <h2 className="mb-6 font-display text-3xl font-bold">Our Story</h2>
               <div className="space-y-4 text-lg text-muted-foreground">
                 <p>
-                  Shell E-Learning Academy was founded with a simple yet powerful vision — "Empowering learners through practical and industry-driven education."
+
+                  Shell E-Learning Academy was founded with a simple yet powerful vision — “Empowering learners through practical and industry-driven education.”
                 </p>
                 <p>
-                  Today, we're proud to serve over 50,000 students worldwide, offering cutting-edge courses
-                  taught by industry experts. Our platform combines the best of technology and pedagogy to
-                  deliver an unparalleled learning experience.
+
+                  We observed that traditional education often fails to meet the evolving needs of modern learners. To bridge this gap, Shell E-Learning Academy was created — combining live interactive sessions, hands-on projects, and recognized certifications that help students gain real-world expertise.
+
                 </p>
                 <p>
-                  From web development to digital marketing, from design to data science, we offer courses
-                  that help you build real-world skills and advance your career.
+                  Today, we are proud to have empowered thousands of students across India with digital-age skills in fields like Digital Marketing, Artificial Intelligence, Data Analytics, UI/UX Design, and more.
+
+                </p>
+                <p>
+                  Our programs are designed not only to educate but to prepare students for real-world success with internship support, placement guidance, and continuous mentorship.
+
                 </p>
               </div>
             </div>
@@ -91,7 +96,7 @@ const About = () => {
                 <h3 className="mb-2 font-display text-xl font-bold">Kartik Gupta</h3>
                 <p className="mb-4 text-primary font-medium">Founder & Director</p>
                 <p className="text-muted-foreground">
-                  A visionary entrepreneur with a mission to transform education through innovation and digital learning. 
+                  A visionary entrepreneur with a mission to transform education through innovation and digital learning.
                   Kartik believes in creating opportunities that empower learners to achieve personal and professional success.
                 </p>
               </div>
@@ -100,7 +105,7 @@ const About = () => {
                 <h3 className="mb-2 font-display text-xl font-bold">Mayank Jain</h3>
                 <p className="mb-4 text-primary font-medium">Associate Founder</p>
                 <p className="text-muted-foreground">
-                  A creative mind and strategic thinker who focuses on building meaningful learning experiences. 
+                  A creative mind and strategic thinker who focuses on building meaningful learning experiences.
                   Mayank ensures that every course at Shell E-Learning Academy aligns with industry demand and student goals.
                 </p>
               </div>
@@ -138,7 +143,7 @@ const About = () => {
         </section>
 
         {/* Stats Section */}
-        <section className="py-20">
+        {/* <section className="py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {stats.map((stat, index) => (
@@ -151,7 +156,7 @@ const About = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* CTA Section */}
         <section className="border-t border-border bg-gradient-to-br from-primary/5 via-background to-primary/10 py-20">

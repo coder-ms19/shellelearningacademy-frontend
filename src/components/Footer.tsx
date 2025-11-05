@@ -9,41 +9,41 @@ export const Footer = () => {
       { name: "About Us", path: "/about" },
       { name: "Services", path: "/services" },
       { name: "contact", path: "/contact" },
-     
+
     ],
     Programs: [
       { name: "All Courses", path: "/all-courses" },
       { name: "Certifications", path: "/certifications" },
-      { name: "Interviews", path: "/interviews" },
-      { name: "Workshops", path: "/workshops" },
-      { name: "Internships", path: "/internships" },
+
     ],
     Support: [
       { name: "Help Center", path: "/help-center" },
       { name: "Contact Us", path: "/contact" },
-      { name: "Community", path: "/community" },
-      { name: "FAQ", path: "/faq" },
-      { name: "Student Support", path: "/student-support" },
+      // { name: "Community", path: "/community" },
+      // { name: "FAQ", path: "/faq" },
+      // { name: "Student Support", path: "/student-support" },
     ],
     Legal: [
       { name: "Privacy Policy", path: "/privacy" },
       { name: "Terms of Service", path: "/terms" },
-      { name: "Cookie Policy", path: "/cookies" },
-      { name: "Refund Policy", path: "/refund-policy" },
-      { name: "Licenses", path: "/licenses" },
+      // { name: "Cookie Policy", path: "/cookies" },
+      // { name: "Refund Policy", path: "/refund-policy" },
+      // { name: "Licenses", path: "/licenses" },
     ],
   };
 
   const socialLinks = [
     { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61583112636861&mibextid=wwXIfr&rdid=XJJPGaN0Ttkd5y2I", label: "Facebook" },
     { icon: Twitter, href: "https://x.com/shellelearning", label: "Twitter" },
+    { icon: Instagram, href: "https://www.instagram.com/shellelearningacademy", label: "Instagram" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/shell-e-learning-academy-1180a538a/", label: "LinkedIn" },
+    { icon: Youtube, href: "https://www.youtube.com/@shellelearningacademy", label: "YouTube" },
   ];
 
   const contactInfo = [
     { icon: Mail, text: "support@shellelearning.com", href: "mailto:support@shellelearning.com" },
-    { icon: Phone, text: "+1 (555) 123-4567", href: "tel:+15551234567" },
-    { icon: MapPin, text: "123 Learning Street, Education City", href: "#" },
+    { icon: Phone, text: "+919406688303", href: "tel:+919406688303" },
+    { icon: MapPin, text: "Vijay Nagar, Scheme No. 78, New Road, Indore MP 452010", href: "https://maps.app.goo.gl/pjFpAL8tVE7F9EAg7?g_st=ipc" },
   ];
 
   return (
@@ -63,13 +63,15 @@ export const Footer = () => {
             <p className="mb-4 text-sm text-muted-foreground">
               Empowering learners worldwide with quality education, certifications, and career opportunities.
             </p>
-            
+
             {/* Contact Info */}
             <div className="mb-4 space-y-2">
               {contactInfo.map((contact, index) => (
                 <a
                   key={index}
                   href={contact.href}
+                  target={contact.href.startsWith('http') ? '_blank' : undefined}
+                  rel={contact.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   <contact.icon className="h-4 w-4" />
@@ -77,7 +79,7 @@ export const Footer = () => {
                 </a>
               ))}
             </div>
-            
+
             {/* Social Links */}
             <div className="flex gap-3">
               {socialLinks.map((social) => (

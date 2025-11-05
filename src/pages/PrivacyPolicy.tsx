@@ -1,7 +1,21 @@
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 export const PrivacyPolicy = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background pt-20">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="mb-6 flex items-center gap-2 text-muted-foreground hover:text-primary"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
         <h1 className="mb-8 text-4xl font-bold text-foreground">Privacy Policy</h1>
         
         <div className="prose prose-gray max-w-none">
