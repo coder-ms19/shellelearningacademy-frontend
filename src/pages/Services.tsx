@@ -2,45 +2,79 @@ import { Navigation } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Code, Palette, Megaphone, LineChart, Shield, Zap } from "lucide-react";
+import { ArrowRight, Code, Palette, Megaphone, LineChart, Shield, Zap, Users, GraduationCap, Briefcase, BookOpen } from "lucide-react";
 
 const Services = () => {
   const services = [
     {
-      icon: <Code className="w-8 h-8" />,
-      title: "Web Development",
-      description: "Custom websites and web applications built with modern technologies",
-      features: ["Responsive Design", "Performance Optimized", "SEO Ready", "Scalable Architecture"]
+      icon: <BookOpen className="w-12 h-12" />,
+      title: "Professional E-Learning Courses",
+      description: "Gain job-ready skills through practical, industry-based learning programs designed for real-world success.",
+      features: [
+        "Digital Marketing",
+        "AI for Marketing",
+        "Stock Market & Financial Investment",
+        "Data Analytics with Power BI",
+        "UI/UX & Graphic Design",
+        "Advanced Photoshop",
+        "E-commerce & Affiliate Marketing",
+        "Get certified and become industry-ready with hands-on knowledge"
+      ]
     },
     {
-      icon: <Palette className="w-8 h-8" />,
-      title: "UI/UX Design",
-      description: "Beautiful and intuitive interfaces that users love",
-      features: ["User Research", "Wireframing", "Prototyping", "Visual Design"]
+      icon: <Users className="w-12 h-12" />,
+      title: "Live Mentorship & Career Guidance",
+      description: "Every learner receives personalized mentorship from industry professionals to build a confident career path.",
+      features: [
+        "One-on-one mentorship sessions",
+        "Career roadmap planning",
+        "Interview and job preparation guidance"
+      ]
     },
     {
-      icon: <Megaphone className="w-8 h-8" />,
-      title: "Digital Marketing",
-      description: "Grow your business with strategic digital marketing campaigns",
-      features: ["Social Media", "Content Marketing", "Email Campaigns", "Brand Strategy"]
+      icon: <Briefcase className="w-12 h-12" />,
+      title: "Internship & Placement Assistance",
+      description: "We connect students with real industry projects and internship opportunities to gain professional experience.",
+      features: [
+        "Internship programs with Shell Entertainment & partner companies",
+        "Resume and portfolio support",
+        "Placement training and guidance"
+      ]
     },
     {
-      icon: <LineChart className="w-8 h-8" />,
-      title: "Analytics & Insights",
-      description: "Data-driven decisions with comprehensive analytics",
-      features: ["Performance Tracking", "User Behavior", "Conversion Optimization", "Custom Reports"]
+      icon: <Zap className="w-12 h-12" />,
+      title: "Corporate Training Solutions",
+      description: "Customized digital skill training programs designed for companies and professionals to enhance team performance.",
+      features: [
+        "Corporate workshops and webinars",
+        "Skill development for employees",
+        "Project-based learning modules"
+      ]
     },
     {
-      icon: <Shield className="w-8 h-8" />,
-      title: "Security Solutions",
-      description: "Protect your digital assets with enterprise-grade security",
-      features: ["Vulnerability Assessment", "Security Audits", "Compliance", "24/7 Monitoring"]
+      icon: <GraduationCap className="w-12 h-12" />,
+      title: "College & Institutional Partnerships",
+      description: "We collaborate with colleges and educational institutions to make digital learning more accessible.",
+      features: [
+        "Campus certification programs",
+        "Student skill development initiatives",
+        "Expert-led seminars and guest lectures"
+      ]
     },
     {
-      icon: <Zap className="w-8 h-8" />,
-      title: "Performance Optimization",
-      description: "Lightning-fast experiences that engage and convert",
-      features: ["Speed Optimization", "Code Splitting", "CDN Integration", "Caching Strategies"]
+      icon: <Megaphone className="w-12 h-12" />,
+      title: "Webinars & Community Events",
+      description: "Join our regular live sessions with industry leaders and mentors to stay ahead in the digital world.",
+      features: [
+        "Free learning webinars",
+        "Networking and growth opportunities"
+      ]
+    },
+    {
+      icon: <Shield className="w-12 h-12" />,
+      title: "24×7 Support & Lifetime Learning Access",
+      description: "All students receive lifetime access to learning materials and 24×7 academic support through our online portal.",
+      features: []
     }
   ];
 
@@ -66,7 +100,7 @@ const Services = () => {
               key={index}
               className="p-8 hover-lift smooth-transition bg-card/50 backdrop-blur-sm border-primary/10 group"
             >
-              <div className="mb-6 text-primary group-hover:scale-110 smooth-transition">
+              <div className="mb-6 text-primary">
                 {service.icon}
               </div>
               <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
