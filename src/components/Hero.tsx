@@ -92,8 +92,11 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Link, Play } from "lucide-react";
 import logo from "@/assets/logo2.png";
+import { useNavigate } from "react-router-dom";
 
 export const Hero = () => {
+
+  const navigate = useNavigate();
   return (
     <section className="relative min-h-[calc(100vh-4rem)] flex items-center overflow-hidden md:min-h-screen">
       {/* Background Gradient */}
@@ -147,11 +150,15 @@ export const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col gap-3 md:gap-4 sm:flex-row mb-6 md:mb-8 lg:mb-12">
-              <Button size="lg" className="group smooth-transition hover:scale-105">
+              <Button size="lg" className="group smooth-transition hover:scale-105"
+              onClick={()=>navigate("/all-courses")}
+              >
                 Explore Programs
                 <ArrowRight className="ml-2 h-5 w-5 smooth-transition group-hover:translate-x-1" />
               </Button>
-              <Button size="lg" variant="outline" className="group smooth-transition">
+              <Button size="lg" variant="outline" className="group smooth-transition"
+              onClick={() => navigate("/demo")}
+              >
                 <Play className="mr-2 h-5 w-5" />
                 Watch Demo
               </Button>

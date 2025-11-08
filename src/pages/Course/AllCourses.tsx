@@ -25,12 +25,16 @@ const AllCourses = () => {
   // Function to infer category from title (fallback)
   const inferCategory = (title: string): string => {
     const titleLower = title.toLowerCase();
-    if (titleLower.includes('web') || titleLower.includes('mern') || titleLower.includes('react') || titleLower.includes('node')) {
+    if (titleLower.includes('web') || titleLower.includes('mern') || titleLower.includes('react') || titleLower.includes('node') || titleLower.includes('javascript') || titleLower.includes('html') || titleLower.includes('css')) {
+      return 'Web Development';
+    } else if (titleLower.includes('java') || titleLower.includes('python') || titleLower.includes('programming') || titleLower.includes('coding')) {
       return 'Development';
-    } else if (titleLower.includes('ds') || titleLower.includes('data structure')) {
+    } else if (titleLower.includes('data') || titleLower.includes('analytics') || titleLower.includes('machine learning') || titleLower.includes('ai')) {
       return 'Data Science';
-    } else if (titleLower.includes('java')) {
-      return 'Development';
+    } else if (titleLower.includes('design') || titleLower.includes('ui') || titleLower.includes('ux')) {
+      return 'Design';
+    } else if (titleLower.includes('marketing') || titleLower.includes('seo') || titleLower.includes('digital')) {
+      return 'Marketing';
     }
     return 'General';
   };
@@ -91,14 +95,21 @@ const AllCourses = () => {
     fetchCourses();
   }, []);
 
-  // Filtered courses
-  const filteredCourses = courses.filter((course: any) =>
-    (searchTerm === "" ||
-      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (selectedCategory === "all" || course.category.toLowerCase() === selectedCategory.toLowerCase()) &&
-    (selectedLevel === "all" || course.level.toLowerCase() === selectedLevel.toLowerCase())
-  );
+  // Filtered courses with comprehensive search
+  const filteredCourses = courses.filter((course: any) => {
+    const searchLower = searchTerm.toLowerCase().trim();
+    const titleMatch = course.title.toLowerCase().includes(searchLower);
+    const descMatch = course.description.toLowerCase().includes(searchLower);
+    const instructorMatch = course.instructor.toLowerCase().includes(searchLower);
+    const categoryMatch = course.category.toLowerCase().includes(searchLower);
+    const levelMatch = course.level.toLowerCase().includes(searchLower);
+    
+    const searchMatches = searchTerm === "" || titleMatch || descMatch || instructorMatch || categoryMatch || levelMatch;
+    const categoryMatches = selectedCategory === "all" || course.category.toLowerCase().includes(selectedCategory.toLowerCase());
+    const levelMatches = selectedLevel === "all" || course.level.toLowerCase().includes(selectedLevel.toLowerCase());
+    
+    return searchMatches && categoryMatches && levelMatches;
+  });
 
   // Loading State
   if (isLoading) {
@@ -145,7 +156,7 @@ const AllCourses = () => {
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
-              placeholder="Search courses..."
+              placeholder="Search by title, instructor, category..."
               className="pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -161,8 +172,7 @@ const AllCourses = () => {
               <SelectItem value="design">Design</SelectItem>
               <SelectItem value="marketing">Marketing</SelectItem>
               <SelectItem value="data science">Data Science</SelectItem>
-              <SelectItem value="web devlopment">Web Devlopment</SelectItem>
-              <SelectItem value="data sciencer">Data Sciencer</SelectItem>
+              <SelectItem value="web development">Web Development</SelectItem>
               <SelectItem value="general">General</SelectItem>
             </SelectContent>
           </Select>

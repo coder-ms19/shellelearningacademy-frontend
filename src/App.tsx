@@ -37,6 +37,7 @@ import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { TermsOfService } from "./pages/TermsOfService";
 import { FAQ } from "./pages/FAQ";
 import { Careers } from "./pages/Careers";
+import Demo from "./pages/Demo";
 
 
 const queryClient = new QueryClient();
@@ -49,7 +50,7 @@ const App = () => (
           <BrowserRouter>
             <ScrollToTop />
             <Toaster 
-              position="top-right"
+              position="top-center"
               toastOptions={{
                 duration: 3000,
                 style: {
@@ -62,9 +63,9 @@ const App = () => (
             <AuthLoader>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/navigation" element={<Navigation />} />
-            {/* <Route path="/courses" element={<Courses />} /> */}
+    
             <Route path="/about" element={<About />} />
+            <Route path="/demo" element={<Demo />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />
             <Route path="/auth" element={<Auth />} />
