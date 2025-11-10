@@ -1,182 +1,155 @@
 import { Navigation } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Target, Users, Award, Zap } from "lucide-react";
+import { Users, GraduationCap, BookOpen, TrendingUp, Lightbulb, Target, Heart, Calendar } from "lucide-react";
 
-const About = () => {
-  const values = [
+const AboutPage = () => {
+  const stats = [
+    { icon: Users, label: "Students Enrolled", value: "150K+" },
+    { icon: GraduationCap, label: "Expert Instructors", value: "80+" },
+    { icon: BookOpen, label: "Courses Available", value: "100+" },
+    { icon: TrendingUp, label: "Satisfaction Rate", value: "90%" },
+  ];
+
+  const coreValues = [
+    {
+      icon: Lightbulb,
+      title: "Quality Education",
+      description: "We provide top-tier courses designed by industry experts with real-world applications.",
+    },
     {
       icon: Target,
-      title: "Our Mission",
-      description: "To make industry-ready education accessible to everyone, everywhere, at any time.",
+      title: "Innovation",
+      description: "We constantly update our curriculum to reflect the latest trends and technologies.",
     },
     {
-      icon: Users,
-      title: "Community First",
-      description: "We're building a global community of learners and professionals who support, inspire, and grow together.",
-    },
-    {
-      icon: Award,
-      title: "Excellence in Learning",
-      description: "We're committed to delivering top-quality, practical, and future-focused education through expert trainers and structured learning paths.",
-    },
-    {
-      icon: Zap,
-      title: "Innovation & Growth",
-      description: "We constantly upgrade our teaching methods and course content to ensure our learners stay ahead of industry trends.",
+      icon: Heart,
+      title: "Student Support",
+      description: "Our dedicated team is always ready to help you succeed in your learning journey.",
     },
   ];
 
-  // const stats = [
-  //   { value: "50K+", label: "Students Worldwide" },
-  //   { value: "1000+", label: "Expert Instructors" },
-  //   { value: "500+", label: "Courses Available" },
-  //   { value: "98%", label: "Satisfaction Rate" },
-  // ];
+  const teamMembers = [
+    {
+      name: "Dr. Raj Kumar",
+      role: "CEO & Founder",
+      description: "15+ years in education technology",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80",
+    },
+    {
+      name: "Priya Deshmukh",
+      role: "Head of Curriculum",
+      description: "Former professor at IIT",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80",
+    },
+    {
+      name: "Amit Patel",
+      role: "Chief Technology Officer",
+      description: "Ex-Google engineer",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80",
+    },
+    {
+      name: "Sarah Williams",
+      role: "Head of Business",
+      description: "10+ years in edtech",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300&q=80",
+    },
+  ];
+
+  const journeyMilestones = [
+    { year: "2018", description: "Shell E-Learning Academy founded with 5 courses" },
+    { year: "2019", description: "Reached 10,000 students across India" },
+    { year: "2020", description: "Launched live interactive sessions and mentorship programs" },
+    { year: "2022", description: "Expanded to 50+ courses in tech and management" },
+    { year: "2022", description: "Achieved 100,000+ enrolled students milestone" },
+    { year: "2023", description: "Introduced AI-powered learning paths" },
+    { year: "2024", description: "Partnership with industry leaders for certifications" },
+  ];
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="min-h-screen ">
       <Navigation />
-
-      <main className="flex-1 pt-16">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-b from-accent/20 to-background py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-3xl text-center">
-              <h1 className="mb-6 font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                About <span className="text-gradient">Shell E-Learning Academy</span>
-              </h1>
-              <p className="text-lg text-muted-foreground sm:text-xl">
-                At Shell E-Learning Academy, we're on a mission to make career-focused education accessible, engaging, and affordable for learners across the globe.
-                We believe learning should not just give knowledge — it should build skills, confidence, and real opportunities for growth.
-              </p>
-            </div>
-          </div>
+      <main className="container mx-auto px-4 pt-32 pb-20">
+        {/* Hero Section - Gradient Green */}
+        <section className=" py-20 rounded-3xl mb-16 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">About Shell E-Learning Academy</h1>
+          <p className="text-xl max-w-3xl mx-auto">Bridging Innovation and Education to Empower Learners Worldwide</p>
         </section>
 
-        {/* Story Section */}
-        <section className="py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-3xl">
-              <h2 className="mb-6 font-display text-3xl font-bold">Our Story</h2>
-              <div className="space-y-4 text-lg text-muted-foreground">
-                <p>
-
-                  Shell E-Learning Academy was founded with a simple yet powerful vision — “Empowering learners through practical and industry-driven education.”
-                </p>
-                <p>
-
-                  We observed that traditional education often fails to meet the evolving needs of modern learners. To bridge this gap, Shell E-Learning Academy was created — combining live interactive sessions, hands-on projects, and recognized certifications that help students gain real-world expertise.
-
-                </p>
-                <p>
-                  Today, we are proud to have empowered thousands of students across India with digital-age skills in fields like Digital Marketing, Artificial Intelligence, Data Analytics, UI/UX Design, and more.
-
-                </p>
-                <p>
-                  Our programs are designed not only to educate but to prepare students for real-world success with internship support, placement guidance, and continuous mentorship.
-
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Founders Section */}
-        <section className="py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-16 text-center">
-              <h2 className="mb-4 font-display text-3xl font-bold sm:text-4xl">
-                Our Founders
-              </h2>
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
-              <div className="rounded-xl border border-border bg-card p-8 text-center hover-lift">
-                <h3 className="mb-2 font-display text-xl font-bold">Kartik Gupta</h3>
-                <p className="mb-4 text-primary font-medium">Founder & Director</p>
-                <p className="text-muted-foreground">
-                  A visionary entrepreneur with a mission to transform education through innovation and digital learning.
-                  Kartik believes in creating opportunities that empower learners to achieve personal and professional success.
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-border bg-card p-8 text-center hover-lift">
-                <h3 className="mb-2 font-display text-xl font-bold">Mayank Jain</h3>
-                <p className="mb-4 text-primary font-medium">Associate Founder</p>
-                <p className="text-muted-foreground">
-                  A creative mind and strategic thinker who focuses on building meaningful learning experiences.
-                  Mayank ensures that every course at Shell E-Learning Academy aligns with industry demand and student goals.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Values Section */}
-        <section className="border-y border-border bg-accent/30 py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-16 text-center">
-              <h2 className="mb-4 font-display text-3xl font-bold sm:text-4xl">
-                Our Core Values
-              </h2>
-              <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-                These principles guide everything we do
-              </p>
-            </div>
-
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {values.map((value, index) => (
-                <div
-                  key={index}
-                  className="rounded-xl border border-border bg-card p-6 text-center hover-lift"
-                >
-                  <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                    <value.icon className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="mb-2 font-display text-lg font-semibold">{value.title}</h3>
-                  <p className="text-sm text-muted-foreground">{value.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Mission Section */}
+        <section className="mb-16 max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6 text-center">Our Mission</h2>
+          <p className="text-lg text-gray-600 leading-relaxed text-center">
+            At Shell E-Learning Academy, we believe quality education should be accessible to everyone. Our mission is to unlock world-class learning experiences, expert instructors, cutting-edge technology, career guidance, and personalized support to create an unmatched learning environment.
+          </p>
         </section>
 
         {/* Stats Section */}
-        {/* <section className="py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="mb-2 font-display text-4xl font-bold text-primary sm:text-5xl">
-                    {stat.value}
-                  </div>
-                  <div className="text-muted-foreground">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+        <section className="mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center p-6  rounded-xl border border-gray-200 shadow-sm">
+                <stat.icon className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
+                <h3 className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</h3>
+                <p className="text-gray-600 text-sm">{stat.label}</p>
+              </div>
+            ))}
           </div>
-        </section> */}
+        </section>
 
-        {/* CTA Section */}
-        <section className="border-t border-border bg-gradient-to-br from-primary/5 via-background to-primary/10 py-20">
-          <div className="container mx-auto px-4 text-center sm:px-6 lg:px-8">
-            <h2 className="mb-4 font-display text-3xl font-bold sm:text-4xl">
-              Join Our Community
-            </h2>
-            <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
-              Be part of a global learning community that's shaping the future
-            </p>
-            <Button size="lg" className="smooth-transition hover:scale-105">
-              Get Started Today
-            </Button>
+        {/* Core Values Section */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-12 text-center">Our Core Values</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {coreValues.map((value, index) => (
+              <div key={index} className="text-center p-6  rounded-xl border border-gray-200 shadow-sm">
+                <value.icon className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-4 text-gray-900">{value.title}</h3>
+                <p className="text-gray-600 text-sm">{value.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Team Section */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-12 text-center">Meet Our Team</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {teamMembers.map((member, index) => (
+              <div key={index} className="text-center p-6  rounded-xl border border-gray-200 shadow-sm">
+                <div className="mb-4">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-24 h-24 rounded-full mx-auto object-cover border-4 border-emerald-100"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2 text-gray-900">{member.name}</h3>
+                <p className="text-emerald-500 font-semibold mb-2">{member.role}</p>
+                <p className="text-gray-600 text-sm">{member.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Journey Section - Timeline */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-12 text-center">Our Journey</h2>
+          <div className="relative max-w-4xl mx-auto border-l-4 border-emerald-200 pl-8">
+            {journeyMilestones.map((milestone, index) => (
+              <div key={index} className="mb-8 relative">
+                <div className="absolute left-[-20px] top-2 w-5 h-5 bg-emerald-500 rounded-full"></div>
+                <div className=" p-6 rounded-xl border border-gray-200 shadow-sm">
+                  <h3 className="font-bold text-emerald-500 text-lg mb-2">{milestone.year}</h3>
+                  <p className="text-gray-600">{milestone.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );
 };
 
-export default About;
+export default AboutPage;

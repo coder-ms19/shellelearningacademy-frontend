@@ -107,17 +107,19 @@ All colors MUST be HSL.
     font-feature-settings: 'cv11', 'ss01';
   }
 
+  /* Heading Colors - Consistent across all pages */
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
-    color: #447C2A !important;
+    color: #447C2A !important; /* Primary heading color */
   }
 
+  /* Text Colors */
   p, span, div, label, a, li, td, th, input, textarea, button {
     color: black !important;
   }
 
   .text-muted-foreground {
-    color: black !important;
+    color: #666666 !important;
   }
 
   .text-foreground {
@@ -134,7 +136,15 @@ All colors MUST be HSL.
   }
 
   .text-heading {
-    color: hsl(0, 0%, 0%); /* #38871E for headings */
+    color: #447C2A !important; /* Consistent heading color */
+  }
+
+  .text-heading-secondary {
+    color: #38871E !important; /* Alternative heading color */
+  }
+
+  .text-heading-accent {
+    color: #2D5A1F !important; /* Darker heading variant */
   }
 
   .hover-lift {
