@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -392,7 +392,7 @@ const CreateCourse = () => {
                                 3. Finalize
                             </span>
                         </div>
-                        <Progress value={getStageProgress()} className="h-2 bg-muted" indicatorColor="bg-primary" />
+                        <Progress value={getStageProgress()} className="h-2 bg-muted" />
                     </div>
                 </div>
             </div>

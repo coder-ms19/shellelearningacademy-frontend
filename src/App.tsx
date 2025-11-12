@@ -17,7 +17,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Certificate from "./pages/Certificate";
 import Course from "./pages/Course";
-import CourseSignupForm from "./pages/CourseSignupForm";
+
 import AllCourses from "./pages/Course/AllCourses";
 import CoursesList from "./pages/Course/CoursesList";
 import CourseDetail from "./pages/Course/CourseDetail";
@@ -39,6 +39,8 @@ import { FAQ } from "./pages/FAQ";
 import { Careers } from "./pages/Careers";
 import Demo from "./pages/Demo";
 import Register from "./pages/Register";
+
+
 
 
 const queryClient = new QueryClient();
@@ -80,6 +82,8 @@ const App = () => (
             <Route path="/courses-list" element={<CoursesList />} />
             <Route path="/course/:id" element={<ViewCourse />} />
             <Route path="/course-detail/:courseId" element={<CourseDetail />} />
+
+
             <Route path="/course-learning/:id" element={<CourseLearning />} />
             
             {/* Course Management Routes */}

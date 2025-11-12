@@ -27,6 +27,15 @@ class AuthService {
       throw error;
     }
   }
+
+  public async enrollInCourse(data: any) {
+    try {
+      const res = await axiosInstance.post("/auth/enrollInCourse", data);
+      return res.data;
+    } catch (error: any) {
+      throw error;
+    }
+  }
 }
 
 export const authService = new AuthService();

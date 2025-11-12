@@ -1,3 +1,4 @@
+// Indian States and Union Territories
 export const INDIAN_STATES = [
   "Andhra Pradesh",
   "Arunachal Pradesh", 
@@ -38,19 +39,32 @@ export const INDIAN_STATES = [
 ];
 
 export const BATCHES = [
+  "January 2025",
+  "February 2025", 
+  "March 2025",
+  "April 2025",
+  "May 2025",
+  "June 2025",
+  "July 2025",
+  "August 2025",
+  "September 2025",
+  "October 2025",
+  "November 2025",
+  "December 2025",
+  "January 2026",
+  "February 2026",
+  "March 2026",
+  "April 2026",
+  "May 2026",
+  "June 2026",
   "2024",
   "2023",
   "2022",
   "2021",
-  "2020",
-  "2019",
-  "2018",
-  "2017",
-  "2016",
-  "2015",
-  "2014",
-  "2013",
-  "2012",
-  "2011",
-  "2010"
+  "2020"
+];
+
+export const ACCOUNT_TYPES = [
+  "Student",
+  "Admin"
 ];

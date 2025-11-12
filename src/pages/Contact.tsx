@@ -47,7 +47,7 @@ const Contact = () => {
             title: "Visit Us",
             detail: "Vijay Nagar, Scheme No. 78, Indore MP 452010",
             description: "Stop by during business hours (by appointment)",
-            link: "https://maps.app.goo.gl/YourLocationHash"
+            link: "https://maps.google.com/search?q=Vijay+Nagar,+Scheme+No.+78,+Indore"
         },
     ];
 
@@ -168,7 +168,7 @@ const Contact = () => {
                                     loading="lazy"
                                     referrerPolicy="no-referrer-when-downgrade"
                                     title="Shell E-learning Academy Location"
-                                />
+            z                    />
                             </div>
                         </div>
                     </div>

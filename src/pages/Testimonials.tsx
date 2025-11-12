@@ -22,7 +22,7 @@ const Testimonials = () => {
             name: "Rohit Verma",
             role: "Digital Marketing",
             quote: "This was the most practical digital marketing course I’ve done. Every session was hands-on, and the mentors personally guided us. I even got freelance clients during the course itself!",
-            rating: 5,
+            rating: 4,
             avatar: img1,
         },
         {
@@ -38,7 +38,7 @@ const Testimonials = () => {
             name: "Vikrant Singh",
             role: "Advanced Paid Marketing (Meta & Google Ads)",
             quote: "I’ve done many online marketing courses before, but this one actually focused on results. I was able to scale my e-commerce ad campaigns from ₹10,000/month to ₹1 lakh/month after applying the strategies taught here.",
-            rating: 5,
+            rating: 3,
             avatar: img3,
         },
         {
@@ -46,7 +46,7 @@ const Testimonials = () => {
             name: "Ankit Raj",
             role: "Dropshipping Mastery",
             quote: "The Dropshipping Mastery program was completely practical. They helped me set up my first store, find suppliers, and even run profitable ads. I made my first sale within 10 days!",
-            rating: 5,
+            rating: 4,
             avatar: img4,
         },
         // {

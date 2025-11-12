@@ -39,7 +39,8 @@ export const Footer = () => {
     ];
 
     const contactInfo = [
-        { icon: Mail, text: "support@shellelearning.com", href: "mailto:support@shellelearning.com" },
+        // { icon: Mail, text: "info@shellelearningacademy.com", href: "mailto:info@shellelearningacademy.com" },
+        { icon: Mail, text: "support@shellelearningacademy.com", href: "mailto:support@shellelearningacademy.com" },
         { icon: Phone, text: "+91 94066 88303", href: "tel:+919406688303" },
         { icon: MapPin, text: "Vijay Nagar, Scheme No. 78, Indore MP 452010", href: "https://maps.google.com/search?q=Vijay+Nagar,+Scheme+No.+78,+Indore" },
     ];
