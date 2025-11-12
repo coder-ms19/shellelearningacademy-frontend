@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Tag, Send, Loader2, ArrowLeft } from "lucide-react";
+import { Tag, Send, Loader2, ArrowLeft, MessageSquare } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAppSelector } from '@/hooks/redux';
 import { adminService } from '@/service/admin.service';
@@ -141,7 +141,7 @@ const CreateCategory = () => {
 
                             <Button 
                                 type="submit" 
-                                className="w-full h-12 text-base bg-primary hover:bg-primary/90 font-bold text-lg shadow-lg shadow-primary/30 transition-all duration-300" 
+                                className="w-full h-12 text-base bg-primary hover:bg-primary/90 font-bold  shadow-lg shadow-primary/30 transition-all duration-300" 
                                 disabled={isLoading}
                                 size="lg"
                             >
