@@ -36,11 +36,11 @@ const Auth = () => {
                 email: data.email, 
                 password: data.password 
             });
-            const { token, user } = response;
+            const { accessToken, user } = response;
             
-            // Note: If data.rememberMe is true, you might store the token/user data in localStorage
+            // Note: If data.rememberMe is true, you might store the accessToken/user data in localStorage
             // Otherwise, typically sessionStorage is used for session-based login.
-            dispatch(loginSuccess({ token, user }));
+            dispatch(loginSuccess({ accessToken, user }));
             
             toast.success("Signed in successfully! Welcome back. 👋");
             navigate("/");

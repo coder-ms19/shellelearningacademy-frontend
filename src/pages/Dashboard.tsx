@@ -102,7 +102,7 @@ const ContinueLearningCard = ({ course, navigate }) => (
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const { user, token } = useAppSelector((state) => state.auth);
+    const { user, accessToken } = useAppSelector((state) => state.auth);
     const [isLoadingStats, setIsLoadingStats] = useState(false);
     const [viewType, setViewType] = useState<'student' | 'admin'>('student');
     const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -135,13 +135,13 @@ const Dashboard = () => {
     // --- Data Fetching Logic (Simplified & Focused) ---
 
     const fetchStudentStats = async () => {
-        if (!token || user?.accountType !== 'Student') return;
+        if (!accessToken || user?.accountType !== 'Student') return;
         setIsLoadingStats(true);
         try {
             // Combined Fetch for all courses (for recommendations) and enrolled data
             const [coursesRes, enrolledRes] = await Promise.all([
                 courseService.getAllCourses(),
-                studentService.getEnrolledCourses(token).catch(() => ({ data: { courses: user?.courses || [] } }))
+                studentService.getEnrolledCourses(accessToken).catch(() => ({ data: { courses: user?.courses || [] } }))
             ]);
 
             setAllCourses(coursesRes.data || []);
@@ -151,7 +151,7 @@ const Dashboard = () => {
             const coursesWithProgress = await Promise.all(
                 userEnrolledCourses.map(async (course) => {
                     try {
-                        const progressRes = await courseService.getFullCourseDetails(course._id, token);
+                        const progressRes = await courseService.getFullCourseDetails(course._id, accessToken);
                         const completedVideos = progressRes.data?.completedVideos || [];
                         const totalLectures = course.courseContent?.reduce((total, section) => 
                             total + (section.subSection?.length || 0), 0) || 0;
@@ -194,10 +194,10 @@ const Dashboard = () => {
     };
 
     const fetchAdminStats = async () => {
-        if (!token || user?.accountType !== 'Admin') return;
+        if (!accessToken || user?.accountType !== 'Admin') return;
         setIsLoadingStats(true);
         try {
-            const coursesRes = await courseService.getAdminCourses(token);
+            const coursesRes = await courseService.getAdminCourses(accessToken);
             const adminCourses = coursesRes.data || [];
             
             const totalStudents = adminCourses.reduce((sum, course) => sum + (course.studentsEnrolled?.length || 0), 0);
@@ -217,7 +217,7 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
-        if (!token) {
+        if (!accessToken) {
             navigate("/auth");
             return;
         }
@@ -229,7 +229,7 @@ const Dashboard = () => {
         } else {
             fetchAdminStats();
         }
-    }, [navigate, token, user]);
+    }, [navigate, accessToken, user]);
 
     // --- Data Mappers for Rendering ---
     
@@ -440,7 +440,7 @@ const Dashboard = () => {
 
     // --- Final Render ---
 
-    if (isLoadingStats && token) {
+    if (isLoadingStats && accessToken) {
         return (
             <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10 flex items-center justify-center">
                 <Navigation />

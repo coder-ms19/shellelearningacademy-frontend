@@ -16,14 +16,14 @@ interface User {
 
 interface AuthState {
   user: User | null;
-  token: string | null;
+  accessToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
-  token: null,
+  accessToken: null,
   isAuthenticated: false,
   isLoading: true,
 };
@@ -35,32 +35,32 @@ const authSlice = createSlice({
     loginStart: (state) => {
       state.isLoading = true;
     },
-    loginSuccess: (state, action: PayloadAction<{ user: User; token: string }>) => {
+    loginSuccess: (state, action: PayloadAction<{ user: User; accessToken: string }>) => {
       state.isLoading = false;
       state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.accessToken = action.payload.accessToken;
       state.isAuthenticated = true;
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('accessToken', action.payload.accessToken);
       localStorage.setItem('user', JSON.stringify(action.payload.user));
     },
     loginFailure: (state) => {
       state.isLoading = false;
       state.user = null;
-      state.token = null;
+      state.accessToken = null;
       state.isAuthenticated = false;
     },
     logout: (state) => {
       state.user = null;
-      state.token = null;
+      state.accessToken = null;
       state.isAuthenticated = false;
-      localStorage.removeItem('token');
+      localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
     },
     loadUserFromStorage: (state) => {
-      const token = localStorage.getItem('token');
+      const accessToken = localStorage.getItem('accessToken');
       const user = localStorage.getItem('user');
-      if (token && user) {
-        state.token = token;
+      if (accessToken && user) {
+        state.accessToken = accessToken;
         state.user = JSON.parse(user);
         state.isAuthenticated = true;
       }

@@ -35,7 +35,7 @@ export const Navigation = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useAppDispatch();
-    const { isAuthenticated, user, token } = useAppSelector((state) => state.auth);
+    const { isAuthenticated, user, accessToken } = useAppSelector((state) => state.auth);
 
     const isActive = (path: string) => {
         if (path === "/") return location.pathname === "/";
@@ -187,7 +187,7 @@ export const Navigation = () => {
                         <div className="flex items-center gap-2 xl:hidden">
                         
                             {/* User Avatar (Mobile - if logged in) */}
-                            {token && (
+                            {isAuthenticated && (
                                 <Button
                                     variant="ghost"
                                     className="h-9 w-9 rounded-full p-0 border border-primary/20 hover:bg-primary/5"
@@ -269,7 +269,7 @@ export const Navigation = () => {
                             ))}
                             
                             {/* Auth Section in Mobile Menu */}
-                            {!token ? (
+                            {!isAuthenticated ? (
                                 <div className="space-y-3 pt-6 border-t border-border">
                                     <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
                                         <Button 
@@ -282,6 +282,42 @@ export const Navigation = () => {
                                 </div>
                             ) : (
                                 <div className="space-y-3 pt-6 border-t border-border">
+                                    {/* User Profile Info */}
+                                    <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl">
+                                        <Avatar className="h-10 w-10">
+                                            <AvatarImage src={user?.image} alt={user?.firstName} />
+                                            <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
+                                                {user?.firstName?.[0]}{user?.lastName?.[0]}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <div className="flex flex-col">
+                                            <p className="font-bold text-sm text-foreground">{user?.firstName} {user?.lastName}</p>
+                                            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Profile Actions */}
+                                    <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start h-12 rounded-xl text-base font-semibold">
+                                            <User className="w-5 h-5 mr-3 text-primary" />
+                                            Dashboard
+                                        </Button>
+                                    </Link>
+                                    
+                                    <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start h-12 rounded-xl text-base font-semibold">
+                                            <User className="w-5 h-5 mr-3 text-primary" />
+                                            Profile Settings
+                                        </Button>
+                                    </Link>
+                                    
+                                    <Link to="/all-courses" onClick={() => setMobileMenuOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start h-12 rounded-xl text-base font-semibold">
+                                            <BookOpen className="w-5 h-5 mr-3 text-primary" />
+                                            My Learning
+                                        </Button>
+                                    </Link>
+                                    
                                     <Button
                                         variant="destructive"
                                         onClick={() => {

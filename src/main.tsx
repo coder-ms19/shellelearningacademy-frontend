@@ -4,6 +4,15 @@ import "./index.css";
 import { Provider } from "react-redux";
 import { store } from "./store";
 
+
+
+// Clear localStorage only once
+if (!localStorage.getItem("hasCleared")) {
+  localStorage.clear();
+  localStorage.setItem("hasCleared", "true");
+}
+
+
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <App />
