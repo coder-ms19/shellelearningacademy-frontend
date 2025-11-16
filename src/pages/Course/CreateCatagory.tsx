@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateCategory = () => {
     const navigate = useNavigate();
-    const { token } = useAppSelector((state) => state.auth);
+    const token  = useAppSelector((state) => state.auth.accessToken);
 
     const [categoryData, setCategoryData] = useState({
         name: "",

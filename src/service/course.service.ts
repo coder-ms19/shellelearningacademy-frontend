@@ -107,6 +107,7 @@ class CourseService {
   // Categories
   public async getAllCategories() {
     try {
+      // console.log("Fetching categories...");
       const res = await axiosInstance.get(`/course/showAllCategories`);
       return res.data;
     } catch (error: any) {

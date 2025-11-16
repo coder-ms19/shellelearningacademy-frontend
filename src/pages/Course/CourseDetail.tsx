@@ -979,7 +979,7 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = React.memo(({
                     ) : (
                         <>
                             <CreditCard className="w-5 h-5 mr-2" />
-                            {finalPrice === 0 ? "Enroll Now (Free)" : `Buy Now - ₹${finalPrice.toLocaleString()}`}
+                            {/* { ? "Edit Course" : `Buy Now - ₹${finalPrice.toLocaleString()}`} */}
                         </>
                     )}
                 </Button>
@@ -1018,7 +1018,7 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = React.memo(({
 const CourseDetail = () => {
     const { courseId } = useParams();
     const [searchParams] = useSearchParams();
-    // const { user } = useSelector((state:any) => state.auth);
+    const actualUser  = useSelector((state:any) => state.auth.user);
     const userString = localStorage.getItem("enrolledUser");
     const user = userString ? JSON.parse(userString) : null;
     console.log("enrolled user is ",user);

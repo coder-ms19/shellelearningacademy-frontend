@@ -13,12 +13,6 @@ import { Search, Star, Loader2, Frown, Filter, FilterX, X, Users, BookOpen } fro
 import toast from "react-hot-toast";
 import { courseService } from "@/service/course.service";
 
-// --- Utility Functions ---
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const getRandomFloat = (min, max) => (Math.random() * (max - min) + min).toFixed(1);
-
-
-
 // 1. Reusable Course Card Component (Updated for better UI/UX and pricing)
 const CourseCard = ({ course }) => {
     // Determine Star Color based on rating (better UI/UX)
@@ -208,6 +202,7 @@ const AllCourses = () => {
     const [selectedCategories, setSelectedCategories] = useState(new Set());
     const [selectedLevels, setSelectedLevels] = useState(new Set());
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+    
 
     const levels = useMemo(() => ["Beginner", "Intermediate", "Advanced", "All Levels"], []);
 

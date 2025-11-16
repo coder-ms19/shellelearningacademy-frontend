@@ -125,7 +125,7 @@ const Services = () => {
                                     </ul>
                                     
                                     {/* Action Button */}
-                                    <Link to="/contact">
+                                    {/* <Link to="/contact">
                                         <Button 
                                             variant="outline" 
                                             className="w-full h-11 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-2xl font-bold transition-all duration-300 shadow-md hover:shadow-lg"
@@ -133,7 +133,7 @@ const Services = () => {
                                             Learn More
                                             <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300" />
                                         </Button>
-                                    </Link>
+                                    </Link> */}
                                 </div>
                             );
                         })}

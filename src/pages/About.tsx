@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Target, Users, Award, Zap, Building2, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 // Assuming logo1 is accessible via this relative path
-import logo1 from "../assets/logo1.png"; 
+import logo1 from "../assets/logo1.png";
 
 // --- Data Definitions (Unchanged) ---
 
@@ -32,9 +32,9 @@ const values = [
 ];
 
 const stats = [
-    { value: "50K+", label: "Students Worldwide" },
-    { value: "500+", label: "Courses Available" },
-    { value: "100+", label: "Expert Instructors" },
+    { value: "2K+", label: "Students Worldwide" },
+    { value: "20+", label: "Courses Available" },
+    { value: "60+", label: "Expert Instructors" },
     { value: "98%", label: "Satisfaction Rate" },
 ];
 
@@ -57,7 +57,7 @@ const About = () => {
             <Navigation />
 
             <main className="flex-1 pt-16">
-                
+
                 {/* 1. Hero Section */}
                 <section className="bg-gradient-to-b from-primary/10 to-background py-20 lg:py-32">
                     <div className="container mx-auto px-4 max-w-7xl">
@@ -111,29 +111,29 @@ const About = () => {
                                 </div>
                             </div>
                             {/* Right: Image Placeholder */}
-                          <div className="relative h-80 sm:h-96 rounded-3xl overflow-hidden shadow-2xl shadow-gray-400/30">
-    {/* Background element: Use a large abstract image to fill the space */}
-    <img
-        src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt="Abstract learning background"
-        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-    />
-    
-    {/* Primary/Green Overlay for Theme Consistency */}
-    <div className="absolute inset-0 bg-primary/80" /> 
-    
-    {/* Centered Logo with Best Style (Z-indexed above overlay) */}
-    <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="p-8 bg-card/80 rounded-full shadow-2xl border-4 border-primary/50 backdrop-blur-md transition-all duration-500 hover:scale-110">
-            <img
-                src={logo1} // Your Shell E-learning Academy logo
-                alt="Shell E-learning Academy Logo"
-                // Ensure logo is highly visible and constrained
-                className="w-28 h-28 sm:w-36 sm:h-36 object-contain" 
-            />
-        </div>
-    </div>
-</div>
+                            <div className="relative h-80 sm:h-96 rounded-3xl overflow-hidden shadow-2xl shadow-gray-400/30">
+                                {/* Background element: Use a large abstract image to fill the space */}
+                                <img
+                                    src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                    alt="Abstract learning background"
+                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                />
+
+                                {/* Primary/Green Overlay for Theme Consistency */}
+                                <div className="absolute inset-0 bg-primary/80" />
+
+                                {/* Centered Logo with Best Style (Z-indexed above overlay) */}
+                                <div className="absolute inset-0 flex items-center justify-center z-10">
+                                    <div className="p-8 bg-card/80 rounded-full shadow-2xl border-4 border-primary/50 backdrop-blur-md transition-all duration-500 hover:scale-110">
+                                        <img
+                                            src={logo1} // Your Shell E-learning Academy logo
+                                            alt="Shell E-learning Academy Logo"
+                                            // Ensure logo is highly visible and constrained
+                                            className="w-28 h-28 sm:w-36 sm:h-36 object-contain"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -147,7 +147,7 @@ const About = () => {
                         </div>
 
                         <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
-                            
+
                             {/* Founder 1 - Kartik Gupta */}
                             <div className="bg-card rounded-3xl p-8 text-center shadow-lg border border-border/70 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20">
                                 <img

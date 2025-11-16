@@ -11,7 +11,6 @@ import { useAppSelector } from "@/hooks/redux";
 import { courseService } from "@/service/course.service";
 import { studentService } from '@/service/student.service';
 import { useNavigate, Link } from "react-router-dom";
-import FloatingActionButton from '@/components/FloatingActionButton';
 import CourseSearch from "./Course/CourseSearch"; // Assuming this component exists
 
 // --- Helper Components for Clean Code ---
@@ -258,7 +257,7 @@ const Dashboard = () => {
         { title: "Create Course", description: "Build and publish a new learning module.", icon: BookOpen, action: () => navigate('/create-course'), colorClass: "from-primary to-green-500" },
         { title: "Manage Courses", description: "Edit, update, or delete content.", icon: Settings, action: () => navigate('/manage-courses'), colorClass: "from-blue-500 to-blue-600" },
         { title: "Add Category", description: "Organize content with new course categories.", icon: Zap, action: () => navigate('/add-category'), colorClass: "from-purple-500 to-purple-600" },
-        { title: "View All Students", description: "Monitor all registered users.", icon: Users, action: () => navigate('/manage-users'), colorClass: "from-orange-500 to-orange-600" }
+        // { title: "View All Students", description: "Monitor all registered users.", icon: Users, action: () => navigate('/manage-users'), colorClass: "from-orange-500 to-orange-600" }
     ];
 
     // --- Render Sections ---
@@ -287,9 +286,9 @@ const Dashboard = () => {
         <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-3xl font-bold text-foreground">Quick Actions</h2>
-                <Button variant="outline" className="text-primary border-primary hover:bg-primary/10" onClick={() => navigate(viewType === 'admin' ? '/manage-courses' : '/all-courses')}>
+                {/* <Button variant="outline" className="text-primary border-primary hover:bg-primary/10" onClick={() => navigate(viewType === 'admin' ? '/manage-courses' : '/all-courses')}>
                     {viewType === 'admin' ? 'Go to Manager' : 'Browse All'}
-                </Button>
+                </Button> */}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {viewType === 'admin'
@@ -393,7 +392,7 @@ const Dashboard = () => {
                 <div className="mb-12">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-3xl font-bold text-foreground">Platform Overview</h2>
-                        <Button variant="outline" className="text-primary border-primary hover:bg-primary/10">View Reports</Button>
+                        {/* <Button variant="outline" className="text-primary border-primary hover:bg-primary/10">View Reports</Button> */}
                     </div>
                     <Card className="bg-card/90 backdrop-blur-sm border-border/70 p-6 shadow-md">
                         <p className="text-muted-foreground">Monitor key metrics, recent student activity, and course performance metrics here.</p>
@@ -476,7 +475,7 @@ const Dashboard = () => {
             </main>
 
             <Footer />
-            {viewType === 'admin' && <FloatingActionButton />}
+        
         </div>
     );
 };

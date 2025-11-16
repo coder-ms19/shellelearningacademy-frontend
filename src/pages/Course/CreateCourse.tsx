@@ -16,7 +16,7 @@ import { Navigation } from '@/components/Navbar';
 
 const CreateCourse = () => {
     const navigate = useNavigate();
-    const { token } = useAppSelector((state) => state.auth);
+    const token = useAppSelector((state) => state.auth.accessToken);
     const [currentStage, setCurrentStage] = useState(1);
     const [createdCourseId, setCreatedCourseId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +59,10 @@ const CreateCourse = () => {
 
     // Fetch categories
     const fetchCategories = async () => {
-        if (!token) return;
+        if (!token) {
+            return;
+        }
+
         try {
             const res = await courseService.getAllCategories();
             setCategories(res.data || []);
