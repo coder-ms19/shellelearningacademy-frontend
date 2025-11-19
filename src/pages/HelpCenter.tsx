@@ -13,7 +13,6 @@ import {
   CreditCard, 
   Settings, 
   Users,
-  HelpCircle,
   ExternalLink
 } from "lucide-react";
 

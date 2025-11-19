@@ -11,22 +11,22 @@ export const Footer = () => {
             { name: "About Us", path: "/about" },
             { name: "Services", path: "/services" },
             { name: "Contact", path: "/contact" },
-            { name: "Certifications", path: "/certifications" },
+            // { name: "Certifications", path: "/certifications" },
         ],
-        Programs: [
-            { name: "All Courses", path: "/all-courses" },
-            { name: "Featured Bundles", path: "/bundles" },
-            { name: "Live Workshops", path: "/workshops" },
-        ],
+        // Programs: [
+        //     { name: "All Courses", path: "/all-courses" },
+        //     // { name: "Featured Bundles", path: "/bundles" },
+        //     // { name: "Live Workshops", path: "/workshops" },
+        // ],
         Support: [
-            { name: "Help Center", path: "/help-center" },
+            // { name: "Help Center", path: "/help-center" },
             { name: "FAQ", path: "/faq" },
-            { name: "Student Support", path: "/student-support" },
+            // { name: "Student Support", path: "/student-support" },
         ],
         Legal: [
             { name: "Privacy Policy", path: "/privacy" },
             { name: "Terms of Service", path: "/terms" },
-            { name: "Cookie Policy", path: "/cookies" },
+            // { name: "Cookie Policy", path: "/cookies" },
         ],
     };
 

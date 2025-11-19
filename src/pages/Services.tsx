@@ -140,7 +140,7 @@ const Services = () => {
                     </div>
 
                     {/* CTA Section (Refined Card Style) */}
-                    <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-8 md:p-12 text-center shadow-2xl border border-border/70 shadow-primary/10">
+                    {/* <div className="bg-card/90 backdrop-blur-sm rounded-3xl p-8 md:p-12 text-center shadow-2xl border border-border/70 shadow-primary/10">
                         <div className="flex justify-center mb-6">
                             <div className="p-4 bg-primary/10 rounded-2xl shadow-inner">
                                 <Target className="h-8 w-8 text-primary" />
@@ -159,7 +159,7 @@ const Services = () => {
                             Schedule a Consultation
                             <ArrowRight className="ml-2 h-5 w-5" />
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
             </section>
             <Footer />
