@@ -40,7 +40,7 @@ export const CourseCard = ({
   return (
     <Card className="group overflow-hidden hover-lift transition-all duration-300 border-0 shadow-lg hover:shadow-xl h-full flex flex-col">
       {/* Image */}
-      <div className="relative h-48 w-full overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
+      <div className="relative aspect-video w-full overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
         {image ? (
           <img 
             src={image} 

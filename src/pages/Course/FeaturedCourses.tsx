@@ -329,7 +329,7 @@ interface CourseData {
 const MainCourseCard: React.FC<{ course: CourseData }> = ({ course }) => (
     <div className="w-full bg-card rounded-2xl shadow-xl overflow-hidden border transition-all duration-300 hover:shadow-2xl">
         {/* Large Image */}
-        <Link to={`/course-detail/${course.id}`} className="group block relative h-64 sm:h-96 xl:h-[450px] cursor-pointer">
+        <Link to={`/course-detail/${course.id}`} className="group block relative aspect-video cursor-pointer">
             <img
                 src={course.image}
                 alt={course.title}
@@ -384,7 +384,7 @@ const PreviewCourseCard: React.FC<{ course: CourseData, nextSlide: () => void }>
     // Clicking the preview card navigates the carousel (improving UX)
     <div className="w-full bg-card rounded-2xl shadow-lg overflow-hidden border group cursor-pointer" onClick={nextSlide}>
         {/* Smaller Image */}
-        <div className="relative h-48 lg:h-[220px]">
+        <div className="relative aspect-video">
             <img
                 src={course.image}
                 alt={course.title}

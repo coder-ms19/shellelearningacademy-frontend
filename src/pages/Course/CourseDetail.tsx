@@ -244,7 +244,7 @@ const CourseEnrollment: React.FC<CourseEnrollmentProps> = React.memo(({
                     alt={course.title}
                     loading="lazy"
                     className="w-full h-full object-cover"
-                    onError={(e) => e.currentTarget.src = 'https://placehold.co/600x400?text=Course+Thumbnail'}
+                    onError={(e) => e.currentTarget.src = 'https://placehold.co/1280x720?text=Course+Thumbnail'}
                 />
             </div>
 
@@ -606,7 +606,7 @@ const CourseDetail = () => {
                                                     <ChevronDown className={`w-5 h-5 transition-transform text-primary shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
                                                     <span className="text-lg font-semibold text-foreground text-left">{section.title}</span>
                                                 </div>
-                                                <Badge variant="outline" className="text-sm font-medium bg-muted/70 px-3 py-1 ml-auto shrink-0">{totalLessons} Lectures</Badge>
+                                                {/* <Badge variant="outline" className="text-sm font-medium bg-muted/70 px-3 py-1 ml-auto shrink-0">{totalLessons} Lectures</Badge> */}
                                             </button>
 
                                             {isOpen && (

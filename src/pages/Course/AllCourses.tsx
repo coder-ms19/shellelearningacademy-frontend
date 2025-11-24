@@ -23,13 +23,13 @@ const CourseCard = ({ course }) => {
     return (
         <div className="bg-card rounded-xl overflow-hidden shadow-xl border border-border/70 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-1 group">
             {/* Image with Price Badge */}
-            <Link to={`/course-detail/${course.id}`} className="relative block h-48 overflow-hidden">
+            <Link to={`/course-detail/${course.id}`} className="relative block aspect-video overflow-hidden">
                 <img
                     src={course.image}
                     alt={course.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     onError={(e) => {
-                        e.currentTarget.src = 'https://via.placeholder.com/400x256/ECECEC/9CA3AF?text=No+Image';
+                        e.currentTarget.src = 'https://via.placeholder.com/1280x720/ECECEC/9CA3AF?text=No+Image';
                     }}
                 />
                 {course.discountPercent > 0 && (
