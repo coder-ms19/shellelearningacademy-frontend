@@ -149,7 +149,7 @@ export const Footer = () => {
                                 href={social.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-white transition-all duration-300   shadow-md"
+                                className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-black transition-all duration-300   shadow-md"
                                 aria-label={`Follow us on ${social.label}`}
                             >
                                 <social.icon className="h-4 w-4" />

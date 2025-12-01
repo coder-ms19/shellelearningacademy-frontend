@@ -44,15 +44,15 @@ const axiosInstance = axios.create({
 // -------------------------
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
-  console.log("access token in interceptor", token)
+  // console.log("access token in interceptor", token)
    
   
   if (token) {
-    console.log("we are in access token condition")
+    // console.log("we are in access token condition")
     config.headers.Authorization = `Bearer ${token}`;
   }
   else{
-    console.log("we are in enrollment token condition")
+    // console.log("we are in enrollment token condition")
     const enrollmentToken =localStorage.getItem("enrollmentToken");
     // console.log("enrollment token in interceptor", enrollmentToken)
     if(enrollmentToken){

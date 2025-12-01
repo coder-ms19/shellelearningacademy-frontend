@@ -132,7 +132,7 @@ const Profile = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 text-foreground">
-            <Navigation/>
+            <Navbar/>
             <div className="max-w-6xl mx-auto px-4 py-8 pt-32">
                 
                 {/* 1. Header & User Info */}
