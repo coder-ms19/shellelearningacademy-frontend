@@ -134,6 +134,7 @@ const EditCourse = () => {
   };
 
   useEffect(() => {
+    console.log("we are in useefeect to fetch")
     fetchCourseDetails();
     fetchCategories();
   }, [courseId, token]);

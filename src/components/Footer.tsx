@@ -49,7 +49,7 @@ export const Footer = () => {
 
     const LinkGroup = ({ category, links }) => (
         <div>
-            <h3 className="mb-4 font-bold text-base text-foreground transition-colors hover:text-primary">
+            <h3 className="mb-4 font-bold text-base text-white transition-colors ">
                 {category}
             </h3>
             <ul className="space-y-3">
@@ -57,7 +57,7 @@ export const Footer = () => {
                     <li key={link.name}>
                         <Link
                             to={link.path}
-                            className="text-sm text-muted-foreground transition-colors hover:text-primary block"
+                            className="text-sm text-white transition-colors  block"
                         >
                             {link.name}
                         </Link>
@@ -69,7 +69,7 @@ export const Footer = () => {
     
     // --- Main Component Render ---
     return (
-        <footer className="border-t border-border bg-card dark:bg-black/20">
+        <footer className="border-t border-border bg-[#166D37] dark:bg-black/20">
             <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20 max-w-7xl">
                 
                 {/* Top Section: Brand + Links Grid */}
@@ -80,25 +80,25 @@ export const Footer = () => {
                         <Link to="/" className="flex items-center gap-3">
                             <img src={logo} alt="Shell E-learning Academy" className="h-10 w-10 object-contain" />
                             <div>
-                                <span className="font-extrabold text-xl text-primary block">Shell E-learning Academy</span>
-                                <span className="text-xs font-medium text-muted-foreground">MSME Verified | Learn Today</span>
+                                <span className="font-extrabold text-xl text-white block">Shell E-learning Academy</span>
+                                <span className="text-xs font-medium text-white">MSME Verified | Learn Today</span>
                             </div>
                         </Link>
                         
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-sm text-white leading-relaxed">
                             Empowering learners worldwide with cutting-edge education, recognized certifications, and clear career pathways.
                         </p>
 
                         {/* Contact Info */}
                         <div className="space-y-3 pt-3">
-                            <h4 className="font-bold text-sm text-foreground">Get In Touch:</h4>
+                            <h4 className="font-bold text-sm text-white">Get In Touch:</h4>
                             {contactInfo.map((contact, index) => (
                                 <a
                                     key={index}
                                     href={contact.href}
                                     target={contact.href.startsWith('http') ? '_blank' : undefined}
                                     rel={contact.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                                    className="flex items-start gap-3 text-sm text-muted-foreground hover:text-primary transition-colors"
+                                    className="flex items-start gap-3 text-sm text-white  transition-colors"
                                 >
                                     <contact.icon className="h-4 w-4 flex-shrink-0 mt-0.5" />
                                     <span className="break-words">{contact.text}</span>
@@ -128,14 +128,14 @@ export const Footer = () => {
                     
                     {/* Copyright and Links */}
                     <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4 text-center sm:text-left">
-                        <p className="text-sm text-muted-foreground font-medium">
+                        <p className="text-sm text-white font-medium">
                             © {new Date().getFullYear()} Shell E-learning Academy. All rights reserved.
                         </p>
                         {/* <div className="flex gap-4">
-                            <Link to="/sitemap" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+                            <Link to="/sitemap" className="text-xs text-white  transition-colors">
                                 Sitemap
                             </Link>
-                            <Link to="/accessibility" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+                            <Link to="/accessibility" className="text-xs text-white  transition-colors">
                                 Accessibility
                             </Link>
                         </div> */}
@@ -149,7 +149,7 @@ export const Footer = () => {
                                 href={social.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-foreground/80 transition-all duration-300 hover:bg-primary hover:text-primary-foreground shadow-md"
+                                className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-white transition-all duration-300   shadow-md"
                                 aria-label={`Follow us on ${social.label}`}
                             >
                                 <social.icon className="h-4 w-4" />
