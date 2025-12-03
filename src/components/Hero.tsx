@@ -127,6 +127,7 @@ import img3 from "../assets/new_student/3.jpg"
 import img4 from "../assets/new_student/4.jpg"
 import img5 from "../assets/new_student/5.jpg"
 import img6 from "../assets/new_student/6.jpg"
+import img12 from "../assets/new_student/12.jpg"
 
 export const Hero = () => {
   const navigate = useNavigate();
@@ -153,7 +154,7 @@ export const Hero = () => {
     {
       id: 4,
 
-      avatar: img6,
+      avatar: img12,
     },
   ];
 
@@ -216,8 +217,9 @@ export const Hero = () => {
                 New Courses Available
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-foreground leading-[1.1]">
-                Learn. Grow. <br />
-                <span className="text-primary">Succeed with Shell.</span>
+                Learn The  <br />
+                <span className="text-primary">Future
+                  TODAY</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
                 Unlock your potential with expert-led courses designed for real-world success. Join a community of learners and transform your future today.
