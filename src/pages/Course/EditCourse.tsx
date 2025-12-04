@@ -61,13 +61,14 @@ const EditCourse = () => {
   // Helper states
   const [currentTag, setCurrentTag] = useState('');
   const [currentInstruction, setCurrentInstruction] = useState('');
-  const [showPdfViewer, setShowPdfViewer] = useState(false);
 
   const initialForm = { title: '' };
 
   // Fetch course details (adapted to controller fields)
   const fetchCourseDetails = async () => {
-    if (!courseId || !token) return;
+    if (!courseId || !token) {
+    console.log("token and course id is not found")
+    };
     try {
       setIsLoadingCourse(true);
       const res = await courseService.getFullCourseDetails(courseId, token);
@@ -124,7 +125,9 @@ const EditCourse = () => {
 
   // Fetch categories
   const fetchCategories = async () => {
-    if (!token) return;
+    if (!token) {
+      console.log("token is not found")
+    };
     try {
       const res = await courseService.getAllCategories();
       setCategories(res.data || []);
@@ -137,7 +140,7 @@ const EditCourse = () => {
     console.log("we are in useefeect to fetch")
     fetchCourseDetails();
     fetchCategories();
-  }, [courseId, token]);
+  }, []);
 
   // Stage 1 Handlers (matched to controller)
   const handleCourseInputChange = (e) => {
@@ -952,15 +955,7 @@ const EditCourse = () => {
                             {!courseData.brochure && <Badge variant="outline" className="text-xs">Existing</Badge>}
                           </div>
                           <div className="flex gap-2">
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              onClick={() => setShowPdfViewer(!showPdfViewer)}
-                            >
-                              <Eye className="w-4 h-4 mr-1" />
-                              {showPdfViewer ? 'Hide Preview' : 'Show Preview'}
-                            </Button>
+                           
                             <Button
                               type="button"
                               size="sm"
@@ -998,17 +993,7 @@ const EditCourse = () => {
                           </div>
                         </div>
                       </div>
-                      {showPdfViewer && (
-                        <div className="mt-4 border border-border rounded-lg overflow-hidden">
-                          <iframe
-                            src={courseData.brochure ? URL.createObjectURL(courseData.brochure) : courseData.brochureUrl}
-                            width="100%"
-                            height="600px"
-                            title="PDF Preview"
-                            className="w-full"
-                          />
-                        </div>
-                      )}
+                      
                     </div>
                   )}
                 </div>
