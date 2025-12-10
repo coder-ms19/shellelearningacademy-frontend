@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { createPopupData } from "@/service/popup.service"; // Placeholder service
 import toast from "react-hot-toast";
-import { MessageSquareText, X, Loader2 } from "lucide-react"; 
+import { MessageSquareText, X, Loader2 } from "lucide-react";
 
 // --- 1. Zod Schema for Form Validation ---
 const formSchema = z.object({
@@ -42,11 +42,17 @@ const Popup = () => {
   // --- Show Popup Timer (after 10 seconds) ---
   useEffect(() => {
     const hasSeenPopup = localStorage.getItem("hasSeenPopup");
+    const nexaLeadCaptured = localStorage.getItem("nexaLeadCaptured");
 
-    if (!hasSeenPopup) {
+    // Don't show popup if user has already seen it OR if Nexa lead form is being shown/captured
+    if (!hasSeenPopup && !nexaLeadCaptured) {
       const timer = setTimeout(() => {
-        setShowPopup(true);
-        localStorage.setItem("hasSeenPopup", "true");
+        // Double-check before showing (in case Nexa form was shown during the timeout)
+        const nexaLeadCheck = localStorage.getItem("nexaLeadCaptured");
+        if (!nexaLeadCheck) {
+          setShowPopup(true);
+          localStorage.setItem("hasSeenPopup", "true");
+        }
       }, 10000);
 
       return () => clearTimeout(timer);
@@ -83,11 +89,13 @@ const Popup = () => {
     try {
       // Replace with actual API call:
       // await createPopupData(values); 
-      console.log("Form Data Submitted:", values); 
+      console.log("Form Data Submitted:", values);
 
       toast.success("Thank you! We've received your details!");
       setShowPopup(false);
       localStorage.setItem("hasSeenPopup", "true");
+      // Also set nexaLeadCaptured to prevent Nexa lead form from showing
+      localStorage.setItem("nexaLeadCaptured", "true");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }
@@ -102,28 +110,29 @@ const Popup = () => {
   return (
     // Backdrop: High Z-index, blurred background, padding for mobile edges
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in p-4 sm:p-0">
-      
+
       {/* Modal Container: Modern Card Style, Max height/Scrollable for Mobile */}
       <div className="
         bg-card p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-sm sm:max-w-md 
         transition-all duration-300 transform scale-100 opacity-100 
         max-h-[90vh] overflow-y-auto 
       ">
-        
+
         {/* Header Section: Sticky for better mobile scroll UX */}
         <div className="flex justify-between items-center mb-4 pb-4 border-b border-border/70 sticky top-0 bg-card z-10">
           <div className="flex items-center space-x-2">
-             <MessageSquareText className="h-6 w-6 text-primary" />
-             <h2 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
-               Get in Touch
-             </h2>
+            <MessageSquareText className="h-6 w-6 text-primary" />
+            <h2 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
+              Get in Touch
+            </h2>
           </div>
-          
+
           {/* Close Button: Styled consistently with Navigation */}
           <Button
             onClick={() => {
               setShowPopup(false);
               localStorage.setItem("hasSeenPopup", "true");
+              localStorage.setItem("nexaLeadCaptured", "true");
             }}
             variant="ghost"
             size="icon"
@@ -133,15 +142,15 @@ const Popup = () => {
             <X className="h-5 w-5" />
           </Button>
         </div>
-        
+
         <p className="text-sm text-muted-foreground mb-6">
-            Fill in your details to get early access and updates.
+          Fill in your details to get early access and updates.
         </p>
 
         {/* Form Content */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            
+
             {/* Input Field: Name */}
             <FormField
               control={form.control}
@@ -150,17 +159,17 @@ const Popup = () => {
                 <FormItem>
                   <FormLabel className="font-semibold">Full Name</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="e.g., Jane Doe" 
+                    <Input
+                      placeholder="e.g., Jane Doe"
                       className="h-10 bg-background border border-border rounded-lg focus-visible:ring-primary focus-visible:border-primary/50"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
-            
+
             {/* Input Field: Email */}
             <FormField
               control={form.control}
@@ -169,18 +178,18 @@ const Popup = () => {
                 <FormItem>
                   <FormLabel className="font-semibold">Email</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="you@example.com" 
+                    <Input
+                      placeholder="you@example.com"
                       type="email"
                       className="h-10 bg-background border border-border rounded-lg focus-visible:ring-primary focus-visible:border-primary/50"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
-            
+
             {/* Input Field: Phone Number */}
             <FormField
               control={form.control}
@@ -189,18 +198,18 @@ const Popup = () => {
                 <FormItem>
                   <FormLabel className="font-semibold">Phone Number</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="e.g., 9876543210" 
+                    <Input
+                      placeholder="e.g., 9876543210"
                       type="tel"
                       className="h-10 bg-background border border-border rounded-lg focus-visible:ring-primary focus-visible:border-primary/50"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
-            
+
             {/* Input Field: College */}
             <FormField
               control={form.control}
@@ -209,17 +218,17 @@ const Popup = () => {
                 <FormItem>
                   <FormLabel className="font-semibold">College / Organization</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="e.g., XYZ University" 
+                    <Input
+                      placeholder="e.g., XYZ University"
                       className="h-10 bg-background border border-border rounded-lg focus-visible:ring-primary focus-visible:border-primary/50"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
-            
+
             {/* Input Field: Batch */}
             <FormField
               control={form.control}
@@ -228,10 +237,10 @@ const Popup = () => {
                 <FormItem>
                   <FormLabel className="font-semibold">Batch / Year</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="e.g., 2024" 
+                    <Input
+                      placeholder="e.g., 2024"
                       className="h-10 bg-background border border-border rounded-lg focus-visible:ring-primary focus-visible:border-primary/50"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
@@ -240,10 +249,10 @@ const Popup = () => {
             />
 
             {/* Submit Button: Prominent CTA Style */}
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full h-11 mt-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-6 py-2 font-bold shadow-lg shadow-primary/30 transition-all duration-300 hover:scale-[1.01]"
-              disabled={form.formState.isSubmitting} 
+              disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting ? (
                 <>

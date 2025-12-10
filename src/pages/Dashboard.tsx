@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Award, Clock, TrendingUp, GraduationCap, Play, Settings, Users, CheckCircle, Search, Loader2, Zap, Calendar } from "lucide-react";
+import { BookOpen, Award, Clock, TrendingUp, GraduationCap, Play, Settings, Users, CheckCircle, Search, Loader2, Zap, Calendar, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAppSelector } from "@/hooks/redux";
 import { courseService } from "@/service/course.service";
@@ -256,9 +256,11 @@ const Dashboard = () => {
     const adminActions = [
         { title: "Create Course", description: "Build and publish a new learning module.", icon: BookOpen, action: () => navigate('/create-course'), colorClass: "from-primary to-green-500" },
         { title: "Create Workshop", description: "Schedule a new workshop or event.", icon: Calendar, action: () => navigate('/create-workshop'), colorClass: "from-pink-500 to-rose-500" },
-        { title: "Manage Courses", description: "Edit, update, or delete content.", icon: Settings, action: () => navigate('/manage-courses'), colorClass: "from-blue-500 to-blue-600" },
-        { title: "Add Category", description: "Organize content with new course categories.", icon: Zap, action: () => navigate('/add-category'), colorClass: "from-purple-500 to-purple-600" },
-        { title: "Create Job", description: "Post new job opportunities for students.", icon: Users, action: () => navigate('/create-job'), colorClass: "from-orange-500 to-orange-600" },
+        { title: "Workshop Applications", description: "View and manage workshop registrations.", icon: Users, action: () => navigate('/workshop-registrations'), colorClass: "from-blue-500 to-blue-600" },
+        { title: "Nexa Leads", description: "View all leads captured from Nexa AI.", icon: Sparkles, action: () => navigate('/leads'), colorClass: "from-indigo-500 to-purple-600" },
+        { title: "Manage Courses", description: "Edit, update, or delete content.", icon: Settings, action: () => navigate('/manage-courses'), colorClass: "from-purple-500 to-purple-600" },
+        { title: "Add Category", description: "Organize content with new course categories.", icon: Zap, action: () => navigate('/add-category'), colorClass: "from-orange-500 to-orange-600" },
+        { title: "Create Job", description: "Post new job opportunities for students.", icon: GraduationCap, action: () => navigate('/create-job'), colorClass: "from-teal-500 to-teal-600" },
         { title: "Manage Jobs", description: "Edit and manage existing job postings.", icon: Settings, action: () => navigate('/manage-jobs'), colorClass: "from-red-500 to-red-600" }
     ];
 

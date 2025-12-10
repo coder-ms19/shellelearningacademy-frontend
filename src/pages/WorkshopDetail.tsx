@@ -2,15 +2,16 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { WorkshopRegistrationModal } from "@/components/WorkshopRegistrationModal";
 import { workshopService } from "@/service/workshop.service";
 import { useAppSelector } from "@/hooks/redux";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { 
-    Calendar, Clock, MapPin, Monitor, 
-    CheckCircle, ArrowLeft, Loader2, DollarSign, 
+import {
+    Calendar, Clock, MapPin, Monitor,
+    CheckCircle, ArrowLeft, Loader2, DollarSign,
     Share2, Users, TrendingUp, Zap, ArrowRight, Video
 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -64,8 +65,8 @@ const WorkshopEnrollmentCard: React.FC<WorkshopEnrollmentProps> = React.memo(({
     const PrimaryButton = () => {
         if (isEnrolled) {
             return (
-                <Button 
-                    className="w-full bg-green-100 text-green-800 hover:bg-green-200 font-bold h-12 text-lg" 
+                <Button
+                    className="w-full bg-green-100 text-green-800 hover:bg-green-200 font-bold h-12 text-lg"
                     disabled
                 >
                     <CheckCircle className="w-5 h-5 mr-2" /> Already Enrolled
@@ -83,12 +84,12 @@ const WorkshopEnrollmentCard: React.FC<WorkshopEnrollmentProps> = React.memo(({
             >
                 {enrolling ? (
                     <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" /> 
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                         {workshop.type === 'Free' ? 'Registering...' : 'Processing...'}
                     </>
                 ) : (
                     <>
-                        <Zap className="w-5 h-5 mr-2" /> 
+                        <Zap className="w-5 h-5 mr-2" />
                         {buttonText}
                     </>
                 )}
@@ -147,7 +148,7 @@ const WorkshopEnrollmentCard: React.FC<WorkshopEnrollmentProps> = React.memo(({
                 <div className="flex justify-center items-center text-xs text-muted-foreground/70 pt-1">
                     <Users className="w-4 h-4 mr-1 text-primary" />
                     {/* Placeholder for dynamic count */}
-                    <span>{workshop.studentsEnrolled?.length || 0} participants joined so far</span> 
+                    <span>{workshop.studentsEnrolled?.length || 0} participants joined so far</span>
                 </div>
 
                 <Separator className="my-4" />
@@ -199,6 +200,7 @@ const WorkshopDetail = () => {
     const [workshop, setWorkshop] = useState<Workshop | null>(location.state?.workshop || null);
     const [loading, setLoading] = useState(!workshop);
     const [enrolling, setEnrolling] = useState(false);
+    const [showRegistrationModal, setShowRegistrationModal] = useState(false);
 
     // Memoize the JSON parsing for list fields
     const parseListField = useCallback((field: string[] | string) => {
@@ -238,7 +240,7 @@ const WorkshopDetail = () => {
         if (!userId) return false;
 
         // Check if user ID is in the enrolled students list
-        return workshop.studentsEnrolled?.some((student: any) => 
+        return workshop.studentsEnrolled?.some((student: any) =>
             student._id === userId
         ) || false;
     }, [user, workshop]);
@@ -246,31 +248,35 @@ const WorkshopDetail = () => {
     const handleEnroll = useCallback(async () => {
         if (!workshop) return;
 
-        if (!accessToken) {
-            toast.error("This feature is not available yet ");
-            return;
+        // Allow registration without login
+        // Show registration modal for all workshops (both Free and Paid)
+        setShowRegistrationModal(true);
+    }, [workshop]);
+
+    const handleRegistrationSuccess = useCallback(() => {
+        // Refresh workshop details to get updated enrollment count
+        if (id) {
+            fetchWorkshop();
         }
+    }, [id, fetchWorkshop]);
+
+    // Legacy enrollment function (kept for backward compatibility)
+    const handleDirectEnroll = useCallback(async () => {
+        if (!workshop || !accessToken) return;
 
         if (user?.accountType !== "Student") {
             toast.error("Only students can enroll in workshops.");
             return;
         }
 
-        if (workshop.type === 'Paid' && workshop.price > 0) {
-            // Placeholder for payment gateway integration (like the CourseDetail component)
-            toast.info("This is a paid workshop. Payment gateway integration required here.");
-            return; 
-        }
-
-        setEnrolling(true);
         try {
             await workshopService.enrollWorkshop(workshop._id, accessToken);
             toast.success("Enrolled successfully!");
-            
+
             // Re-fetch or manually update state to show "Already Enrolled"
-            setWorkshop(prev => prev ? ({ 
-                ...prev, 
-                studentsEnrolled: [...(prev.studentsEnrolled || []), { _id: user._id || (user as any).id }] 
+            setWorkshop(prev => prev ? ({
+                ...prev,
+                studentsEnrolled: [...(prev.studentsEnrolled || []), { _id: user._id || (user as any).id }]
             } as Workshop) : null);
 
         } catch (error: any) {
@@ -433,7 +439,7 @@ const WorkshopDetail = () => {
                         )}
 
                         <Separator />
-                        
+
                         {/* 4. Practical Details */}
                         <div>
                             <h3 className="text-2xl font-bold mb-5 text-foreground border-l-4 border-green-600 pl-4">Practical Information</h3>
@@ -473,13 +479,13 @@ const WorkshopDetail = () => {
                             onEnroll={handleEnroll}
                             enrolling={enrolling}
                         />
-                         {/* Share Button (Optional but adds to premium feel) */}
-                        <Button 
-                            onClick={() => { 
-                                navigator.clipboard.writeText(window.location.href); 
-                                toast.success("Link copied to clipboard!"); 
-                            }} 
-                            variant="outline" 
+                        {/* Share Button (Optional but adds to premium feel) */}
+                        <Button
+                            onClick={() => {
+                                navigator.clipboard.writeText(window.location.href);
+                                toast.success("Link copied to clipboard!");
+                            }}
+                            variant="outline"
                             className="w-full gap-3 h-12 mt-6 border-dashed border-2 border-primary/50 text-primary font-bold hover:bg-primary/5 shadow-md transition-all"
                         >
                             <Share2 className="w-5 h-5" /> Share this Workshop
@@ -487,6 +493,20 @@ const WorkshopDetail = () => {
                     </div>
                 </div>
             </main>
+
+            {/* Registration Modal */}
+            {workshop && (
+                <WorkshopRegistrationModal
+                    open={showRegistrationModal}
+                    onOpenChange={setShowRegistrationModal}
+                    workshopId={workshop._id}
+                    workshopTitle={workshop.title}
+                    workshopType={workshop.type}
+                    workshopPrice={workshop.price}
+                    accessToken={accessToken || ''}
+                    onSuccess={handleRegistrationSuccess}
+                />
+            )}
 
             <Footer />
         </div>

@@ -1,12 +1,61 @@
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, Loader2, Zap, MessageSquare, Menu, X, Clock, User, MessageSquareText, RefreshCw, Layers, ArrowLeft } from 'lucide-react';
+import { Send, Loader2, Zap, MessageSquare, Menu, X, User, MessageSquareText, RefreshCw, Layers, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import nexa_img from "../../assets/nexa.png"
 import axiosInstance from '@/service/axiosInstance';
+import { useNexaChat } from '@/context/NexaChatContext';
+import { Navbar } from '../Navbar';
+import { Footer } from '../Footer';
+import { LeadFormModal } from '../LeadFormModal';
+
+// --- Types ---
+interface ButtonProps {
+    children: React.ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
+    type?: 'button' | 'submit' | 'reset';
+    size?: string;
+    variant?: string;
+    className?: string;
+    title?: string;
+}
+
+interface MessageBubbleProps {
+    sender: 'User' | 'Nexa';
+    text: string;
+    timestamp: string;
+}
+
+interface ChatInputProps {
+    input: string;
+    setInput: (value: string) => void;
+    handleSend: (e: React.FormEvent) => void;
+    isLoading: boolean;
+}
+
+interface ChatMessagesProps {
+    messages: Array<{ id: number; sender: 'User' | 'Nexa'; text: string; timestamp: string }>;
+    isLoading: boolean;
+    messagesEndRef: React.RefObject<HTMLDivElement>;
+    nexa_img: string;
+}
+
+interface SidebarProps {
+    isSidebarOpen: boolean;
+    setIsSidebarOpen: (value: boolean) => void;
+    handleNewChat: () => void;
+    handlePromptClick: (prompt: string) => void;
+    isLoading: boolean;
+    nexa_img: string;
+}
+
+interface HeaderProps {
+    setIsSidebarOpen: (value: boolean) => void;
+}
 
 // --- Custom Button Component ---
-const Button = ({ children, onClick, disabled, type = 'button', size, variant = 'primary', className = '' }) => {
+const Button: React.FC<ButtonProps> = ({ children, onClick, disabled, type = 'button', size, variant = 'primary', className = '', title }) => {
     let baseClasses = "flex items-center justify-center font-semibold rounded-xl transition-all duration-300 active:scale-[0.98] focus:ring-4 focus:ring-offset-2 focus:ring-primary/50 relative z-10";
     if (size === 'icon') baseClasses += " h-11 w-11 p-2";
     else if (size === 'lg') baseClasses += " h-14 px-7 py-3 text-lg";
@@ -23,6 +72,7 @@ const Button = ({ children, onClick, disabled, type = 'button', size, variant = 
             onClick={onClick}
             disabled={disabled}
             className={`${baseClasses} ${className}`}
+            title={title}
         >
             {children}
         </motion.button>
@@ -30,7 +80,7 @@ const Button = ({ children, onClick, disabled, type = 'button', size, variant = 
 };
 
 // --- Memoized Message Bubble Component ---
-const MessageBubble = memo(({ sender, text, timestamp }) => {
+const MessageBubble = memo<MessageBubbleProps>(({ sender, text, timestamp }) => {
     const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     const isUser = sender === 'User';
 
@@ -67,7 +117,7 @@ const MessageBubble = memo(({ sender, text, timestamp }) => {
 
 
 // --- Component for the Input Bar and Footer (Dynamic Part) ---
-const ChatInput = memo(({ input, setInput, handleSend, isLoading }) => {
+const ChatInput = memo<ChatInputProps>(({ input, setInput, handleSend, isLoading }) => {
     return (
         <footer className="flex-shrink-0 p-4 pb-6 md:p-6 border-t border-border/40 bg-background/80 backdrop-blur-xl relative z-20">
             <form onSubmit={handleSend} className="max-w-4xl mx-auto relative flex items-end gap-2 p-1.5 bg-card/60 backdrop-blur-sm border border-border/50 rounded-[24px] shadow-sm hover:shadow-md transition-shadow duration-300">
@@ -103,7 +153,7 @@ const ChatInput = memo(({ input, setInput, handleSend, isLoading }) => {
 
 
 // --- Component for the Message Body (Only renders on new messages) ---
-const ChatMessages = memo(({ messages, isLoading, messagesEndRef, nexa_img }) => {
+const ChatMessages = memo<ChatMessagesProps>(({ messages, isLoading, messagesEndRef, nexa_img }) => {
     return (
         <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 bg-transparent custom-scrollbar-thin relative z-10 scroll-smooth">
             <AnimatePresence>
@@ -144,17 +194,23 @@ const ChatMessages = memo(({ messages, isLoading, messagesEndRef, nexa_img }) =>
 
 const FullPageAIChatbot = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            sender: 'Nexa',
-            text: "Hello! I'm **Nexa**, your official AI assistant. I can help you with courses, fees, and policies. **Ask me anything!**",
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        },
-    ]);
+    const { messages, setMessages, clearMessages } = useNexaChat();
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showLeadForm, setShowLeadForm] = useState(false);
+    const [hasSubmittedLead, setHasSubmittedLead] = useState(false);
     const messagesEndRef = useRef(null);
+
+    // Check localStorage on mount and show lead form if not submitted
+    useEffect(() => {
+        const leadCaptured = localStorage.getItem('nexaLeadCaptured');
+        if (leadCaptured === 'true') {
+            setHasSubmittedLead(true);
+        } else {
+            // Show lead form on page load if not captured yet
+            setShowLeadForm(true);
+        }
+    }, []);
 
     const scrollToBottom = useCallback(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -165,14 +221,14 @@ const FullPageAIChatbot = () => {
     }, [messages, scrollToBottom]);
 
 
-    const handleSend = useCallback(async (e) => {
+    const handleSend = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
 
         const messageText = input.trim();
         const userMessage = {
             id: Date.now(),
-            sender: 'User',
+            sender: 'User' as const,
             text: messageText,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
@@ -188,7 +244,7 @@ const FullPageAIChatbot = () => {
 
             const aiMessage = {
                 id: Date.now() + 1,
-                sender: 'Nexa',
+                sender: 'Nexa' as const,
                 text: aiResponseText,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
@@ -198,7 +254,7 @@ const FullPageAIChatbot = () => {
         } catch (error) {
             const errorMessage = {
                 id: Date.now() + 1,
-                sender: 'Nexa',
+                sender: 'Nexa' as const,
                 text: "⚠️ **Connection Error**: I failed to reach the server. Please try again.",
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
@@ -206,34 +262,20 @@ const FullPageAIChatbot = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [input, isLoading]);
+    }, [input, isLoading, setMessages]);
 
     const handleNewChat = useCallback(() => {
-        setMessages([
-            {
-                id: Date.now(),
-                sender: 'Nexa',
-                text: "Hello! I'm **Nexa**, your official AI assistant. I can help you with courses, fees, and policies. **Ask me anything!**",
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            },
-        ]);
+        clearMessages();
         setInput('');
         setIsLoading(false);
         setIsSidebarOpen(false);
-    }, []);
+    }, [clearMessages]);
 
-    // Helper function to send message (hoisted via const definition before usage in handler if possible, or use useCallback)
-    // We can't hoist const. So we define it here, but handlePromptClick depends on it.
-    // To solve circular or ordering deps, we can just inline the logic or use a ref.
-    // However, since handleSend is already there, we can reuse handleSend if we refactor it to take text as argument.
-    // But handleSend is bound to 'e' event. 
-    // SAFEST FIX: Define sendUserMessage BEFORE handlePromptClick.
-
-    const sendUserMessage = useCallback(async (text) => {
+    const sendUserMessage = useCallback(async (text: string) => {
         if (!text.trim() || isLoading) return;
         const userMessage = {
             id: Date.now(),
-            sender: 'User',
+            sender: 'User' as const,
             text: text,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
@@ -246,7 +288,7 @@ const FullPageAIChatbot = () => {
             const aiResponseText = response.data.reply;
             const aiMessage = {
                 id: Date.now() + 1,
-                sender: 'Nexa',
+                sender: 'Nexa' as const,
                 text: aiResponseText,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
@@ -254,7 +296,7 @@ const FullPageAIChatbot = () => {
         } catch (error) {
             const errorMessage = {
                 id: Date.now() + 1,
-                sender: 'Nexa',
+                sender: 'Nexa' as const,
                 text: "⚠️ **Connection Error**: I failed to reach the server. Please try again.",
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
@@ -262,85 +304,98 @@ const FullPageAIChatbot = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [isLoading]);
+    }, [isLoading, setMessages]);
 
-    const handlePromptClick = useCallback((prompt) => {
-        // setInput(prompt);
+    const handlePromptClick = useCallback((prompt: string) => {
         sendUserMessage(prompt);
     }, [sendUserMessage]);
 
 
     return (
-        <div className="fixed inset-0 flex transition-all duration-300 z-[9999] text-foreground font-sans overflow-hidden bg-background">
+        <>
+            <Navbar />
+            <div className="fixed inset-0 flex transition-all duration-300 z-40 text-foreground font-sans overflow-hidden bg-background pt-16">
 
-            {/* Abstract Background Elements */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
-                <motion.div
-                    animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
-                />
-                <motion.div
-                    animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                    className="absolute bottom-0 left-0 w-72 h-72 bg-secondary/10 rounded-full blur-3xl"
-                />
-            </div>
+                {/* Abstract Background Elements */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+                    <motion.div
+                        animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
+                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
+                    />
+                    <motion.div
+                        animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
+                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                        className="absolute bottom-0 left-0 w-72 h-72 bg-secondary/10 rounded-full blur-3xl"
+                    />
+                </div>
 
-            {/* Sidebar */}
-            <Sidebar
-                isSidebarOpen={isSidebarOpen}
-                setIsSidebarOpen={setIsSidebarOpen}
-                handleNewChat={handleNewChat}
-                handlePromptClick={handlePromptClick}
-                isLoading={isLoading}
-                nexa_img={nexa_img}
-            />
-
-            {/* Main Chat Area */}
-            <div className={`flex-1 flex flex-col transition-all duration-500 ease-spring relative z-10 ${isSidebarOpen ? 'opacity-50 md:opacity-100' : 'opacity-100'}`}>
-
-                {isSidebarOpen && <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={() => setIsSidebarOpen(false)} />}
-
-                <Header setIsSidebarOpen={setIsSidebarOpen} />
-
-                <ChatMessages
-                    messages={messages}
+                {/* Sidebar */}
+                <Sidebar
+                    isSidebarOpen={isSidebarOpen}
+                    setIsSidebarOpen={setIsSidebarOpen}
+                    handleNewChat={handleNewChat}
+                    handlePromptClick={handlePromptClick}
                     isLoading={isLoading}
-                    messagesEndRef={messagesEndRef}
                     nexa_img={nexa_img}
                 />
 
-                <ChatInput
-                    input={input}
-                    setInput={setInput}
-                    handleSend={handleSend}
-                    isLoading={isLoading}
-                />
+                {/* Main Chat Area */}
+                <div className={`flex-1 flex flex-col transition-all duration-500 ease-spring relative z-10 ${isSidebarOpen ? 'opacity-50 md:opacity-100' : 'opacity-100'}`}>
+
+                    {isSidebarOpen && <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={() => setIsSidebarOpen(false)} />}
+
+                    <Header setIsSidebarOpen={setIsSidebarOpen} />
+
+                    <ChatMessages
+                        messages={messages}
+                        isLoading={isLoading}
+                        messagesEndRef={messagesEndRef}
+                        nexa_img={nexa_img}
+                    />
+
+                    <ChatInput
+                        input={input}
+                        setInput={setInput}
+                        handleSend={handleSend}
+                        isLoading={isLoading}
+                    />
+                </div>
+
+                <style>{`
+                    .custom-scrollbar-thin::-webkit-scrollbar {
+                        width: 6px;
+                    }
+                    .custom-scrollbar-thin::-webkit-scrollbar-track {
+                        background: transparent;
+                    }
+                    .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+                        background: rgba(156, 163, 175, 0.5);
+                        border-radius: 10px;
+                    }
+                    .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+                        background: rgba(156, 163, 175, 0.8);
+                    }
+                `}</style>
             </div>
 
-            <style>{`
-                .custom-scrollbar-thin::-webkit-scrollbar {
-                    width: 6px;
-                }
-                .custom-scrollbar-thin::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-                .custom-scrollbar-thin::-webkit-scrollbar-thumb {
-                    background: rgba(156, 163, 175, 0.5);
-                    border-radius: 10px;
-                }
-                .custom-scrollbar-thin::-webkit-scrollbar-thumb:hover {
-                    background: rgba(156, 163, 175, 0.8);
-                }
-            `}</style>
-        </div>
+            {/* Lead Form Modal */}
+            <LeadFormModal
+                open={showLeadForm}
+                onOpenChange={setShowLeadForm}
+                onSuccess={() => {
+                    setHasSubmittedLead(true);
+                }}
+            />
+
+            <Footer />
+        </>
     );
 };
 
 // --- Memoized Header Component ---
-const Header = memo(({ setIsSidebarOpen }: any) => {
+const Header = memo<HeaderProps>(({ setIsSidebarOpen }) => {
     const navigate = useNavigate();
     return (
         <header className="flex items-center justify-between p-4 md:px-8 bg-background/80 border-b border-border shadow-sm flex-shrink-0 backdrop-blur-md relative z-20">
@@ -382,10 +437,9 @@ const Header = memo(({ setIsSidebarOpen }: any) => {
 });
 
 // --- Memoized Sidebar Component ---
-const Sidebar = memo(({ isSidebarOpen, setIsSidebarOpen, handleNewChat, handlePromptClick, isLoading, nexa_img }) => {
+const Sidebar = memo<SidebarProps>(({ isSidebarOpen, setIsSidebarOpen, handleNewChat, handlePromptClick, isLoading, nexa_img }) => {
     const recommendedPrompts = [
         "What are the most popular courses?",
-        "Can I get a scholarship for fees?",
         "How do I get my certificate?",
         "Do you offer career guidance?",
     ];
@@ -446,7 +500,7 @@ const Sidebar = memo(({ isSidebarOpen, setIsSidebarOpen, handleNewChat, handlePr
                         Knowledge Base
                     </h4>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                        Nexa is trained on the latest course material and  policies.
+                        Nexa is trained on the latest course material and policies.
                     </p>
                 </div>
             </div>

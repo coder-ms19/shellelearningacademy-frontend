@@ -49,6 +49,89 @@ class WorkshopService {
             throw error;
         }
     }
+
+    // Register for workshop (works with or without authentication)
+    public async registerForWorkshop(data: {
+        workshopId: string;
+        name: string;
+        email: string;
+        phone: string;
+        college: string;
+        year: string;
+    }, token?: string) {
+        try {
+            const config = token ? {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            } : {};
+
+            const res = await axiosInstance.post(`/workshop/registerForWorkshop`, data, config);
+            return res.data;
+        } catch (error: any) {
+            throw error;
+        }
+    }
+
+    // Admin: Get all workshop registrations
+    public async getAllWorkshopRegistrations(token: string) {
+        try {
+            const res = await axiosInstance.get(`/workshop/getAllRegistrations`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            return res.data;
+        } catch (error: any) {
+            throw error;
+        }
+    }
+
+    // Admin: Get registrations for specific workshop
+    public async getWorkshopRegistrations(workshopId: string, token: string) {
+        try {
+            const res = await axiosInstance.get(`/workshop/getWorkshopRegistrations/${workshopId}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            return res.data;
+        } catch (error: any) {
+            throw error;
+        }
+    }
+
+    // Admin: Update registration status
+    public async updateRegistrationStatus(registrationId: string, status: string, token: string) {
+        try {
+            const res = await axiosInstance.put(`/workshop/updateRegistrationStatus/${registrationId}`,
+                { status },
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+            return res.data;
+        } catch (error: any) {
+            throw error;
+        }
+    }
+
+    // Get my workshop registrations
+    public async getMyWorkshopRegistrations(token: string) {
+        try {
+            const res = await axiosInstance.get(`/workshop/myRegistrations`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            return res.data;
+        } catch (error: any) {
+            throw error;
+        }
+    }
 }
 
 export const workshopService = new WorkshopService();
+

@@ -4,23 +4,28 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import nexa_img from "../../assets/nexa.png";
 import axiosInstance from '@/service/axiosInstance';
+import { useNexaChat } from '@/context/NexaChatContext';
+import { LeadFormModal } from '../LeadFormModal';
 
 const FloatingNexaChat = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            sender: 'Nexa',
-            text: "Hi! I'm **Nexa**. How can I help you today?",
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        },
-    ]);
+    const [showLeadForm, setShowLeadForm] = useState(false);
+    const [hasSubmittedLead, setHasSubmittedLead] = useState(false);
+    const { messages, setMessages } = useNexaChat();
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null); // Ref for the chat container
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Check localStorage on mount
+    useEffect(() => {
+        const leadCaptured = localStorage.getItem('nexaLeadCaptured');
+        if (leadCaptured === 'true') {
+            setHasSubmittedLead(true);
+        }
+    }, []);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -57,7 +62,7 @@ const FloatingNexaChat = () => {
         const messageText = input.trim();
         const userMessage = {
             id: Date.now(),
-            sender: 'User',
+            sender: 'User' as const,
             text: messageText,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
@@ -73,7 +78,7 @@ const FloatingNexaChat = () => {
 
             const aiMessage = {
                 id: Date.now() + 1,
-                sender: 'Nexa',
+                sender: 'Nexa' as const,
                 text: aiResponseText,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
@@ -83,7 +88,7 @@ const FloatingNexaChat = () => {
         } catch (error) {
             const errorMessage = {
                 id: Date.now() + 1,
-                sender: 'Nexa',
+                sender: 'Nexa' as const,
                 text: "⚠️ Connection Error. Please try again.",
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
@@ -218,7 +223,13 @@ const FloatingNexaChat = () => {
 
             {/* Floating Button */}
             <motion.button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => {
+                    if (!hasSubmittedLead) {
+                        setShowLeadForm(true);
+                    } else {
+                        setIsOpen(!isOpen);
+                    }
+                }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className={`w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 z-50 overflow-hidden relative group ${isOpen ? 'bg-destructive ring-4 ring-destructive/20' : 'bg-primary ring-4 ring-primary/20'}`}
@@ -253,6 +264,16 @@ const FloatingNexaChat = () => {
                     )}
                 </AnimatePresence>
             </motion.button>
+
+            {/* Lead Form Modal */}
+            <LeadFormModal
+                open={showLeadForm}
+                onOpenChange={setShowLeadForm}
+                onSuccess={() => {
+                    setHasSubmittedLead(true);
+                    setIsOpen(true);
+                }}
+            />
         </div>
     );
 };

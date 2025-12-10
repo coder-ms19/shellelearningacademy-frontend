@@ -10,6 +10,8 @@ import ScrollToTop from "@/components/ScrollToTop";
 import Workshops from "./pages/Workshops";
 import WorkshopDetail from "./pages/WorkshopDetail";
 import CreateWorkshop from "./pages/CreateWorkshop";
+import WorkshopRegistrations from "./pages/WorkshopRegistrations";
+import Leads from "./pages/Leads";
 import { Toaster } from "react-hot-toast";
 import Index from "./pages/Index";
 import Courses from "./pages/Courses";
@@ -56,6 +58,7 @@ import Demo from "./pages/Demo";
 import FullPageAIChatbot from "./components/ChatBot/AiChatBot";
 import NexaHome from "./components/nexa/NexaHome";
 import FloatingNexaChat from "./components/nexa/FloatingNexaChat";
+import { NexaChatProvider } from "./context/NexaChatContext";
 
 
 
@@ -64,84 +67,88 @@ const App = () => (
   <Provider store={store}>
     <ThemeProvider defaultTheme="light">
       <TooltipProvider>
-        <BrowserRouter>
-          <Popup />
-          <ScrollToTop />
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              duration: 3000,
-              style: {
-                background: 'hsl(var(--background))',
-                color: 'hsl(var(--foreground))',
-                border: '1px solid hsl(var(--border))',
-              },
-            }}
-          />
-          <AuthLoader>
-            <Routes>
-              <Route path="/" element={<Index />} />
+        <NexaChatProvider>
+          <BrowserRouter>
+            <Popup />
+            <ScrollToTop />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  background: 'hsl(var(--background))',
+                  color: 'hsl(var(--foreground))',
+                  border: '1px solid hsl(var(--border))',
+                },
+              }}
+            />
+            <AuthLoader>
+              <Routes>
+                <Route path="/" element={<Index />} />
 
-              <Route path="/about" element={<About />} />
-              <Route path="/demo" element={<Demo />} />
-              <Route path="/nexa" element={<NexaHome />} />
-              <Route path="/nexa-bot" element={<FullPageAIChatbot />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/demo" element={<Demo />} />
+                <Route path="/nexa" element={<NexaHome />} />
+                <Route path="/nexa-bot" element={<FullPageAIChatbot />} />
 
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/personal-info" element={<CourseSignUpForm onSuccess={() => { console.log("hello ") }} />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/personal-info" element={<CourseSignUpForm onSuccess={() => { console.log("hello ") }} />} />
 
-              <Route path="/services" element={<Services />} />
-              <Route path="/enrollment-success" element={<EnrollmentSuccess />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/sign-up" element={<Register />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/certificate/:courseId" element={<Certificate />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/enrollment-success" element={<EnrollmentSuccess />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/sign-up" element={<Register />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/certificate/:courseId" element={<Certificate />} />
 
-              {/* Course Routes */}
-              <Route path="/all-courses" element={<AllCourses />} />
-              <Route path="/courses-list" element={<CoursesList />} />
-              <Route path="/course/:id" element={<ViewCourse />} />
-              <Route path="/course-detail/:courseId" element={<CourseDetail />} />
+                {/* Course Routes */}
+                <Route path="/all-courses" element={<AllCourses />} />
+                <Route path="/courses-list" element={<CoursesList />} />
+                <Route path="/course/:id" element={<ViewCourse />} />
+                <Route path="/course-detail/:courseId" element={<CourseDetail />} />
 
 
-              <Route path="/course-learning/:id" element={<CourseLearning />} />
+                <Route path="/course-learning/:id" element={<CourseLearning />} />
 
-              {/* Course Management Routes */}
-              <Route path="/create-course" element={<CreateCourse />} />
-              <Route path="/edit-course/:courseId" element={<EditCourse />} />
-              <Route path="/manage-courses" element={<ManageCourses />} />
-              <Route path="/add-category" element={<CreateCategory />} />
+                {/* Course Management Routes */}
+                <Route path="/create-course" element={<CreateCourse />} />
+                <Route path="/edit-course/:courseId" element={<EditCourse />} />
+                <Route path="/manage-courses" element={<ManageCourses />} />
+                <Route path="/add-category" element={<CreateCategory />} />
 
-              {/* New Feature Routes */}
-              <Route path="/certifications" element={<Certifications />} />
-              <Route path="/interviews" element={<Interviews />} />
-              <Route path="/help-center" element={<HelpCenter />} />
-              <Route path="/community" element={<Community />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/terms" element={<TermsOfService />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/careers" element={<Careers />} />
-              <Route path="/careers/:id" element={<JobDetailPage />} />
-              <Route path="/workshops" element={<Workshops />} />
-              <Route path="/workshops/:id" element={<WorkshopDetail />} />
-              <Route path="/create-workshop" element={
+                {/* New Feature Routes */}
+                <Route path="/certifications" element={<Certifications />} />
+                <Route path="/interviews" element={<Interviews />} />
+                <Route path="/help-center" element={<HelpCenter />} />
+                <Route path="/community" element={<Community />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/careers" element={<Careers />} />
+                <Route path="/careers/:id" element={<JobDetailPage />} />
+                <Route path="/workshops" element={<Workshops />} />
+                <Route path="/workshops/:id" element={<WorkshopDetail />} />
+                <Route path="/create-workshop" element={
 
-                <CreateWorkshop />
+                  <CreateWorkshop />
 
-              } />
-              <Route path="/events" element={<Events />} />
-              <Route path="/events/:id" element={<EventDetail />} />
-              <Route path="/create-job" element={<CreateJob />} />
-              <Route path="/edit-job/:id" element={<EditJob />} />
-              <Route path="/manage-jobs" element={<ManageJobs />} />
+                } />
+                <Route path="/workshop-registrations" element={<WorkshopRegistrations />} />
+                <Route path="/leads" element={<Leads />} />
+                <Route path="/events" element={<Events />} />
+                <Route path="/events/:id" element={<EventDetail />} />
+                <Route path="/create-job" element={<CreateJob />} />
+                <Route path="/edit-job/:id" element={<EditJob />} />
+                <Route path="/manage-jobs" element={<ManageJobs />} />
 
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <FloatingNexaChat />
-          </AuthLoader>
-        </BrowserRouter>
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <FloatingNexaChat />
+            </AuthLoader>
+          </BrowserRouter>
+        </NexaChatProvider>
       </TooltipProvider>
     </ThemeProvider>
   </Provider>

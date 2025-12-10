@@ -37,7 +37,7 @@ export const Hero = () => {
     {
       id: 4,
 
-      avatar: img12,
+      avatar: img5,
     },
   ];
 
