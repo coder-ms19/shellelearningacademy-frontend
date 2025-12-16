@@ -79,11 +79,21 @@ const ManageClasses: React.FC<ManageClassesProps> = ({ courseId, token }) => {
     };
 
     const handleEditClass = (cls: any) => {
+        // Convert UTC date to local datetime-local format
+        let localDateTimeString = '';
+        if (cls.classDate) {
+            const date = new Date(cls.classDate);
+            // Adjust for timezone offset to get local time
+            const offset = date.getTimezoneOffset();
+            const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+            localDateTimeString = localDate.toISOString().slice(0, 16);
+        }
+
         setFormData({
             className: cls.className,
             classDescription: cls.classDescription,
             classUrl: cls.classUrl,
-            classDate: cls.classDate ? new Date(cls.classDate).toISOString().slice(0, 16) : '',
+            classDate: localDateTimeString,
         });
         setCurrentClassId(cls._id);
         setIsEditing(true);
@@ -103,16 +113,26 @@ const ManageClasses: React.FC<ManageClassesProps> = ({ courseId, token }) => {
 
         try {
             setIsLoading(true);
+
+            // Convert local datetime to UTC ISO string for backend
+            const localDate = new Date(formData.classDate);
+            const utcDateString = localDate.toISOString();
+
+            const dataToSend = {
+                ...formData,
+                classDate: utcDateString, // Send UTC time to backend
+            };
+
             if (isEditing && currentClassId) {
                 await courseClassService.updateClass({
                     classId: currentClassId,
-                    ...formData,
+                    ...dataToSend,
                 }, token);
                 toast({ title: "Class Updated Successfully" });
             } else {
                 await courseClassService.createClass({
                     courseId,
-                    ...formData,
+                    ...dataToSend,
                 }, token);
                 toast({ title: "Class Created Successfully" });
             }

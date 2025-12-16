@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Search, Users, Calendar, Mail, Phone, GraduationCap, Building2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { WorkshopApplicationsSkeleton } from "@/components/DashboardSkeleton";
 
 interface Registration {
     _id: string;
@@ -81,12 +82,22 @@ const WorkshopRegistrations = () => {
                 reg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 reg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 reg.college.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                reg.workshop.title.toLowerCase().includes(searchTerm.toLowerCase())
+                reg.workshop?.title.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
 
         setFilteredRegistrations(filtered);
     };
+
+    // Show skeleton while auth is loading or data is being fetched
+    if (isLoading || loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10">
+                <Navbar />
+                <WorkshopApplicationsSkeleton />
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10">
@@ -140,11 +151,7 @@ const WorkshopRegistrations = () => {
                         <CardTitle className="text-2xl">All Applications ({filteredRegistrations.length})</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {loading ? (
-                            <div className="flex justify-center py-12">
-                                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                            </div>
-                        ) : filteredRegistrations.length > 0 ? (
+                        {filteredRegistrations.length > 0 ? (
                             <div className="overflow-x-auto">
                                 <Table>
                                     <TableHeader>

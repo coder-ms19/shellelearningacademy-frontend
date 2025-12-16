@@ -194,7 +194,7 @@ const WorkshopDetail = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
-    const { user, accessToken } = useAppSelector((state) => state.auth);
+    const { user, accessToken, isLoading: authLoading } = useAppSelector((state) => state.auth);
 
     const [workshop, setWorkshop] = useState<Workshop | null>(location.state?.workshop || null);
     const [loading, setLoading] = useState(!workshop);

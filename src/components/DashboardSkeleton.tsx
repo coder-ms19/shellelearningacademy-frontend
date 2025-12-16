@@ -364,3 +364,68 @@ export const WorkshopsSkeleton = () => {
         </div>
     );
 };
+
+export const WorkshopApplicationsSkeleton = () => {
+    return (
+        <div className="container mx-auto px-4 pt-32 pb-20 max-w-7xl">
+            {/* Header Skeleton */}
+            <div className="mb-8">
+                <Skeleton className="h-12 w-96 mb-2" />
+                <Skeleton className="h-6 w-80" />
+            </div>
+
+            {/* Stats Card Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6 mb-8">
+                <Card className="bg-card/90 backdrop-blur-sm border-border/70 shadow-lg">
+                    <div className="p-6 pb-3">
+                        <Skeleton className="h-4 w-32 mb-2" />
+                        <div className="flex items-center gap-3">
+                            <Skeleton className="w-8 h-8 rounded-xl" />
+                            <Skeleton className="h-10 w-16" />
+                        </div>
+                    </div>
+                </Card>
+            </div>
+
+            {/* Search Filter Skeleton */}
+            <Card className="bg-card/90 backdrop-blur-sm border-border/70 shadow-lg mb-6">
+                <div className="p-6">
+                    <Skeleton className="h-6 w-48 mb-4" />
+                    <Skeleton className="h-10 w-full rounded-lg" />
+                </div>
+            </Card>
+
+            {/* Table Skeleton */}
+            <Card className="bg-card/90 backdrop-blur-sm border-border/70 shadow-lg">
+                <div className="p-6">
+                    <Skeleton className="h-8 w-56 mb-6" />
+                    <div className="space-y-4">
+                        {/* Table Header */}
+                        <div className="grid grid-cols-7 gap-4 pb-3 border-b">
+                            <Skeleton className="h-4 w-20" />
+                            <Skeleton className="h-4 w-16" />
+                            <Skeleton className="h-4 w-16" />
+                            <Skeleton className="h-4 w-16" />
+                            <Skeleton className="h-4 w-20" />
+                            <Skeleton className="h-4 w-12" />
+                            <Skeleton className="h-4 w-24" />
+                        </div>
+                        {/* Table Rows */}
+                        {[1, 2, 3, 4, 5].map((i) => (
+                            <div key={i} className="grid grid-cols-7 gap-4 py-4 border-b">
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </Card>
+        </div>
+    );
+};
+
