@@ -21,6 +21,7 @@ import {
 import toast from "react-hot-toast";
 import { courseService } from "@/service/course.service";
 import { useAppSelector } from "@/hooks/redux"; // Assuming this hook exists
+import { EnrolledCourseViewSkeleton } from "@/components/DashboardSkeleton";
 
 const EnrolledCourseView = () => {
     const { courseId } = useParams();
@@ -139,10 +140,7 @@ const EnrolledCourseView = () => {
         return (
             <div className="min-h-screen bg-background flex flex-col">
                 <Navbar />
-                <div className="flex-1 flex items-center justify-center">
-                    <Loader2 className="w-10 h-10 animate-spin text-primary" />
-                </div>
-                <Footer />
+                <EnrolledCourseViewSkeleton />
             </div>
         );
     }

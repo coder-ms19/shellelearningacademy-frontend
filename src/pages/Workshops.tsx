@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, MapPin, Monitor, Loader2, ArrowRight, Zap, TrendingUp, DollarSign, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { WorkshopsSkeleton } from "@/components/DashboardSkeleton";
 
 // Define a simple type structure for clarity
 interface Workshop {
@@ -74,6 +75,16 @@ const Workshops = () => {
         }
     };
 
+    // Loading state with skeleton
+    if (loading) {
+        return (
+            <>
+                <Navbar />
+                <WorkshopsSkeleton />
+            </>
+        );
+    }
+
     return (
         <div className="min-h-screen font-sans">
             <Navbar />
@@ -96,11 +107,7 @@ const Workshops = () => {
                 </h2>
 
                 {/* Workshop Grid */}
-                {loading ? (
-                    <div className="flex justify-center py-20">
-                        <Loader2 className="w-12 h-12 text-green-600 animate-spin" />
-                    </div>
-                ) : workshops.length > 0 ? (
+                {workshops.length > 0 ? (
                     <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
                         {workshops.map((workshop) => (
                             <Card

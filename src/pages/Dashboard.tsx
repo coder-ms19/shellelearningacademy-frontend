@@ -12,6 +12,7 @@ import { courseService } from "@/service/course.service";
 import { studentService } from '@/service/student.service';
 import { useNavigate, Link } from "react-router-dom";
 import CourseSearch from "./Course/CourseSearch"; // Assuming this component exists
+import { DashboardSkeleton } from "@/components/DashboardSkeleton";
 
 // --- Helper Components for Clean Code ---
 
@@ -348,12 +349,12 @@ const Dashboard = () => {
 
                 {/* 2. Continue Learning */}
                 <div className="mb-12">
-                    <div className="flex items-center justify-between mb-6">
+                    {/* <div className="flex items-center justify-between mb-6">
                         <h2 className="text-3xl font-bold text-foreground">Continue Learning</h2>
                         {enrolledCourses.length > 0 && (
                             <Button variant="link" className="text-primary" onClick={() => navigate('/my-courses')}>View All</Button>
                         )}
-                    </div>
+                    </div> */}
 
                     {isLoadingStats ? (
                         <div className="flex justify-center py-12">
@@ -437,16 +438,9 @@ const Dashboard = () => {
 
     if (isLoadingStats && accessToken) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10">
                 <Navbar />
-                <div className="container mx-auto px-4 py-32">
-                    <div className="text-center">
-                        <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto mb-4" />
-                        <h2 className="text-xl font-semibold text-foreground">Loading Your Personalized Dashboard...</h2>
-                        <p className="text-muted-foreground">Fetching statistics and learning progress.</p>
-                    </div>
-                </div>
-                <Footer />
+                <DashboardSkeleton />
             </div>
         );
     }

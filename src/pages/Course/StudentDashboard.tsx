@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-    BookOpen, 
-    Clock, 
-    Play, 
-    CheckCircle, 
+import {
+    BookOpen,
+    Clock,
+    Play,
+    CheckCircle,
     TrendingUp,
     Award,
     Loader2,
@@ -21,6 +21,7 @@ import { useAppSelector } from '@/hooks/redux';
 import { Navigation } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import CourseSearch from "./CourseSearch";
+import { StudentDashboardSkeleton } from "@/components/DashboardSkeleton";
 
 // --- Helper Component: Reusable Stat Card ---
 const StatCard = ({ icon: Icon, label, value, colorClass }: { icon: React.ElementType, label: string, value: string | number, colorClass: string }) => (
@@ -42,7 +43,7 @@ const StudentDashboard = () => {
     const navigate = useNavigate();
     const { toast } = useToast();
     const { token, user } = useAppSelector((state) => state.auth);
-    
+
     const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]);
     const [allCourses, setAllCourses] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -58,29 +59,29 @@ const StudentDashboard = () => {
             navigate('/auth'); // Redirect if no token
             return;
         }
-        
+
         try {
             setIsLoading(true);
-            
+
             // 1. Fetch all courses for recommendations (runs concurrently with enrolled check)
             const [coursesRes, enrolledRes] = await Promise.all([
                 courseService.getAllCourses(),
                 studentService.getEnrolledCourses(token).catch(err => ({ data: { courses: user?.courses || [] } }))
             ]);
-            
+
             setAllCourses(coursesRes.data || []);
             let userEnrolledCourses = enrolledRes.data?.courses || [];
-            
+
             // 2. Fetch progress for each enrolled course
             const coursesWithProgress = await Promise.all(
                 userEnrolledCourses.map(async (course) => {
                     try {
                         const progressRes = await courseService.getFullCourseDetails(course._id, token);
                         const completedVideos = progressRes.data?.completedVideos || [];
-                        const totalLectures = course.courseContent?.reduce((total, section) => 
+                        const totalLectures = course.courseContent?.reduce((total, section) =>
                             total + (section.subSection?.length || 0), 0) || 0;
                         const progress = totalLectures > 0 ? (completedVideos.length / totalLectures) * 100 : 0;
-                        
+
                         return {
                             ...course,
                             progress: Math.round(progress),
@@ -93,29 +94,29 @@ const StudentDashboard = () => {
                             ...course,
                             progress: 0,
                             completedLectures: 0,
-                            totalLectures: course.courseContent?.reduce((total, section) => 
+                            totalLectures: course.courseContent?.reduce((total, section) =>
                                 total + (section.subSection?.length || 0), 0) || 0,
                             lastAccessed: new Date().toISOString()
                         };
                     }
                 })
             );
-            
+
             const validCourses = coursesWithProgress.filter(c => c && c._id);
             setEnrolledCourses(validCourses);
-            
+
             // 3. Calculate Stats
             const totalEnrolled = validCourses.length;
             const completedCourses = validCourses.filter(c => c.progress === 100).length;
             const totalProgress = totalEnrolled > 0 ? validCourses.reduce((sum, c) => sum + (c.progress || 0), 0) / totalEnrolled : 0;
-            
+
             setStats({
                 totalEnrolled,
                 completedCourses,
                 totalProgress: Math.round(totalProgress),
                 certificatesEarned: completedCourses
             });
-            
+
         } catch (error: any) {
             console.error("Dashboard fetch error:", error);
             toast({ title: "Error", description: "Failed to load dashboard data.", variant: "destructive" });
@@ -131,11 +132,9 @@ const StudentDashboard = () => {
     // --- Conditional Render: Loading State ---
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background flex items-center justify-center">
-                <div className="text-center bg-card p-10 rounded-xl shadow-lg">
-                    <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
-                    <p className="font-medium text-foreground">Loading your personalized dashboard...</p>
-                </div>
+            <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background">
+                <Navigation />
+                <StudentDashboardSkeleton />
             </div>
         );
     }
@@ -143,9 +142,9 @@ const StudentDashboard = () => {
     // --- Main Render ---
     return (
         <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background text-foreground">
-            {/* Assuming Navigation and Footer are handled by the main Layout or imported */}
+            <Navigation />
             <div className="container mx-auto px-4 py-8 pt-24 max-w-7xl">
-                
+
                 {/* Welcome Section */}
                 <div className="mb-12">
                     <h1 className="text-4xl font-extrabold mb-2 text-foreground">
@@ -158,29 +157,29 @@ const StudentDashboard = () => {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                    <StatCard 
-                        icon={BookOpen} 
-                        label="Enrolled Courses" 
-                        value={stats.totalEnrolled} 
-                        colorClass="text-primary" 
+                    <StatCard
+                        icon={BookOpen}
+                        label="Enrolled Courses"
+                        value={stats.totalEnrolled}
+                        colorClass="text-primary"
                     />
-                    <StatCard 
-                        icon={CheckCircle} 
-                        label="Completed" 
-                        value={stats.completedCourses} 
-                        colorClass="text-green-500" 
+                    <StatCard
+                        icon={CheckCircle}
+                        label="Completed"
+                        value={stats.completedCourses}
+                        colorClass="text-green-500"
                     />
-                    <StatCard 
-                        icon={TrendingUp} 
-                        label="Avg Progress" 
-                        value={`${stats.totalProgress}%`} 
-                        colorClass="text-orange-500" 
+                    <StatCard
+                        icon={TrendingUp}
+                        label="Avg Progress"
+                        value={`${stats.totalProgress}%`}
+                        colorClass="text-orange-500"
                     />
-                    <StatCard 
-                        icon={Award} 
-                        label="Certificates" 
-                        value={stats.certificatesEarned} 
-                        colorClass="text-purple-500" 
+                    <StatCard
+                        icon={Award}
+                        label="Certificates"
+                        value={stats.certificatesEarned}
+                        colorClass="text-purple-500"
                     />
                 </div>
 
@@ -211,7 +210,7 @@ const StudentDashboard = () => {
                                 <p className="text-base text-muted-foreground mb-6">
                                     Start your learning journey by enrolling in a course.
                                 </p>
-                                <Button 
+                                <Button
                                     onClick={() => navigate('/all-courses')}
                                     className="bg-primary hover:bg-primary/90 font-semibold"
                                 >
@@ -224,32 +223,32 @@ const StudentDashboard = () => {
                             {enrolledCourses.slice(0, 3).map((course: any) => (
                                 <Card key={course._id} className="overflow-hidden bg-card/90 backdrop-blur-lg border-border/70 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                                     <div className="aspect-video relative overflow-hidden rounded-t-lg">
-                                        <img 
-                                            src={course.thumbnail || 'https://via.placeholder.com/600x337/4C7C33/FFFFFF?text=Course+Image'} 
+                                        <img
+                                            src={course.thumbnail || 'https://via.placeholder.com/600x337/4C7C33/FFFFFF?text=Course+Image'}
                                             alt={course.courseName}
                                             className="w-full h-full object-cover"
                                         />
                                         <div className="absolute top-3 right-3">
-                                            <Badge 
+                                            <Badge
                                                 className={`font-semibold ${course.progress === 100 ? 'bg-green-500 hover:bg-green-600' : 'bg-orange-500 hover:bg-orange-600'}`}
                                             >
                                                 {course.progress === 100 ? 'Completed' : 'In Progress'}
                                             </Badge>
                                         </div>
                                     </div>
-                                    
+
                                     <CardContent className="p-5">
                                         <h3 className="font-bold text-lg mb-2 line-clamp-2 transition-colors hover:text-primary">
                                             {course.courseName}
                                         </h3>
-                                        
+
                                         <div className="space-y-3 mb-4 pt-1">
                                             <div className="flex items-center justify-between text-sm">
                                                 <span className="font-medium text-foreground">Progress</span>
                                                 <span className="font-bold text-primary">{course.progress}%</span>
                                             </div>
                                             <Progress value={course.progress} className="h-2 bg-muted" indicatorColor="bg-primary" />
-                                            
+
                                             <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
                                                 <div className="flex items-center space-x-1">
                                                     <CheckCircle className="w-3.5 h-3.5" />
@@ -261,8 +260,8 @@ const StudentDashboard = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        <Button 
+
+                                        <Button
                                             className="w-full h-10 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                                             onClick={() => navigate(`/course-learning/${course._id}`)}
                                         >
@@ -283,13 +282,13 @@ const StudentDashboard = () => {
                         {allCourses.slice(0, 4).map((course: any) => (
                             <Card key={course._id} className="bg-card/90 backdrop-blur-lg border-border/70 hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1" onClick={() => navigate(`/course-detail/${course._id}`)}>
                                 <div className="aspect-video relative overflow-hidden rounded-t-lg">
-                                    <img 
-                                        src={course.thumbnail || 'https://via.placeholder.com/600x337/4C7C33/FFFFFF?text=Recommended+Course'} 
+                                    <img
+                                        src={course.thumbnail || 'https://via.placeholder.com/600x337/4C7C33/FFFFFF?text=Recommended+Course'}
                                         alt={course.courseName}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
-                                
+
                                 <CardContent className="p-4">
                                     <h3 className="font-semibold mb-2 line-clamp-2 transition-colors hover:text-primary">
                                         {course.courseName}
@@ -297,7 +296,7 @@ const StudentDashboard = () => {
                                     <p className="text-xs text-muted-foreground mb-3 line-clamp-1">
                                         by {course.instructor?.firstName} {course.instructor?.lastName || 'Expert'}
                                     </p>
-                                    
+
                                     <div className="flex items-center justify-between">
                                         <Badge variant="secondary" className="text-xs font-medium">
                                             {course.category?.name || 'General'}
@@ -312,6 +311,7 @@ const StudentDashboard = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

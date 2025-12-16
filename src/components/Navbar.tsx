@@ -167,6 +167,19 @@ export const Navbar = () => {
                                         {item.name}
                                     </Link>
                                 ))}
+
+                                {/* Dashboard Link - Only show when authenticated */}
+                                {isAuthenticated && (
+                                    <Link
+                                        to="/dashboard"
+                                        className={`text-sm font-semibold transition-colors duration-300 ${isActive('/dashboard')
+                                            ? "text-primary border-b-2 border-primary pb-1"
+                                            : "text-foreground/80 hover:text-primary"
+                                            }`}
+                                    >
+                                        LMS
+                                    </Link>
+                                )}
                             </div>
 
                             {/* Desktop Search Input */}
@@ -272,6 +285,20 @@ export const Navbar = () => {
                                     {item.name}
                                 </Link>
                             ))}
+
+                            {/* LMS (Dashboard) Link - Only show when authenticated */}
+                            {isAuthenticated && (
+                                <Link
+                                    to="/dashboard"
+                                    className={`block w-full rounded-xl px-4 py-4 text-base font-semibold transition-all duration-300 ease-in-out ${isActive('/dashboard')
+                                        ? "text-primary bg-primary/10 shadow-sm border border-primary/20"
+                                        : "text-foreground/80 hover:bg-muted/50"
+                                        }`}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    LMS
+                                </Link>
+                            )}
 
                             {/* Auth Section in Mobile Menu */}
                             {!isAuthenticated ? (
