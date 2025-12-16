@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Edit, Trash2, Plus, Calendar, Link as LinkIcon, ExternalLink, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
+import { Edit, Trash2, Plus, Calendar, Link as LinkIcon, ExternalLink, ChevronDown, ChevronUp, BookOpen, Search, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { courseClassService } from '@/service/courseClass.service';
 import { courseService } from '@/service/course.service';
@@ -35,6 +35,7 @@ const ManageAllClasses: React.FC = () => {
     const { toast } = useToast();
     const { accessToken } = useSelector((state: RootState) => state.auth);
     const [courses, setCourses] = useState<Course[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [expandedCourseId, setExpandedCourseId] = useState<string | null>(null);
     const [classes, setClasses] = useState<{ [courseId: string]: CourseClass[] }>({});
@@ -49,6 +50,12 @@ const ManageAllClasses: React.FC = () => {
         classUrl: '',
         classDate: '',
     });
+
+    // Filter courses based on search query
+    const filteredCourses = courses.filter(course =>
+        course.courseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.courseDescription?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const fetchCourses = async () => {
         try {
@@ -228,6 +235,35 @@ const ManageAllClasses: React.FC = () => {
                     </p>
                 </div>
 
+                {/* Search Bar */}
+                <div className="mb-6 sm:mb-8">
+                    <div className="relative max-w-2xl">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input
+                            type="text"
+                            placeholder="Search courses by name or description..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-12 pr-12 h-12 sm:h-14 text-sm sm:text-base shadow-md border-2 focus:border-primary transition-all duration-300"
+                        />
+                        {searchQuery && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSearchQuery('')}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-muted rounded-full"
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
+                        )}
+                    </div>
+                    {searchQuery && (
+                        <p className="text-sm text-muted-foreground mt-3 ml-1">
+                            Found <span className="font-bold text-primary">{filteredCourses.length}</span> {filteredCourses.length === 1 ? 'course' : 'courses'}
+                        </p>
+                    )}
+                </div>
+
                 {/* Loading State */}
                 {isLoading && courses.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-16 sm:py-24">
@@ -244,7 +280,7 @@ const ManageAllClasses: React.FC = () => {
                 ) : (
                     /* Courses Grid - Responsive */
                     <div className="grid gap-4 sm:gap-5 lg:gap-6">
-                        {courses.map((course) => (
+                        {filteredCourses.map((course) => (
                             <Card
                                 key={course._id}
                                 className="overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-lg"

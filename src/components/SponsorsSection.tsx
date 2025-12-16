@@ -27,62 +27,94 @@ const sponsors = [
 
 export const SponsorsSection = () => {
     return (
-        <section className="py-12 md:py-16 bg-muted/30 border-y border-border/50 overflow-hidden">
-            <div className="container mx-auto px-4">
+        <section className="relative py-16 md:py-20 bg-gradient-to-b from-background via-muted/20 to-background overflow-hidden">
+            {/* Decorative Background Elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+            </div>
+
+            <div className="container relative mx-auto px-4 z-10">
                 {/* Section Header */}
-                <div className="text-center mb-10">
-                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                        Our Trusted Partners
-                    </p>
-                    <h2 className="text-2xl md:text-3xl font-bold text-primary">
-                        Collaborating with Industry Leaders
+                <div className="text-center mb-12 md:mb-16">
+                    <div className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium mb-4 border-transparent bg-primary/10 text-primary">
+                        <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse"></span>
+                        Our Partners
+                    </div>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+                        Trusted by <span className="text-primary">Industry Leaders</span>
                     </h2>
+                    <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+                        Collaborating with top organizations to deliver world-class education
+                    </p>
                 </div>
 
                 {/* Infinite Scroll Animation Container */}
-                <div className="relative flex overflow-x-hidden">
-                    <div className="flex animate-marquee whitespace-nowrap gap-8 md:gap-12 lg:gap-16 items-center py-4">
-                        {/* First set of sponsors */}
-                        {sponsors.map((sponsor, index) => (
-                            <div
-                                key={`sponsor-1-${index}`}
-                                className="flex items-center justify-center min-w-[120px] md:min-w-[160px] lg:min-w-[180px] grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-110"
-                            >
-                                <div className="bg-background rounded-xl p-4 md:p-6 shadow-sm border border-border/50 hover:shadow-md hover:border-primary/30 transition-all duration-300">
-                                    <img
-                                        src={sponsor}
-                                        alt={`Sponsor ${index + 1}`}
-                                        className="h-16 md:h-20 lg:h-24 w-auto object-contain"
-                                        loading="lazy"
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                <div className="relative">
+                    <div className="flex overflow-x-hidden">
+                        <div className="flex animate-marquee gap-6 md:gap-8 lg:gap-10 items-center py-6">
+                            {/* First set of sponsors */}
+                            {sponsors.map((sponsor, index) => (
+                                <div
+                                    key={`sponsor-1-${index}`}
+                                    className="flex-shrink-0 group"
+                                >
+                                    <div className="relative bg-white dark:bg-card rounded-2xl p-6 md:p-8 shadow-md border border-border/50 hover:shadow-xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-1 w-[140px] h-[140px] md:w-[160px] md:h-[160px] lg:w-[180px] lg:h-[180px] flex items-center justify-center overflow-hidden">
+                                        {/* Gradient overlay on hover */}
+                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                        {/* Duplicate set for seamless loop */}
-                        {sponsors.map((sponsor, index) => (
-                            <div
-                                key={`sponsor-2-${index}`}
-                                className="flex items-center justify-center min-w-[120px] md:min-w-[160px] lg:min-w-[180px] grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 hover:scale-110"
-                            >
-                                <div className="bg-background rounded-xl p-4 md:p-6 shadow-sm border border-border/50 hover:shadow-md hover:border-primary/30 transition-all duration-300">
-                                    <img
-                                        src={sponsor}
-                                        alt={`Sponsor ${index + 1}`}
-                                        className="h-16 md:h-20 lg:h-24 w-auto object-contain"
-                                        loading="lazy"
-                                    />
+                                        <img
+                                            src={sponsor}
+                                            alt={`Partner ${index + 1}`}
+                                            className="relative z-10 max-w-full max-h-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-110"
+                                            loading="lazy"
+                                            onError={(e) => {
+                                                console.error(`Failed to load sponsor image ${index + 1}`);
+                                                e.currentTarget.style.display = 'none';
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+
+                            {/* Duplicate set for seamless loop */}
+                            {sponsors.map((sponsor, index) => (
+                                <div
+                                    key={`sponsor-2-${index}`}
+                                    className="flex-shrink-0 group"
+                                >
+                                    <div className="relative bg-white dark:bg-card rounded-2xl p-6 md:p-8 shadow-md border border-border/50 hover:shadow-xl hover:border-primary/50 transition-all duration-500 hover:-translate-y-1 w-[140px] h-[140px] md:w-[160px] md:h-[160px] lg:w-[180px] lg:h-[180px] flex items-center justify-center overflow-hidden">
+                                        {/* Gradient overlay on hover */}
+                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                        <img
+                                            src={sponsor}
+                                            alt={`Partner ${index + 1}`}
+                                            className="relative z-10 max-w-full max-h-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-110"
+                                            loading="lazy"
+                                            onError={(e) => {
+                                                console.error(`Failed to load sponsor image ${index + 1}`);
+                                                e.currentTarget.style.display = 'none';
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
                 {/* Bottom Stats */}
-                <div className="text-center mt-10 pt-6 border-t border-border/30">
-                    <p className="text-sm md:text-base text-muted-foreground font-medium">
-                        Trusted by <span className="text-primary font-bold text-lg">100+</span> organizations worldwide
-                    </p>
+                <div className="text-center mt-12 md:mt-16">
+                    <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20">
+                        <span className="text-sm md:text-base text-muted-foreground font-medium">
+                            Trusted by
+                        </span>
+                        <span className="text-2xl md:text-3xl font-bold text-primary">100+</span>
+                        <span className="text-sm md:text-base text-muted-foreground font-medium">
+                            organizations worldwide
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -98,7 +130,7 @@ export const SponsorsSection = () => {
         }
 
         .animate-marquee {
-          animation: marquee 60s linear infinite;
+          animation: marquee 80s linear infinite;
         }
 
         .animate-marquee:hover {
