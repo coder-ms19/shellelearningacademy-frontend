@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Edit, Trash2, Plus, Calendar, Link as LinkIcon, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { Edit, Trash2, Plus, Calendar, Link as LinkIcon, ExternalLink, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { courseClassService } from '@/service/courseClass.service';
 import { courseService } from '@/service/course.service';
@@ -53,7 +53,6 @@ const ManageAllClasses: React.FC = () => {
     const fetchCourses = async () => {
         try {
             setIsLoading(true);
-            // Use the new lightweight endpoint that only returns ID, name, thumbnail, and description
             const response = await courseService.getCoursesBasicInfo();
             if (response.success) {
                 setCourses(response.data);
@@ -123,7 +122,6 @@ const ManageAllClasses: React.FC = () => {
     };
 
     const handleEditClass = (courseId: string, cls: CourseClass) => {
-        // Convert UTC date to local datetime-local format
         let localDateTimeString = '';
         if (cls.classDate) {
             const date = new Date(cls.classDate);
@@ -157,8 +155,6 @@ const ManageAllClasses: React.FC = () => {
 
         try {
             setIsLoading(true);
-
-            // Convert local datetime to UTC ISO string for backend
             const localDate = new Date(formData.classDate);
             const utcDateString = localDate.toISOString();
 
@@ -216,152 +212,255 @@ const ManageAllClasses: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
             <Navbar />
-            <div className="container mx-auto px-4 py-8 mt-20">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold mb-2">Manage Classes</h1>
-                    <p className="text-muted-foreground">
+
+            {/* Main Container - Fully Responsive */}
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 mt-16 sm:mt-20">
+
+                {/* Page Header */}
+                <div className="mb-6 sm:mb-8 lg:mb-10">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-2">
+                        Manage Classes
+                    </h1>
+                    <p className="text-sm sm:text-base text-muted-foreground">
                         View all courses and manage their classes in one place
                     </p>
                 </div>
 
+                {/* Loading State */}
                 {isLoading && courses.length === 0 ? (
-                    <div className="text-center py-12">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-                        <p className="mt-4 text-muted-foreground">Loading courses...</p>
+                    <div className="flex flex-col items-center justify-center py-16 sm:py-24">
+                        <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-primary"></div>
+                        <p className="mt-4 text-sm sm:text-base text-muted-foreground">Loading courses...</p>
                     </div>
                 ) : courses.length === 0 ? (
-                    <Card>
-                        <CardContent className="py-12 text-center">
-                            <p className="text-muted-foreground">No courses found</p>
+                    <Card className="text-center py-12 sm:py-16">
+                        <CardContent>
+                            <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-muted-foreground mb-4" />
+                            <p className="text-muted-foreground text-sm sm:text-base">No courses found</p>
                         </CardContent>
                     </Card>
                 ) : (
-                    <div className="space-y-4">
+                    /* Courses Grid - Responsive */
+                    <div className="grid gap-4 sm:gap-5 lg:gap-6">
                         {courses.map((course) => (
-                            <Card key={course._id} className="overflow-hidden">
-                                <div
-                                    className="flex items-center justify-between p-6 cursor-pointer hover:bg-accent/50 transition-colors"
-                                    onClick={() => handleToggleCourse(course._id)}
-                                >
-                                    <div className="flex-1">
-                                        <div className="flex items-start gap-4">
-                                            {course.thumbnail && (
+                            <Card
+                                key={course._id}
+                                className="overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
+                            >
+                                {/* Course Header - Stack on Mobile, Row on Desktop */}
+                                <div className="p-4 sm:p-5 lg:p-6 bg-gradient-to-r from-muted/50 to-transparent">
+                                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+
+                                        {/* Thumbnail */}
+                                        {course.thumbnail && (
+                                            <div className="flex-shrink-0">
                                                 <img
                                                     src={course.thumbnail}
                                                     alt={course.courseName}
-                                                    className="w-16 h-16 rounded-lg object-cover"
+                                                    className="w-full sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-lg object-cover shadow-md"
                                                 />
-                                            )}
-                                            <div>
-                                                <h3 className="text-lg font-semibold">{course.courseName}</h3>
-                                                <p className="text-sm text-muted-foreground">ID: {course._id}</p>
-                                                {course.courseDescription && (
-                                                    <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
-                                                        {course.courseDescription}
-                                                    </p>
-                                                )}
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleOpenDialog(course._id);
-                                            }}
-                                        >
-                                            <Plus className="w-4 h-4 mr-2" />
-                                            Add Class
-                                        </Button>
-                                        {expandedCourseId === course._id ? (
-                                            <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                                        ) : (
-                                            <ChevronDown className="w-5 h-5 text-muted-foreground" />
                                         )}
+
+                                        {/* Course Info */}
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2">
+                                                {course.courseName}
+                                            </h3>
+                                            <p className="text-xs sm:text-sm text-muted-foreground mb-2">
+                                                Course ID: <span className="font-mono">{course._id}</span>
+                                            </p>
+                                            {course.courseDescription && (
+                                                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                                                    {course.courseDescription}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        {/* Action Buttons - Improved Mobile Layout */}
+                                        <div className="flex flex-col gap-2 sm:gap-3">
+                                            {/* Add Class Button - Full width on mobile, prominent */}
+                                            <Button
+                                                onClick={() => handleOpenDialog(course._id)}
+                                                className="w-full sm:w-auto h-11 sm:h-9 font-semibold"
+                                                size="default"
+                                            >
+                                                <Plus className="w-4 h-4 mr-2" />
+                                                Add Class
+                                            </Button>
+
+                                            {/* Show/Hide Button - Full width on mobile */}
+                                            <Button
+                                                onClick={() => handleToggleCourse(course._id)}
+                                                variant="outline"
+                                                className="w-full sm:w-auto h-10 sm:h-9"
+                                                size="default"
+                                            >
+                                                {expandedCourseId === course._id ? (
+                                                    <>
+                                                        <ChevronUp className="w-4 h-4 mr-2" />
+                                                        Hide Classes
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <ChevronDown className="w-4 h-4 mr-2" />
+                                                        Show Classes
+                                                    </>
+                                                )}
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
 
+                                {/* Expanded Classes Section */}
                                 {expandedCourseId === course._id && (
-                                    <div className="border-t bg-muted/30 p-6">
+                                    <div className="border-t bg-muted/30">
                                         {!classes[course._id] ? (
-                                            <div className="text-center py-8">
-                                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                                                <p className="mt-2 text-sm text-muted-foreground">Loading classes...</p>
+                                            <div className="flex flex-col items-center justify-center py-12">
+                                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                                                <p className="mt-3 text-xs sm:text-sm text-muted-foreground">Loading classes...</p>
                                             </div>
                                         ) : classes[course._id].length === 0 ? (
-                                            <div className="text-center py-8 text-muted-foreground">
-                                                <p>No classes scheduled for this course.</p>
+                                            <div className="text-center py-12 px-4">
+                                                <Calendar className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-muted-foreground mb-4" />
+                                                <p className="text-sm sm:text-base text-muted-foreground mb-4">
+                                                    No classes scheduled for this course.
+                                                </p>
                                                 <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    className="mt-4"
                                                     onClick={() => handleOpenDialog(course._id)}
+                                                    size="sm"
                                                 >
                                                     <Plus className="w-4 h-4 mr-2" />
                                                     Add First Class
                                                 </Button>
                                             </div>
                                         ) : (
-                                            <div className="overflow-x-auto">
-                                                <Table>
-                                                    <TableHeader>
-                                                        <TableRow>
-                                                            <TableHead>Class Name</TableHead>
-                                                            <TableHead>Date & Time</TableHead>
-                                                            <TableHead>Link</TableHead>
-                                                            <TableHead className="text-right">Actions</TableHead>
-                                                        </TableRow>
-                                                    </TableHeader>
-                                                    <TableBody>
-                                                        {classes[course._id].map((cls) => (
-                                                            <TableRow key={cls._id}>
-                                                                <TableCell className="font-medium">
-                                                                    <div>{cls.className}</div>
-                                                                    <div className="text-xs text-muted-foreground truncate max-w-[200px]">
+                                            <div className="p-4 sm:p-5 lg:p-6">
+                                                {/* Desktop Table View */}
+                                                <div className="hidden lg:block overflow-x-auto">
+                                                    <Table>
+                                                        <TableHeader>
+                                                            <TableRow>
+                                                                <TableHead className="w-[30%]">Class Name</TableHead>
+                                                                <TableHead className="w-[25%]">Date & Time</TableHead>
+                                                                <TableHead className="w-[20%]">Meeting Link</TableHead>
+                                                                <TableHead className="w-[25%] text-right">Actions</TableHead>
+                                                            </TableRow>
+                                                        </TableHeader>
+                                                        <TableBody>
+                                                            {classes[course._id].map((cls) => (
+                                                                <TableRow key={cls._id}>
+                                                                    <TableCell>
+                                                                        <div className="font-semibold">{cls.className}</div>
+                                                                        <div className="text-xs text-muted-foreground line-clamp-1 mt-1">
+                                                                            {cls.classDescription}
+                                                                        </div>
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        <div className="flex items-center gap-2">
+                                                                            <Calendar className="w-4 h-4 text-muted-foreground" />
+                                                                            <span className="text-sm">
+                                                                                {cls.classDate ? format(new Date(cls.classDate), "PPp") : "Invalid"}
+                                                                            </span>
+                                                                        </div>
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        <a
+                                                                            href={cls.classUrl}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="inline-flex items-center gap-1 text-primary hover:underline text-sm"
+                                                                        >
+                                                                            Join <ExternalLink className="w-3 h-3" />
+                                                                        </a>
+                                                                    </TableCell>
+                                                                    <TableCell className="text-right">
+                                                                        <div className="flex items-center justify-end gap-2">
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                size="sm"
+                                                                                onClick={() => handleEditClass(course._id, cls)}
+                                                                            >
+                                                                                <Edit className="w-4 h-4" />
+                                                                            </Button>
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                size="sm"
+                                                                                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                                                                onClick={() => handleDeleteClass(course._id, cls._id)}
+                                                                            >
+                                                                                <Trash2 className="w-4 h-4" />
+                                                                            </Button>
+                                                                        </div>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
+                                                        </TableBody>
+                                                    </Table>
+                                                </div>
+
+                                                {/* Mobile/Tablet Card View */}
+                                                <div className="lg:hidden space-y-3 sm:space-y-4">
+                                                    {classes[course._id].map((cls) => (
+                                                        <Card key={cls._id} className="bg-background/50 backdrop-blur-sm">
+                                                            <CardContent className="p-4 sm:p-5">
+                                                                {/* Class Name */}
+                                                                <div className="mb-3">
+                                                                    <h4 className="font-bold text-base sm:text-lg mb-1">
+                                                                        {cls.className}
+                                                                    </h4>
+                                                                    <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                                                                         {cls.classDescription}
-                                                                    </div>
-                                                                </TableCell>
-                                                                <TableCell>
-                                                                    <div className="flex items-center">
-                                                                        <Calendar className="w-3 h-3 mr-2 text-muted-foreground" />
-                                                                        {cls.classDate ? format(new Date(cls.classDate), "PP p") : "Invalid Date"}
-                                                                    </div>
-                                                                </TableCell>
-                                                                <TableCell>
-                                                                    <a
-                                                                        href={cls.classUrl}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="flex items-center text-primary hover:underline"
-                                                                    >
-                                                                        Join <ExternalLink className="w-3 h-3 ml-1" />
-                                                                    </a>
-                                                                </TableCell>
-                                                                <TableCell className="text-right">
+                                                                    </p>
+                                                                </div>
+
+                                                                {/* Date & Time */}
+                                                                <div className="flex items-center gap-2 mb-3 p-2 bg-muted/50 rounded-md">
+                                                                    <Calendar className="w-4 h-4 text-primary flex-shrink-0" />
+                                                                    <span className="text-xs sm:text-sm font-medium">
+                                                                        {cls.classDate ? format(new Date(cls.classDate), "PPp") : "Invalid Date"}
+                                                                    </span>
+                                                                </div>
+
+                                                                {/* Meeting Link */}
+                                                                <a
+                                                                    href={cls.classUrl}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="inline-flex items-center gap-2 text-primary hover:underline text-sm sm:text-base mb-4 font-medium"
+                                                                >
+                                                                    <LinkIcon className="w-4 h-4" />
+                                                                    Join Meeting
+                                                                    <ExternalLink className="w-3 h-3" />
+                                                                </a>
+
+                                                                {/* Action Buttons */}
+                                                                <div className="flex gap-2 pt-3 border-t">
                                                                     <Button
-                                                                        variant="ghost"
-                                                                        size="icon"
+                                                                        variant="outline"
+                                                                        className="flex-1"
+                                                                        size="sm"
                                                                         onClick={() => handleEditClass(course._id, cls)}
                                                                     >
-                                                                        <Edit className="w-4 h-4" />
+                                                                        <Edit className="w-4 h-4 mr-2" />
+                                                                        Edit
                                                                     </Button>
                                                                     <Button
-                                                                        variant="ghost"
-                                                                        size="icon"
-                                                                        className="text-destructive hover:text-destructive"
+                                                                        variant="outline"
+                                                                        className="flex-1 text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
+                                                                        size="sm"
                                                                         onClick={() => handleDeleteClass(course._id, cls._id)}
                                                                     >
-                                                                        <Trash2 className="w-4 h-4" />
+                                                                        <Trash2 className="w-4 h-4 mr-2" />
+                                                                        Delete
                                                                     </Button>
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>
-                                                </Table>
+                                                                </div>
+                                                            </CardContent>
+                                                        </Card>
+                                                    ))}
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -371,39 +470,51 @@ const ManageAllClasses: React.FC = () => {
                     </div>
                 )}
 
-                {/* Dialog for Add/Edit Class */}
+                {/* Add/Edit Class Dialog - Fully Responsive */}
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                    <DialogContent>
+                    <DialogContent className="w-[95vw] max-w-md sm:max-w-lg max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
-                            <DialogTitle>{isEditing ? "Edit Class" : "Schedule New Class"}</DialogTitle>
+                            <DialogTitle className="text-lg sm:text-xl lg:text-2xl">
+                                {isEditing ? "Edit Class" : "Schedule New Class"}
+                            </DialogTitle>
                         </DialogHeader>
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                             <div className="space-y-2">
-                                <Label htmlFor="className">Class Name *</Label>
+                                <Label htmlFor="className" className="text-sm sm:text-base font-medium">
+                                    Class Name *
+                                </Label>
                                 <Input
                                     id="className"
                                     name="className"
                                     value={formData.className}
                                     onChange={handleInputChange}
                                     placeholder="e.g., Introduction to React"
+                                    className="h-10 sm:h-11 text-sm sm:text-base"
                                     required
                                 />
                             </div>
+
                             <div className="space-y-2">
-                                <Label htmlFor="classDate">Date & Time *</Label>
+                                <Label htmlFor="classDate" className="text-sm sm:text-base font-medium">
+                                    Date & Time *
+                                </Label>
                                 <Input
                                     id="classDate"
                                     name="classDate"
                                     type="datetime-local"
                                     value={formData.classDate}
                                     onChange={handleInputChange}
+                                    className="h-10 sm:h-11 text-sm sm:text-base"
                                     required
                                 />
                             </div>
+
                             <div className="space-y-2">
-                                <Label htmlFor="classUrl">Meeting URL *</Label>
+                                <Label htmlFor="classUrl" className="text-sm sm:text-base font-medium">
+                                    Meeting URL *
+                                </Label>
                                 <div className="flex">
-                                    <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-input bg-muted text-muted-foreground text-sm">
+                                    <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-input bg-muted text-muted-foreground">
                                         <LinkIcon className="h-4 w-4" />
                                     </span>
                                     <Input
@@ -412,28 +523,42 @@ const ManageAllClasses: React.FC = () => {
                                         value={formData.classUrl}
                                         onChange={handleInputChange}
                                         placeholder="https://zoom.us/..."
-                                        className="rounded-l-none"
+                                        className="rounded-l-none h-10 sm:h-11 text-sm sm:text-base"
                                         required
                                     />
                                 </div>
                             </div>
+
                             <div className="space-y-2">
-                                <Label htmlFor="classDescription">Description</Label>
+                                <Label htmlFor="classDescription" className="text-sm sm:text-base font-medium">
+                                    Description *
+                                </Label>
                                 <Textarea
                                     id="classDescription"
                                     name="classDescription"
                                     value={formData.classDescription}
                                     onChange={handleInputChange}
-                                    placeholder="Brief agenda..."
-                                    rows={3}
+                                    placeholder="Brief agenda or class description..."
+                                    rows={4}
+                                    className="text-sm sm:text-base resize-none"
                                     required
                                 />
                             </div>
-                            <div className="flex justify-end gap-2 pt-4">
-                                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+
+                            <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setIsDialogOpen(false)}
+                                    className="w-full sm:w-auto h-11 text-sm sm:text-base"
+                                >
                                     Cancel
                                 </Button>
-                                <Button type="submit" disabled={isLoading}>
+                                <Button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="w-full sm:w-auto h-11 text-sm sm:text-base"
+                                >
                                     {isLoading ? "Saving..." : (isEditing ? "Update Class" : "Schedule Class")}
                                 </Button>
                             </div>
@@ -441,6 +566,7 @@ const ManageAllClasses: React.FC = () => {
                     </DialogContent>
                 </Dialog>
             </div>
+
             <Footer />
         </div>
     );
