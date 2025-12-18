@@ -64,7 +64,7 @@ export const Navbar = () => {
 
     const navItems = [
         { name: "Home", path: "/" },
-        { name: "Courses", path: "/all-courses" },
+        { name: "Programs ", path: "/all-courses" },
         { name: "About Us", path: "/about" },
         { name: "Careers", path: "/careers" },
         { name: "Workshops", path: "/workshops" },
