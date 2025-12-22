@@ -63,7 +63,8 @@ import { NexaChatProvider } from "./context/NexaChatContext";
 import EnrolledCourseView from "./pages/Course/EnrolledCourseView";
 import AdminUserEnrollment from "./pages/AdminUserEnrollment";
 import Settings from "./pages/Settings";
-
+import CertificateManagement from "./pages/CertificateManagement";
+import CertificateVerification from "./pages/CertificateVerification";
 
 
 
@@ -105,7 +106,11 @@ const App = () => (
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />
-                <Route path="/certificate/:courseId" element={<Certificate />} />
+
+                {/* Certificate Routes */}
+                <Route path="/certificate-management" element={<CertificateManagement />} />
+                <Route path="/certificate/:certificateId" element={<CertificateVerification />} />
+
 
                 {/* Course Routes */}
                 <Route path="/all-courses" element={<AllCourses />} />

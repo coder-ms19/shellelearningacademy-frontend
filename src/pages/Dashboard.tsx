@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Award, Clock, TrendingUp, GraduationCap, Play, Settings, Users, CheckCircle, Search, Loader2, Zap, Calendar, Sparkles, UserPlus } from "lucide-react";
+import { BookOpen, Award, Clock, TrendingUp, GraduationCap, Play, Settings, Users, CheckCircle, Search, Loader2, Zap, Calendar, Sparkles, UserPlus, FileCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAppSelector } from "@/hooks/redux";
 import { courseService } from "@/service/course.service";
@@ -277,6 +277,7 @@ const Dashboard = () => {
     ];
 
     const adminActions = [
+        { title: "Certificate Management", description: "Create, verify, and manage student certificates.", icon: FileCheck, action: () => navigate('/certificate-management'), colorClass: "from-emerald-500 to-teal-600" },
         { title: "Create Course", description: "Build and publish a new learning module.", icon: BookOpen, action: () => navigate('/create-course'), colorClass: "from-primary to-green-500" },
         { title: "User Enrollment", description: "Create users and enroll them in courses.", icon: UserPlus, action: () => navigate('/admin/user-enrollment'), colorClass: "from-cyan-500 to-blue-600" },
         { title: "Create Workshop", description: "Schedule a new workshop or event.", icon: Calendar, action: () => navigate('/create-workshop'), colorClass: "from-pink-500 to-rose-500" },
