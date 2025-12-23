@@ -11,6 +11,7 @@ import Workshops from "./pages/Workshops";
 import WorkshopDetail from "./pages/WorkshopDetail";
 import CreateWorkshop from "./pages/CreateWorkshop";
 import WorkshopRegistrations from "./pages/WorkshopRegistrations";
+import WorkshopManagement from "./pages/WorkshopManagement";
 import Leads from "./pages/Leads";
 import { Toaster } from "react-hot-toast";
 import Index from "./pages/Index";
@@ -145,11 +146,8 @@ const App = () => (
                 <Route path="/careers/:id" element={<JobDetailPage />} />
                 <Route path="/workshops" element={<Workshops />} />
                 <Route path="/workshops/:id" element={<WorkshopDetail />} />
-                <Route path="/create-workshop" element={
-
-                  <CreateWorkshop />
-
-                } />
+                <Route path="/create-workshop" element={<CreateWorkshop />} />
+                <Route path="/workshop-management" element={<WorkshopManagement />} />
                 <Route path="/workshop-registrations" element={<WorkshopRegistrations />} />
                 <Route path="/leads" element={<Leads />} />
                 <Route path="/events" element={<Events />} />

@@ -281,6 +281,7 @@ const Dashboard = () => {
         { title: "Create Course", description: "Build and publish a new learning module.", icon: BookOpen, action: () => navigate('/create-course'), colorClass: "from-primary to-green-500" },
         { title: "User Enrollment", description: "Create users and enroll them in courses.", icon: UserPlus, action: () => navigate('/admin/user-enrollment'), colorClass: "from-cyan-500 to-blue-600" },
         { title: "Create Workshop", description: "Schedule a new workshop or event.", icon: Calendar, action: () => navigate('/create-workshop'), colorClass: "from-pink-500 to-rose-500" },
+        { title: "Workshop Management", description: "Manage all workshops - Create, Update, Delete.", icon: Settings, action: () => navigate('/workshop-management'), colorClass: "from-violet-500 to-purple-600" },
         { title: "Workshop Applications", description: "View and manage workshop registrations.", icon: Users, action: () => navigate('/workshop-registrations'), colorClass: "from-blue-500 to-blue-600" },
         { title: "Nexa Leads", description: "View all leads captured from Nexa AI.", icon: Sparkles, action: () => navigate('/leads'), colorClass: "from-indigo-500 to-purple-600" },
         { title: "Manage Courses", description: "Edit, update, or delete content.", icon: Settings, action: () => navigate('/manage-courses'), colorClass: "from-purple-500 to-purple-600" },

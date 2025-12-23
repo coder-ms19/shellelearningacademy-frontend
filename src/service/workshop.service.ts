@@ -131,6 +131,49 @@ class WorkshopService {
             throw error;
         }
     }
+
+    // Admin: Get all workshops (including drafts)
+    public async getAllWorkshopsAdmin(token: string) {
+        try {
+            const res = await axiosInstance.get(`/workshop/getAllWorkshopsAdmin`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            return res.data;
+        } catch (error: any) {
+            throw error;
+        }
+    }
+
+    // Admin: Update workshop
+    public async updateWorkshop(workshopId: string, data: FormData, token: string) {
+        try {
+            const res = await axiosInstance.put(`/workshop/updateWorkshop/${workshopId}`, data, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+            return res.data;
+        } catch (error: any) {
+            throw error;
+        }
+    }
+
+    // Admin: Delete workshop
+    public async deleteWorkshop(workshopId: string, token: string) {
+        try {
+            const res = await axiosInstance.delete(`/workshop/deleteWorkshop/${workshopId}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            return res.data;
+        } catch (error: any) {
+            throw error;
+        }
+    }
 }
 
 export const workshopService = new WorkshopService();
