@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { DashboardLayout } from "@/ems/components/layout/DashboardLayout";
+import { EmsDashboardSkeleton } from "@/ems/components/EmsDashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -316,6 +317,10 @@ const Leads = () => {
       { label: "Achieved", value: `₹${performance.achieved}`, icon: TrendingUp, change: `${performance.target > 0 ? ((performance.achieved / performance.target) * 100).toFixed(0) : 0}%` },
       { label: "Commission", value: `₹${performance.commission}`, icon: CheckCircle, change: "Earned" }
     );
+  }
+
+  if (isLoading) {
+    return <EmsDashboardSkeleton />;
   }
 
   return (

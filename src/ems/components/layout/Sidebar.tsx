@@ -23,17 +23,17 @@ import { useSelector } from "react-redux";
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/ems", roles: ["Super Admin", "Manager"] },
   { icon: Users, label: "Employees", path: "/ems/employees", roles: ["Super Admin", "Manager"] },
-  { icon: CalendarCheck, label: "Attendance", path: "/ems/attendance", roles: ["Super Admin", "Manager"] },
-  { icon: ListTodo, label: "Tasks & Workflow", path: "/ems/tasks", roles: ["Super Admin", "Manager"] },
-  { icon: FileText, label: "Daily Reports", path: "/ems/reports", roles: ["Super Admin", "Manager"] },
+  // { icon: CalendarCheck, label: "Attendance", path: "/ems/attendance", roles: ["Super Admin", "Manager"] },
+  // { icon: ListTodo, label: "Tasks & Workflow", path: "/ems/tasks", roles: ["Super Admin", "Manager"] },
+  // { icon: FileText, label: "Daily Reports", path: "/ems/reports", roles: ["Super Admin", "Manager"] },
   { icon: Target, label: "Leads & Sales", path: "/ems/leads", roles: ["Super Admin", "Manager", "Employee"] },
   { icon: DollarSign, label: "Targets & Commissions", path: "/ems/targets", roles: ["Super Admin", "Manager"] },
-  { icon: Wallet, label: "Payroll & Salary", path: "/ems/payroll", roles: ["Super Admin", "Manager"] },
-  { icon: Calendar, label: "Leaves", path: "/ems/leaves", roles: ["Super Admin", "Manager"] },
-  { icon: BarChart3, label: "Performance & Reports", path: "/ems/performance", roles: ["Super Admin", "Manager"] },
-  { icon: Trophy, label: "Achievements", path: "/ems/achievements", roles: ["Super Admin", "Manager"] },
-  { icon: Bell, label: "Notifications", path: "/ems/notifications", roles: ["Super Admin", "Manager"] },
-  { icon: Settings, label: "Settings", path: "/ems/settings", roles: ["Super Admin", "Manager"] },
+  // { icon: Wallet, label: "Payroll & Salary", path: "/ems/payroll", roles: ["Super Admin", "Manager"] },
+  // { icon: Calendar, label: "Leaves", path: "/ems/leaves", roles: ["Super Admin", "Manager"] },
+  // { icon: BarChart3, label: "Performance & Reports", path: "/ems/performance", roles: ["Super Admin", "Manager"] },
+  // { icon: Trophy, label: "Achievements", path: "/ems/achievements", roles: ["Super Admin", "Manager"] },
+  // { icon: Bell, label: "Notifications", path: "/ems/notifications", roles: ["Super Admin", "Manager"] },
+  // { icon: Settings, label: "Settings", path: "/ems/settings", roles: ["Super Admin", "Manager"] },
 ];
 
 export function Sidebar() {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { DashboardLayout } from "@/ems/components/layout/DashboardLayout";
+import { EmsDashboardSkeleton } from "@/ems/components/EmsDashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -138,6 +139,10 @@ const Employees = () => {
   );
 
   const canCreateManager = user?.accountType === "Super Admin";
+
+  if (isLoading) {
+    return <EmsDashboardSkeleton />;
+  }
 
   return (
     <DashboardLayout>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { DashboardLayout } from "@/ems/components/layout/DashboardLayout";
+import { EmsDashboardSkeleton } from "@/ems/components/EmsDashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
@@ -94,6 +95,10 @@ const Targets = () => {
   const totalAchieved = staff.reduce((sum, s) => sum + (s.employeePerformance?.achievedTarget || 0), 0);
   const totalCommission = staff.reduce((sum, s) => sum + (s.employeePerformance?.totalCommissionEarned || 0), 0);
   const overallProgress = totalTarget > 0 ? (totalAchieved / totalTarget) * 100 : 0;
+
+  if (isLoading) {
+    return <EmsDashboardSkeleton />;
+  }
 
   return (
     <DashboardLayout>

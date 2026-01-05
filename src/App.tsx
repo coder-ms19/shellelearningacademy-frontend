@@ -66,6 +66,7 @@ import AdminUserEnrollment from "./pages/AdminUserEnrollment";
 import Settings from "./pages/Settings";
 import CertificateManagement from "./pages/CertificateManagement";
 import CertificateVerification from "./pages/CertificateVerification";
+import EmsPrivateRoute from "./components/EmsPrivateRoute";
 
 // EMS Module Imports
 import EmsDashboard from "./ems/pages/Index";
@@ -165,20 +166,22 @@ const App = () => (
                 <Route path="/manage-jobs" element={<ManageJobs />} />
                 <Route path="/admin/user-enrollment" element={<AdminUserEnrollment />} />
 
-                {/* EMS Module Routes */}
-                <Route path="/ems" element={<EmsDashboard />} />
-                <Route path="/ems/employees" element={<EmsEmployees />} />
-                <Route path="/ems/attendance" element={<EmsAttendance />} />
-                <Route path="/ems/tasks" element={<EmsTasks />} />
-                <Route path="/ems/reports" element={<EmsDashboard />} />
-                <Route path="/ems/leads" element={<EmsLeads />} />
-                <Route path="/ems/targets" element={<EmsTargets />} />
-                <Route path="/ems/payroll" element={<EmsPayroll />} />
-                <Route path="/ems/leaves" element={<EmsLeaves />} />
-                <Route path="/ems/performance" element={<EmsDashboard />} />
-                <Route path="/ems/achievements" element={<EmsDashboard />} />
-                <Route path="/ems/notifications" element={<EmsDashboard />} />
-                <Route path="/ems/settings" element={<EmsSettings />} />
+                {/* EMS Module Routes - Protected */}
+                <Route element={<EmsPrivateRoute />}>
+                  <Route path="/ems" element={<EmsDashboard />} />
+                  <Route path="/ems/employees" element={<EmsEmployees />} />
+                  <Route path="/ems/attendance" element={<EmsAttendance />} />
+                  <Route path="/ems/tasks" element={<EmsTasks />} />
+                  <Route path="/ems/reports" element={<EmsDashboard />} />
+                  <Route path="/ems/leads" element={<EmsLeads />} />
+                  <Route path="/ems/targets" element={<EmsTargets />} />
+                  <Route path="/ems/payroll" element={<EmsPayroll />} />
+                  <Route path="/ems/leaves" element={<EmsLeaves />} />
+                  <Route path="/ems/performance" element={<EmsDashboard />} />
+                  <Route path="/ems/achievements" element={<EmsDashboard />} />
+                  <Route path="/ems/notifications" element={<EmsDashboard />} />
+                  <Route path="/ems/settings" element={<EmsSettings />} />
+                </Route>
 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
