@@ -8,15 +8,22 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { name: "Sales", completed: 85, target: 100 },
-  { name: "Marketing", completed: 72, target: 100 },
-  { name: "Support", completed: 91, target: 100 },
-  { name: "Content", completed: 68, target: 100 },
-  { name: "Tech", completed: 78, target: 100 },
-];
+interface PerformanceChartProps {
+  data?: any[];
+}
 
-export function PerformanceChart() {
+export function PerformanceChart({ data }: PerformanceChartProps) {
+  const chartData = data?.map(d => ({
+    name: d.name.split(' ')[0], // Shorten name
+    completed: Math.round(d.performance),
+    target: 100
+  })) || [
+      { name: "Sales", completed: 85, target: 100 },
+      { name: "Marketing", completed: 72, target: 100 },
+      { name: "Support", completed: 91, target: 100 },
+      { name: "Content", completed: 68, target: 100 },
+      { name: "Tech", completed: 78, target: 100 },
+    ];
   return (
     <div className="bg-card rounded-xl border border-border p-6 animate-fade-in">
       <div className="flex items-center justify-between mb-6">
@@ -30,7 +37,7 @@ export function PerformanceChart() {
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={data}
+            data={chartData}
             layout="vertical"
             margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
           >

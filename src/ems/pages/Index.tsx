@@ -7,12 +7,14 @@ import { PendingApprovals } from "@/ems/components/dashboard/PendingApprovals";
 import { AttendanceOverview } from "@/ems/components/dashboard/AttendanceOverview";
 import { Users, UserCheck, ListTodo, IndianRupee } from "lucide-react";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import emsService from "@/service/ems.service";
 
 const Dashboard = () => {
   const { user } = useSelector((state: any) => state.auth);
   const navigate = useNavigate();
+  const [stats, setStats] = useState<any>(null);
 
   // Redirect employees to leads page
   useEffect(() => {
@@ -21,8 +23,30 @@ const Dashboard = () => {
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (user?.accountType === "Employee") return;
+      try {
+        const res = await emsService.getDashboardStats();
+        if (res.success) {
+          setStats(res);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchStats();
+  }, [user]);
+
   // Get first name
   const firstName = user?.fullName ? user.fullName.split(" ")[0] : "User";
+
+  const kpi = stats?.kpi || {
+    totalEmployees: { value: 0, subtext: "+0 this month" },
+    presentToday: { value: 0, subtext: "0% attendance" },
+    activeTasks: { value: 0, subtext: "0 due today" },
+    monthlyRevenue: { value: 0, subtext: "+0% vs last month" }
+  };
 
   return (
     <DashboardLayout>
@@ -38,45 +62,45 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <KPICard
           title="Total Employees"
-          value={156}
+          value={kpi.totalEmployees.value}
           icon={Users}
-          change="+12 this month"
+          change={kpi.totalEmployees.subtext}
           changeType="positive"
         />
         <KPICard
           title="Present Today"
-          value={142}
+          value={kpi.presentToday.value}
           icon={UserCheck}
-          change="91.2% attendance"
+          change={kpi.presentToday.subtext}
           changeType="positive"
         />
         <KPICard
           title="Active Tasks"
-          value={89}
+          value={kpi.activeTasks.value}
           icon={ListTodo}
-          change="24 due today"
+          change={kpi.activeTasks.subtext}
           changeType="neutral"
         />
         <KPICard
           title="Monthly Revenue"
-          value="₹9.5L"
+          value={`₹${(kpi.monthlyRevenue.value / 100000).toFixed(1)}L`}
           icon={IndianRupee}
-          change="+18% vs last month"
+          change={kpi.monthlyRevenue.subtext}
           changeType="positive"
         />
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <RevenueChart />
-        <PerformanceChart />
+        <RevenueChart data={stats?.charts?.revenue} />
+        <PerformanceChart data={stats?.charts?.performance} />
       </div>
 
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <TopPerformers />
-        <PendingApprovals />
-        <AttendanceOverview />
+        {/* <TopPerformers /> */}
+        {/* <PendingApprovals /> */}
+        {/* <AttendanceOverview /> */}
       </div>
     </DashboardLayout>
   );

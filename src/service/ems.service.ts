@@ -38,6 +38,14 @@ class EmsService {
         }
     }
 
+    async getDashboardStats() {
+        try {
+            const { data } = await axiosInstance.get("/admin-ems/dashboard-stats");
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     // Lead Management
     async getAllLeads() {

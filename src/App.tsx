@@ -35,6 +35,7 @@ import CreateCategory from "./pages/Course/CreateCatagory";
 import EditCourse from "./pages/Course/EditCourse";
 import ManageCourses from "./pages/Course/ManageCourses";
 import ManageAllClasses from "./pages/Course/ManageAllClasses";
+import MyClasses from "./pages/Course/MyClasses";
 import Navigation from "./pages/Navigation";
 import NotFound from "./pages/NotFound";
 import { Certifications } from "./pages/Certifications";
@@ -141,6 +142,7 @@ const App = () => (
                 <Route path="/edit-course/:courseId" element={<EditCourse />} />
                 <Route path="/manage-courses" element={<ManageCourses />} />
                 <Route path="/manage-all-classes" element={<ManageAllClasses />} />
+                <Route path="/my-classes" element={<MyClasses />} />
                 <Route path="/add-category" element={<CreateCategory />} />
 
                 {/* New Feature Routes */}

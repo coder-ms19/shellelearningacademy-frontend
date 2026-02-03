@@ -46,6 +46,10 @@ axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   // console.log("access token in interceptor", token)
 
+  // Handle FormData - let browser set Content-Type with boundary
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  }
 
   if (token) {
     // console.log("we are in access token condition")

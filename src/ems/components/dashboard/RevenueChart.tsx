@@ -8,22 +8,25 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { month: "Jan", revenue: 45000 },
-  { month: "Feb", revenue: 52000 },
-  { month: "Mar", revenue: 48000 },
-  { month: "Apr", revenue: 61000 },
-  { month: "May", revenue: 55000 },
-  { month: "Jun", revenue: 67000 },
-  { month: "Jul", revenue: 72000 },
-  { month: "Aug", revenue: 69000 },
-  { month: "Sep", revenue: 78000 },
-  { month: "Oct", revenue: 82000 },
-  { month: "Nov", revenue: 91000 },
-  { month: "Dec", revenue: 95000 },
-];
+interface RevenueChartProps {
+  data?: { name: string; value: number }[];
+}
 
-export function RevenueChart() {
+export function RevenueChart({ data }: RevenueChartProps) {
+  const chartData = data?.map(d => ({ month: d.name, revenue: d.value })) || [
+    { month: "Jan", revenue: 45000 },
+    { month: "Feb", revenue: 52000 },
+    { month: "Mar", revenue: 48000 },
+    { month: "Apr", revenue: 61000 },
+    { month: "May", revenue: 55000 },
+    { month: "Jun", revenue: 67000 },
+    { month: "Jul", revenue: 72000 },
+    { month: "Aug", revenue: 69000 },
+    { month: "Sep", revenue: 78000 },
+    { month: "Oct", revenue: 82000 },
+    { month: "Nov", revenue: 91000 },
+    { month: "Dec", revenue: 95000 },
+  ];
   return (
     <div className="bg-card rounded-xl border border-border p-6 animate-fade-in">
       <div className="flex items-center justify-between mb-6">
@@ -43,7 +46,7 @@ export function RevenueChart() {
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={data}
+            data={chartData}
             margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(220 13% 91%)" />

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Edit, Trash2, Plus, Calendar, Link as LinkIcon, ExternalLink, ChevronDown, ChevronUp, BookOpen, Search, X } from "lucide-react";
+import { Edit, Trash2, Plus, Calendar, Link as LinkIcon, ExternalLink, ChevronDown, ChevronUp, BookOpen, Search, X, Upload, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { courseClassService } from '@/service/courseClass.service';
 import { courseService } from '@/service/course.service';
@@ -29,6 +29,11 @@ interface CourseClass {
     classDescription: string;
     classUrl: string;
     classDate: string;
+    recordingUrl?: string;
+    documentFile?: {
+        secure_url: string;
+        public_id: string;
+    };
 }
 
 const ManageAllClasses: React.FC = () => {
@@ -49,7 +54,10 @@ const ManageAllClasses: React.FC = () => {
         classDescription: '',
         classUrl: '',
         classDate: '',
+        recordingUrl: '',
     });
+    const [documentFile, setDocumentFile] = useState<File | null>(null);
+    const [existingDocumentUrl, setExistingDocumentUrl] = useState<string | null>(null);
 
     // Filter courses based on search query
     const filteredCourses = courses.filter(course =>
@@ -116,7 +124,10 @@ const ManageAllClasses: React.FC = () => {
             classDescription: '',
             classUrl: '',
             classDate: '',
+            recordingUrl: '',
         });
+        setDocumentFile(null);
+        setExistingDocumentUrl(null);
         setIsEditing(false);
         setCurrentClassId(null);
         setCurrentCourseId(null);
@@ -142,11 +153,39 @@ const ManageAllClasses: React.FC = () => {
             classDescription: cls.classDescription,
             classUrl: cls.classUrl,
             classDate: localDateTimeString,
+            recordingUrl: cls.recordingUrl || '',
         });
+        setExistingDocumentUrl(cls.documentFile?.secure_url || null);
+        setDocumentFile(null);
         setCurrentClassId(cls._id);
         setCurrentCourseId(courseId);
         setIsEditing(true);
         setIsDialogOpen(true);
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // Validate file type
+            if (file.type !== 'application/pdf') {
+                toast({
+                    title: "Invalid File Type",
+                    description: "Please upload a PDF file only.",
+                    variant: "destructive",
+                });
+                return;
+            }
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                toast({
+                    title: "File Too Large",
+                    description: "Please upload a file smaller than 10MB.",
+                    variant: "destructive",
+                });
+                return;
+            }
+            setDocumentFile(file);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -165,22 +204,41 @@ const ManageAllClasses: React.FC = () => {
             const localDate = new Date(formData.classDate);
             const utcDateString = localDate.toISOString();
 
-            const dataToSend = {
-                ...formData,
-                classDate: utcDateString,
-            };
+            // Create FormData for file upload
+            const formDataToSend = new FormData();
+            formDataToSend.append('className', formData.className);
+            formDataToSend.append('classDescription', formData.classDescription);
+            formDataToSend.append('classUrl', formData.classUrl);
+            formDataToSend.append('classDate', utcDateString);
+            if (formData.recordingUrl) {
+                formDataToSend.append('recordingUrl', formData.recordingUrl);
+            }
+
+            // Only append file if it's actually a File object
+            console.log('📄 documentFile:', documentFile);
+            console.log('📄 documentFile type:', typeof documentFile);
+            console.log('📄 documentFile instanceof File:', documentFile instanceof File);
+
+            if (documentFile && documentFile instanceof File) {
+                console.log('✅ Appending document file:', documentFile.name);
+                formDataToSend.append('documentFile', documentFile);
+            } else {
+                console.log('⚠️ No valid document file to append');
+            }
+
+            // Log FormData contents
+            console.log('📦 FormData contents:');
+            for (let pair of formDataToSend.entries()) {
+                console.log(pair[0], ':', pair[1]);
+            }
 
             if (isEditing && currentClassId) {
-                await courseClassService.updateClass({
-                    classId: currentClassId,
-                    ...dataToSend,
-                }, accessToken!);
+                formDataToSend.append('classId', currentClassId);
+                await courseClassService.updateClass(formDataToSend, accessToken!);
                 toast({ title: "Class Updated Successfully" });
             } else {
-                await courseClassService.createClass({
-                    courseId: currentCourseId!,
-                    ...dataToSend,
-                }, accessToken!);
+                formDataToSend.append('courseId', currentCourseId!);
+                await courseClassService.createClass(formDataToSend, accessToken!);
                 toast({ title: "Class Created Successfully" });
             }
             setIsDialogOpen(false);
@@ -379,10 +437,12 @@ const ManageAllClasses: React.FC = () => {
                                                     <Table>
                                                         <TableHeader>
                                                             <TableRow>
-                                                                <TableHead className="w-[30%]">Class Name</TableHead>
-                                                                <TableHead className="w-[25%]">Date & Time</TableHead>
-                                                                <TableHead className="w-[20%]">Meeting Link</TableHead>
-                                                                <TableHead className="w-[25%] text-right">Actions</TableHead>
+                                                                <TableHead className="w-[25%]">Class Name</TableHead>
+                                                                <TableHead className="w-[20%]">Date & Time</TableHead>
+                                                                <TableHead className="w-[15%]">Meeting</TableHead>
+                                                                <TableHead className="w-[15%]">Recording</TableHead>
+                                                                <TableHead className="w-[15%]">Documents</TableHead>
+                                                                <TableHead className="w-[10%] text-right">Actions</TableHead>
                                                             </TableRow>
                                                         </TableHeader>
                                                         <TableBody>
@@ -411,6 +471,46 @@ const ManageAllClasses: React.FC = () => {
                                                                         >
                                                                             Join <ExternalLink className="w-3 h-3" />
                                                                         </a>
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        {cls.recordingUrl ? (
+                                                                            <a
+                                                                                href={cls.recordingUrl}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                                className="inline-flex items-center gap-1 text-green-600 hover:underline text-sm"
+                                                                            >
+                                                                                View <ExternalLink className="w-3 h-3" />
+                                                                            </a>
+                                                                        ) : (
+                                                                            <span className="text-xs text-muted-foreground">Not added</span>
+                                                                        )}
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        {cls.documentFile?.secure_url ? (
+                                                                            <div className="flex items-center gap-2">
+                                                                                <a
+                                                                                    href={`${cls.documentFile.secure_url}.pdf`}
+                                                                                    target="_blank"
+                                                                                    rel="noopener noreferrer"
+                                                                                    className="inline-flex items-center gap-1 text-blue-600 hover:underline text-sm"
+                                                                                >
+                                                                                    Open <ExternalLink className="w-3 h-3" />
+                                                                                </a>
+                                                                                <span className="text-muted-foreground">|</span>
+                                                                                <a
+                                                                                    href={`${cls.documentFile.secure_url}.pdf`}
+                                                                                    download={`${cls.className}_document.pdf`}
+                                                                                    target="_blank"
+                                                                                    rel="noopener noreferrer"
+                                                                                    className="inline-flex items-center gap-1 text-purple-600 hover:underline text-sm"
+                                                                                >
+                                                                                    Download <Download className="w-3 h-3" />
+                                                                                </a>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <span className="text-xs text-muted-foreground">Not added</span>
+                                                                        )}
                                                                     </TableCell>
                                                                     <TableCell className="text-right">
                                                                         <div className="flex items-center justify-end gap-2">
@@ -471,6 +571,45 @@ const ManageAllClasses: React.FC = () => {
                                                                     Join Meeting
                                                                     <ExternalLink className="w-3 h-3" />
                                                                 </a>
+
+                                                                {/* Recording Link */}
+                                                                {cls.recordingUrl && (
+                                                                    <a
+                                                                        href={cls.recordingUrl}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="inline-flex items-center gap-2 text-green-600 hover:underline text-sm sm:text-base mb-2 font-medium"
+                                                                    >
+                                                                        <LinkIcon className="w-4 h-4" />
+                                                                        View Recording
+                                                                        <ExternalLink className="w-3 h-3" />
+                                                                    </a>
+                                                                )}
+
+                                                                {/* Document Links */}
+                                                                {cls.documentFile?.secure_url && (
+                                                                    <>
+                                                                        <a
+                                                                            href={`${cls.documentFile.secure_url}.pdf`}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="inline-flex items-center gap-2 text-blue-600 hover:underline text-sm sm:text-base mb-2 font-medium"
+                                                                        >
+                                                                            <ExternalLink className="w-4 h-4" />
+                                                                            Open Docs
+                                                                        </a>
+                                                                        <a
+                                                                            href={`${cls.documentFile.secure_url}.pdf`}
+                                                                            download={`${cls.className}_document.pdf`}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="inline-flex items-center gap-2 text-purple-600 hover:underline text-sm sm:text-base mb-4 font-medium"
+                                                                        >
+                                                                            <Download className="w-4 h-4" />
+                                                                            Download Docs
+                                                                        </a>
+                                                                    </>
+                                                                )}
 
                                                                 {/* Action Buttons */}
                                                                 <div className="flex gap-2 pt-3 border-t">
@@ -579,6 +718,65 @@ const ManageAllClasses: React.FC = () => {
                                     className="text-sm sm:text-base resize-none"
                                     required
                                 />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="recordingUrl" className="text-sm sm:text-base font-medium">
+                                    Recording URL (Google Drive)
+                                </Label>
+                                <div className="flex">
+                                    <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-input bg-muted text-muted-foreground">
+                                        <LinkIcon className="h-4 w-4" />
+                                    </span>
+                                    <Input
+                                        id="recordingUrl"
+                                        name="recordingUrl"
+                                        value={formData.recordingUrl}
+                                        onChange={handleInputChange}
+                                        placeholder="https://drive.google.com/..."
+                                        className="rounded-l-none h-10 sm:h-11 text-sm sm:text-base"
+                                    />
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                    Optional: Add Google Drive link for class recording
+                                </p>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="documentFile" className="text-sm sm:text-base font-medium">
+                                    Class Document (PDF)
+                                </Label>
+                                <Input
+                                    id="documentFile"
+                                    name="documentFile"
+                                    type="file"
+                                    accept=".pdf"
+                                    onChange={handleFileChange}
+                                    className="h-10 sm:h-11 text-sm sm:text-base cursor-pointer"
+                                />
+                                {documentFile && (
+                                    <p className="text-xs text-green-600 font-medium">
+                                        Selected: {documentFile.name} ({(documentFile.size / 1024).toFixed(2)} KB)
+                                    </p>
+                                )}
+                                {existingDocumentUrl && !documentFile && (
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-xs text-muted-foreground">
+                                            Current document:
+                                        </p>
+                                        <a
+                                            href={existingDocumentUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs text-blue-600 hover:underline inline-flex items-center gap-1"
+                                        >
+                                            View PDF <ExternalLink className="w-3 h-3" />
+                                        </a>
+                                    </div>
+                                )}
+                                <p className="text-xs text-muted-foreground">
+                                    Optional: Upload a PDF document for this class (max 10MB)
+                                </p>
                             </div>
 
                             <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4">

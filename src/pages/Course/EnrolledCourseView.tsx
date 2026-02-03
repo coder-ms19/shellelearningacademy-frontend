@@ -16,7 +16,9 @@ import {
     BookOpen,
     Video,
     ArrowRight,
-    ArrowLeft
+    ArrowLeft,
+    Download,
+    ExternalLink
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { courseService } from "@/service/course.service";
@@ -405,27 +407,88 @@ const EnrolledCourseView = () => {
                                                                 )}
                                                             </div>
 
-                                                            {/* Action button */}
-                                                            {!isCompleted && (
-                                                                <Button
-                                                                    variant="outline"
-                                                                    className="border-green-500/30 hover:bg-green-500/10 hover:border-green-500/50"
-                                                                    onClick={() => handleClassCompletion(cls._id)}
-                                                                    disabled={markingClassId === cls._id}
-                                                                >
-                                                                    {markingClassId === cls._id ? (
-                                                                        <>
-                                                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                                                            Marking...
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            <CheckCircle className="w-4 h-4 mr-2" />
-                                                                            Mark as Done
-                                                                        </>
-                                                                    )}
-                                                                </Button>
-                                                            )}
+                                                            {/* Action buttons */}
+                                                            <div className="flex flex-wrap gap-3">
+                                                                {/* Recording Link */}
+                                                                {cls.recordingUrl && (
+                                                                    <Button
+                                                                        variant="outline"
+                                                                        className="border-green-500/30 hover:bg-green-500/10 hover:border-green-500/50"
+                                                                        asChild
+                                                                    >
+                                                                        <a href={cls.recordingUrl} target="_blank" rel="noopener noreferrer">
+                                                                            <Video className="w-4 h-4 mr-2" />
+                                                                            Watch Recording
+                                                                        </a>
+                                                                    </Button>
+                                                                )}
+
+                                                                {/* Document Links */}
+                                                                {cls.documentFile?.secure_url && (
+                                                                    <>
+                                                                        {/* Open in New Tab */}
+                                                                        <Button
+                                                                            variant="outline"
+                                                                            className="border-blue-500/30 hover:bg-blue-500/10 hover:border-blue-500/50"
+                                                                            asChild
+                                                                        >
+                                                                            <a href={`${cls.documentFile.secure_url}.pdf`} target="_blank" rel="noopener noreferrer">
+                                                                                <ExternalLink className="w-4 h-4 mr-2" />
+                                                                                Open Docs
+                                                                            </a>
+                                                                        </Button>
+
+
+                                                                        {/* Download */}
+                                                                        <Button
+                                                                            variant="outline"
+                                                                            className="border-purple-500/30 hover:bg-purple-500/10 hover:border-purple-500/50"
+                                                                            asChild
+                                                                        >
+                                                                            <a
+                                                                                href={`${cls.documentFile.secure_url}.pdf`}
+                                                                                download={`${cls.className}_document.pdf`}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                            >
+                                                                                <Download className="w-4 h-4 mr-2" />
+                                                                                Download Docs
+                                                                            </a>
+                                                                        </Button>
+                                                                    </>
+                                                                )}
+
+                                                                {/* Mark as Done */}
+                                                                {!isCompleted && (
+                                                                    <Button
+                                                                        variant="outline"
+                                                                        className="border-green-500/30 hover:bg-green-500/10 hover:border-green-500/50"
+                                                                        onClick={() => handleClassCompletion(cls._id)}
+                                                                        disabled={markingClassId === cls._id}
+                                                                    >
+                                                                        {markingClassId === cls._id ? (
+                                                                            <>
+                                                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                                                Marking...
+                                                                            </>
+                                                                        ) : (
+                                                                            <>
+                                                                                <CheckCircle className="w-4 h-4 mr-2" />
+                                                                                Mark as Done
+                                                                            </>
+                                                                        )}
+                                                                    </Button>
+                                                                )}
+
+                                                                {/* Show message if no resources available */}
+                                                                {!cls.recordingUrl && !cls.documentFile?.secure_url && isCompleted && (
+                                                                    <div className="w-full p-3 bg-muted/30 rounded-lg border border-dashed border-muted-foreground/30">
+                                                                        <p className="text-sm text-muted-foreground text-center">
+                                                                            📚 Recording and documents will be available soon
+                                                                        </p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     </CardContent>
                                                 </Card>
