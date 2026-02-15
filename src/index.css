@@ -44,17 +44,13 @@
     --radius: 0.75rem;
 
     /* Gradients (optional) */
-    --gradient-primary: linear-gradient(
-      135deg,
-      hsl(104 69% 37%),
-      hsl(100 50% 34%)
-    );
+    --gradient-primary: linear-gradient(135deg,
+        hsl(104 69% 37%),
+        hsl(100 50% 34%));
 
-    --gradient-hero: linear-gradient(
-      180deg,
-      hsl(0 0% 100%),
-      hsl(0 0% 98%)
-    );
+    --gradient-hero: linear-gradient(180deg,
+        hsl(0 0% 100%),
+        hsl(0 0% 98%));
 
     /* Shadows */
     --shadow-sm: 0 2px 8px hsl(0 0% 0% / .08);
@@ -74,7 +70,12 @@
   }
 
   /* Headings should use brand green */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bold tracking-tight;
     color: hsl(var(--primary));
   }
@@ -197,5 +198,91 @@
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color: hsl(var(--border));
     border-radius: 3px;
+  }
+}
+
+/* === Locomotive Scroll Styles === */
+@layer utilities {
+
+  /* Smooth scroll container */
+  [data-scroll-container] {
+    overflow: hidden;
+  }
+
+  /* Elements with scroll animations */
+  [data-scroll] {
+    will-change: transform, opacity;
+  }
+
+  /* Fade in animation for elements coming into view */
+  [data-scroll].is-inview {
+    opacity: 1;
+    transition: opacity 0.8s ease-out;
+  }
+
+  /* Elements not yet in view */
+  [data-scroll]:not(.is-inview) {
+    opacity: 0;
+  }
+
+  /* Parallax speed variations */
+  [data-scroll-speed] {
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Disable smooth scroll on reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    [data-scroll-container] {
+      overflow: auto !important;
+    }
+
+    [data-scroll] {
+      will-change: auto !important;
+    }
+  }
+
+  /* Custom scroll animations */
+  .scroll-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .scroll-fade-up.is-inview {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scroll-fade-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .scroll-fade-left.is-inview {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-fade-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .scroll-fade-right.is-inview {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .scroll-scale.is-inview {
+    opacity: 1;
+    transform: scale(1);
   }
 }

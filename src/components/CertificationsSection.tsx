@@ -1,4 +1,4 @@
-import certificate1 from "@/assets/certificate12.png";
+import certificate1 from "@/assets/certificate12.jpeg";
 import certificate2 from "@/assets/certificate13.png";
 
 export const CertificationsSection = () => {
