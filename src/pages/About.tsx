@@ -8,6 +8,7 @@ import about_img from "../assets/about.jpeg";
 import kartikImg from "../assets/owners/kartik.png";
 import mayankImg from "../assets/owners/mayank.jpeg";
 import omkarImg from "../assets/owners/omkarjpeg.jpeg";
+import harshitImg from "../assets/owners/harshit.jpeg";
 
 const About = () => {
     const services = [
@@ -279,7 +280,7 @@ const About = () => {
                             </p>
                         </div>
 
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
                             {/* Founder 1 - Kartik Gupta */}
                             <div className="bg-card rounded-3xl overflow-hidden shadow-lg border border-border/50 group hover:shadow-xl transition-all duration-300">
                                 <div className="h-64 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
@@ -293,7 +294,7 @@ const About = () => {
                                     <h3 className="text-2xl font-bold text-foreground mb-1">Kartik Gupta</h3>
                                     <p className="text-primary font-semibold mb-2">Founder</p>
                                     <p className="text-muted-foreground text-sm mb-4">
-                                        
+
                                     </p>
                                     <p className="text-muted-foreground text-sm leading-relaxed">
                                         Leads marketing and strategic partnerships, driving brand growth and industry collaborations. Focused on expanding outreach, building strong partner networks, and creating opportunities that connect learners with real-world career pathways.
@@ -314,7 +315,7 @@ const About = () => {
                                     <h3 className="text-2xl font-bold text-foreground mb-1">Mayank Jain</h3>
                                     <p className="text-primary font-semibold mb-2">Director & Co-Founder</p>
                                     <p className="text-muted-foreground text-sm mb-4">
-                                        
+
                                     </p>
                                     <p className="text-muted-foreground text-sm leading-relaxed">
                                         Oversees sales, operations, academic development, and financial planning. Ensures smooth execution of programs, strengthens internal processes, and drives sustainable growth while maintaining high training standards.
@@ -333,12 +334,33 @@ const About = () => {
                                 </div>
                                 <div className="p-8 text-center">
                                     <h3 className="text-2xl font-bold text-foreground mb-1">Omkar Dutta</h3>
-                                    <p className="text-primary font-semibold mb-2">Vice President</p>
+                                    <p className="text-primary font-semibold mb-2">Vice president - Collaborations & Partners</p>
                                     <p className="text-muted-foreground text-sm mb-4">
-                                        
+
                                     </p>
                                     <p className="text-muted-foreground text-sm leading-relaxed">
                                         Manages collaborations, partnerships, and key relationships across the organisation. Focuses on building strong alliances, maintaining partner engagement, and supporting initiatives that enhance growth and credibility.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Founder 4 - Harshit Shetty */}
+                            <div className="bg-card rounded-3xl overflow-hidden shadow-lg border border-border/50 group hover:shadow-xl transition-all duration-300">
+                                <div className="h-64 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
+                                    <img
+                                        src={harshitImg}
+                                        alt="Harshit Shetty"
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                    />
+                                </div>
+                                <div className="p-8 text-center">
+                                    <h3 className="text-2xl font-bold text-foreground mb-1">Harshit Shetty</h3>
+                                    <p className="text-primary font-semibold mb-2">Vice President - Relationships & Operations</p>
+                                    <p className="text-muted-foreground text-sm mb-4">
+
+                                    </p>
+                                    <p className="text-muted-foreground text-sm leading-relaxed">
+                                        Oversees partner brands, collaborations, and cross-department coordination. Ensures responsibilities are managed effectively, maintains alignment across teams, and supports smooth operations while strengthening relationships with all partner organisations.
                                     </p>
                                 </div>
                             </div>
