@@ -1,4 +1,3 @@
-
 import HeroSection from "./nexaPages/HeroSection";
 import AboutSection from "./nexaPages/AboutSection";
 import FeaturesSection from "./nexaPages/FeaturesSection";
@@ -10,8 +9,7 @@ import ChatPreviewSection from "./nexaPages/ChatPreviewSection";
 import WaveDivider from "./nexaPages/WaveDivider";
 import { Navbar } from "../Navbar";
 import { Footer } from "../Footer";
-
-
+import { motion } from "framer-motion";
 
 const NexaHome = () => {
   return (
@@ -19,22 +17,67 @@ const NexaHome = () => {
       <Navbar />
 
       <main className="pt-16">
-        <HeroSection />
-        <AboutSection />
-        <section id="features">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <HeroSection />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <AboutSection />
+        </motion.div>
+        <motion.section
+          id="features"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <FeaturesSection />
-        </section>
-        <section id="how-it-works">
+        </motion.section>
+        <motion.section
+          id="how-it-works"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <HowItWorksSection />
-        </section>
-        <ChatPreviewSection />
+        </motion.section>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <ChatPreviewSection />
+        </motion.div>
         <WaveDivider />
-        <section id="testimonials">
+        <motion.section
+          id="testimonials"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <TestimonialsSection />
-        </section>
-        <section id="contact">
+        </motion.section>
+        <motion.section
+          id="contact"
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <CTASection />
-        </section>
+        </motion.section>
       </main>
       <Footer />
     </div>

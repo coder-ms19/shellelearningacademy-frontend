@@ -75,7 +75,7 @@ export const TermsOfService = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold mb-4">8. Governing Law</h2>
             <p className="text-muted-foreground mb-4">
-              These Terms are governed by Indian law. Disputes fall under the jurisdiction of [Your City, India].
+              These Terms are governed by Indian law. Disputes fall under the jurisdiction of Indore, Madhya Pradesh, India.
             </p>
           </section>
         </div>

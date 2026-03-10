@@ -17,20 +17,20 @@ const CERTIFICATE_API = "/certificate";
  * @returns {Promise} - API response
  */
 export const createCertificate = async (formData: FormData) => {
-    try {
-        const response = await axiosInstance.post(
-            `${CERTIFICATE_API}/create`,
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }
-        );
-        return response.data;
-    } catch (error: any) {
-        throw error.response?.data || error;
-    }
+  try {
+    const response = await axiosInstance.post(
+      `${CERTIFICATE_API}/create`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
 };
 
 /**
@@ -39,21 +39,21 @@ export const createCertificate = async (formData: FormData) => {
  * @returns {Promise} - API response
  */
 export const getAllCertificates = async (params?: {
-    page?: number;
-    limit?: number;
-    status?: string;
-    search?: string;
-    sortBy?: string;
-    order?: string;
+  page?: number;
+  limit?: number;
+  status?: string;
+  search?: string;
+  sortBy?: string;
+  order?: string;
 }) => {
-    try {
-        const response = await axiosInstance.get(`${CERTIFICATE_API}/all`, {
-            params,
-        });
-        return response.data;
-    } catch (error: any) {
-        throw error.response?.data || error;
-    }
+  try {
+    const response = await axiosInstance.get(`${CERTIFICATE_API}/all`, {
+      params,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
 };
 
 /**
@@ -62,14 +62,40 @@ export const getAllCertificates = async (params?: {
  * @returns {Promise} - API response
  */
 export const getCertificateByIdAdmin = async (certificateId: string) => {
-    try {
-        const response = await axiosInstance.get(
-            `${CERTIFICATE_API}/admin/${certificateId}`
-        );
-        return response.data;
-    } catch (error: any) {
-        throw error.response?.data || error;
-    }
+  try {
+    const response = await axiosInstance.get(
+      `${CERTIFICATE_API}/admin/${certificateId}`,
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
+};
+
+/**
+ * Update certificate details (Admin view)
+ * @param {string} certificateId - Certificate ID
+ * @param {FormData} formData - Certificate data
+ * @returns {Promise} - API response
+ */
+export const updateCertificate = async (
+  certificateId: string,
+  formData: FormData,
+) => {
+  try {
+    const response = await axiosInstance.put(
+      `${CERTIFICATE_API}/admin/${certificateId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
 };
 
 /**
@@ -80,19 +106,19 @@ export const getCertificateByIdAdmin = async (certificateId: string) => {
  * @returns {Promise} - API response
  */
 export const updateCertificateStatus = async (
-    certificateId: string,
-    status: string,
-    reason?: string
+  certificateId: string,
+  status: string,
+  reason?: string,
 ) => {
-    try {
-        const response = await axiosInstance.put(
-            `${CERTIFICATE_API}/status/${certificateId}`,
-            { status, reason }
-        );
-        return response.data;
-    } catch (error: any) {
-        throw error.response?.data || error;
-    }
+  try {
+    const response = await axiosInstance.put(
+      `${CERTIFICATE_API}/status/${certificateId}`,
+      { status, reason },
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
 };
 
 /**
@@ -101,14 +127,14 @@ export const updateCertificateStatus = async (
  * @returns {Promise} - API response
  */
 export const deleteCertificate = async (certificateId: string) => {
-    try {
-        const response = await axiosInstance.delete(
-            `${CERTIFICATE_API}/${certificateId}`
-        );
-        return response.data;
-    } catch (error: any) {
-        throw error.response?.data || error;
-    }
+  try {
+    const response = await axiosInstance.delete(
+      `${CERTIFICATE_API}/${certificateId}`,
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
 };
 
 /**
@@ -117,14 +143,14 @@ export const deleteCertificate = async (certificateId: string) => {
  * @returns {Promise} - API response
  */
 export const regenerateQRCode = async (certificateId: string) => {
-    try {
-        const response = await axiosInstance.post(
-            `${CERTIFICATE_API}/regenerate-qr/${certificateId}`
-        );
-        return response.data;
-    } catch (error: any) {
-        throw error.response?.data || error;
-    }
+  try {
+    const response = await axiosInstance.post(
+      `${CERTIFICATE_API}/regenerate-qr/${certificateId}`,
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
 };
 
 /**
@@ -132,12 +158,12 @@ export const regenerateQRCode = async (certificateId: string) => {
  * @returns {Promise} - API response
  */
 export const getCertificateStats = async () => {
-    try {
-        const response = await axiosInstance.get(`${CERTIFICATE_API}/stats`);
-        return response.data;
-    } catch (error: any) {
-        throw error.response?.data || error;
-    }
+  try {
+    const response = await axiosInstance.get(`${CERTIFICATE_API}/stats`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
 };
 
 // ============================================
@@ -150,12 +176,12 @@ export const getCertificateStats = async () => {
  * @returns {Promise} - API response
  */
 export const verifyCertificate = async (certificateId: string) => {
-    try {
-        const response = await axiosInstance.get(
-            `${CERTIFICATE_API}/verify/${certificateId}`
-        );
-        return response.data;
-    } catch (error: any) {
-        throw error.response?.data || error;
-    }
+  try {
+    const response = await axiosInstance.get(
+      `${CERTIFICATE_API}/verify/${certificateId}`,
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
 };
