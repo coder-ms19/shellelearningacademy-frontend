@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Tag, Send, Loader2, ArrowLeft, MessageSquare } from "lucide-react";
+import { Tag, Send, Loader2, ArrowLeft, MessageSquare, Pencil, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAppSelector } from '@/hooks/redux';
 import { adminService } from '@/service/admin.service';
@@ -48,6 +48,17 @@ const CreateCategory = () => {
     useEffect(() => {
         fetchCategories();
     }, [token]);
+
+    const handleDeleteCategory = async (categoryId: string) => {
+        if (!token) return;
+        try {
+            const res = await adminService.deleteCategory(categoryId, token);
+            toast.success(res.message || "Category deleted successfully!");
+            fetchCategories(); // Refresh list
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || "Failed to delete category");
+        }
+    };
 
     // Submit handler
     const handleSubmit = async (e: React.FormEvent) => {
@@ -165,20 +176,56 @@ const CreateCategory = () => {
                                 <Tag className="w-5 h-5 text-primary" />
                                 Existing Categories
                             </h3>
-                            <div className="flex flex-wrap gap-3 p-4 bg-muted/10 rounded-xl border border-border">
+                            <div className="space-y-3">
                                 {isLoadingCategories ? (
-                                    <div className="flex items-center gap-2 text-muted-foreground animate-pulse">
+                                    <div className="flex items-center gap-2 text-muted-foreground animate-pulse p-4">
                                         <Loader2 className="w-4 h-4 animate-spin" />
                                         Loading categories...
                                     </div>
                                 ) : categories.length > 0 ? (
-                                    categories.map((category: any) => (
-                                        <Badge key={category._id} className="text-sm font-medium bg-primary/15 text-primary border-primary/50 hover:bg-primary/20 transition-colors">
-                                            {category.name}
-                                        </Badge>
-                                    ))
+                                    <div className="grid grid-cols-1 gap-3">
+                                        {categories.map((category: any) => (
+                                            <div 
+                                                key={category._id} 
+                                                className="flex items-center justify-between p-4 bg-muted/20 rounded-xl border border-border/50 hover:bg-muted/30 transition-all group"
+                                            >
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="font-bold text-foreground">
+                                                        {category.name}
+                                                    </span>
+                                                    {category.description && (
+                                                        <span className="text-xs text-muted-foreground line-clamp-1">
+                                                            {category.description}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <Button 
+                                                        size="sm" 
+                                                        variant="outline" 
+                                                        className="h-8 w-8 p-0 border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground"
+                                                        onClick={() => navigate(`/edit-category/${category._id}`, { state: { category } })}
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </Button>
+                                                    <Button 
+                                                        size="sm" 
+                                                        variant="outline" 
+                                                        className="h-8 w-8 p-0 border-destructive/30 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                                                        onClick={() => {
+                                                            if (window.confirm(`Are you sure you want to delete "${category.name}"?`)) {
+                                                                handleDeleteCategory(category._id);
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 ) : (
-                                    <p className="text-sm text-muted-foreground">No categories created yet.</p>
+                                    <p className="text-sm text-muted-foreground p-4">No categories created yet.</p>
                                 )}
                             </div>
                         </div>

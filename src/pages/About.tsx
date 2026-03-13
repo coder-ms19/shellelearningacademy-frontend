@@ -346,7 +346,7 @@ const About = () => {
         </section>
 
         {/* 5. Our Services */}
-        <section className="py-20 bg-background border-t border-border/50">
+        {/* <section className="py-20 bg-background border-t border-border/50">
           <div className="container mx-auto px-4 max-w-7xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -402,7 +402,7 @@ const About = () => {
               })}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* 6. Founders & Team Section */}
         <section className="py-20 bg-muted/30">

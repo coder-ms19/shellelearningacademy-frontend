@@ -280,6 +280,36 @@ class AdminService {
     }
   }
 
+  public async updateCategory(data: any, token: string) {
+    try {
+      const res = await axiosInstance.post(`/course/updateCategory`, data,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      )
+      return res.data;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  public async deleteCategory(categoryId: string, token: string) {
+    try {
+      const res = await axiosInstance.post(`/course/deleteCategory`, { categoryId },
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      )
+      return res.data;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
 }
 
 export const adminService = new AdminService();

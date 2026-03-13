@@ -50,9 +50,8 @@ export const ReputedPlatformSection = () => {
       <div className="container relative mx-auto px-4 z-10 flex flex-col items-center">
         {/* Section Header */}
         <h2 className="text-[2.25rem] md:text-[3.5rem] font-medium  mb-12 md:mb-16 text-center leading-[1.15] tracking-tight max-w-2xl">
-          Publications That We Are
-          <br />
-          Featured In
+          Our Latest Article On Platforms
+          
         </h2>
 
         {/* Tablet Mockup Component */}
