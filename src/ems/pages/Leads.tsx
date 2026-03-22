@@ -271,7 +271,7 @@ const Leads = () => {
   const openStatusModal = (lead: any) => {
     setSelectedLead(lead);
     setNewStatus(lead.status);
-    setDescriptionNote(lead.description || "");
+    setDescriptionNote(user?.accountType === "Employee" ? (lead.employeeDescription || "") : (lead.description || ""));
     setIsStatusOpen(true);
   };
 
@@ -578,11 +578,11 @@ const Leads = () => {
               </div>
               <div>
                 <Label htmlFor="status-desc" className="mb-2 block">
-                  Description / Notes
+                  {user?.accountType === "Employee" ? "Employee Update Notes" : "Description / Notes"}
                 </Label>
                 <Textarea
                   id="status-desc"
-                  placeholder="Add your notes or description about this lead..."
+                  placeholder={user?.accountType === "Employee" ? "Add your notes to keep track of this lead's progress..." : "Add your notes or description about this lead..."}
                   value={descriptionNote}
                   onChange={(e) => setDescriptionNote(e.target.value)}
                   rows={4}
@@ -639,11 +639,19 @@ const Leads = () => {
                 <div>
                   <h4 className="font-semibold text-foreground">{lead.name}</h4>
                   <p
-                    className="text-sm text-muted-foreground line-clamp-1"
+                    className="text-sm text-muted-foreground line-clamp-1 mt-1"
                     title={lead.description}
                   >
                     {lead.description || "No description"}
                   </p>
+                  {lead.employeeDescription && (
+                    <p
+                      className="text-xs text-muted-foreground/80 line-clamp-1 mt-1 italic border-l-2 border-primary/30 pl-2"
+                      title={lead.employeeDescription}
+                    >
+                      Employee Notes: {lead.employeeDescription}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <span

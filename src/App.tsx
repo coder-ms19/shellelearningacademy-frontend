@@ -5,8 +5,7 @@ import { Provider } from "react-redux";
 import { store } from "@/store";
 import AuthLoader from "@/components/AuthLoader";
 import ScrollToTop from "@/components/ScrollToTop";
-// import PrivateRoute from "./components/core/Auth/PrivateRoute";
-// import OpenRoute from "./components/core/Auth/OpenRoute";
+
 import Workshops from "./pages/Workshops";
 import WorkshopDetail from "./pages/WorkshopDetail";
 import CreateWorkshop from "./pages/CreateWorkshop";
@@ -70,6 +69,10 @@ import CertificateManagement from "./pages/CertificateManagement";
 import CertificateVerification from "./pages/CertificateVerification";
 import EmsPrivateRoute from "./components/EmsPrivateRoute";
 import HeroImageManagement from "./pages/HeroImageManagement";
+import FormManagement from "./shellform/FormManagement";
+import FormEditor from "./shellform/FormEditor";
+import FormResponses from "./shellform/FormResponses";
+import PublicForm from "./shellform/PublicForm";
 
 // EMS Module Imports
 import EmsDashboard from "./ems/pages/Index";
@@ -172,6 +175,14 @@ const App = () => (
                 <Route path="/admin/user-enrollment" element={<AdminUserEnrollment />} />
                 <Route path="/admin/hero-images" element={<HeroImageManagement />} />
 
+                {/* ShellForms Routes */}
+                <Route path="/admin/forms" element={<FormManagement />} />
+                <Route path="/admin/forms/create" element={<FormEditor />} />
+                <Route path="/admin/forms/edit/:id" element={<FormEditor />} />
+                <Route path="/admin/forms/responses/:id" element={<FormResponses />} />
+                <Route path="/f/:slug" element={<PublicForm />} />
+
+             
                 {/* EMS Module Routes - Protected */}
                 <Route element={<EmsPrivateRoute />}>
                   <Route path="/ems" element={<EmsDashboard />} />
