@@ -198,85 +198,85 @@ const Targets = () => {
 
           {(user?.accountType === "Manager" ||
             user?.accountType === "Super Admin") && (
-            <>
-              <Button
-                variant="outline"
-                className="gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
-                onClick={handleResetTargets}
-                disabled={isResetting}
-              >
-                {isResetting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <RefreshCw className="w-4 h-4" />
-                )}
-                <span className="hidden sm:inline">Reset Targets</span>
-              </Button>
-              <Dialog open={isTargetOpen} onOpenChange={setIsTargetOpen}>
-                <DialogTrigger asChild>
-                  <Button className="gap-2">
-                    <Target className="w-4 h-4" />
-                    Set Targets
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Set Monthly Target</DialogTitle>
-                    <DialogDescription>
-                      Assign sales target to an employee for {new Date(parseInt(year), parseInt(month) - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div>
-                      <Label>Employee</Label>
-                      <Select
-                        value={targetData.employeeId}
-                        onValueChange={(val) =>
-                          setTargetData({ ...targetData, employeeId: val })
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Employee" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {staff.map((s) => (
-                            <SelectItem key={s._id} value={s._id}>
-                              {s.fullName}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>Target Amount (₹)</Label>
-                      <Input
-                        type="number"
-                        value={targetData.amount}
-                        onChange={(e) =>
-                          setTargetData({
-                            ...targetData,
-                            amount: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      onClick={handleAssignTarget}
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <Loader2 className="animate-spin" />
-                      ) : (
-                        "Assign Target"
-                      )}
+              <>
+                <Button
+                  variant="outline"
+                  className="gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
+                  onClick={handleResetTargets}
+                  disabled={isResetting}
+                >
+                  {isResetting ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <RefreshCw className="w-4 h-4" />
+                  )}
+                  <span>Reset Targets</span>
+                </Button>
+                <Dialog open={isTargetOpen} onOpenChange={setIsTargetOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="gap-2">
+                      <Target className="w-4 h-4" />
+                      Set Targets
                     </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </>
-          )}
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Set Monthly Target</DialogTitle>
+                      <DialogDescription>
+                        Assign sales target to an employee for {new Date(parseInt(year), parseInt(month) - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div>
+                        <Label>Employee</Label>
+                        <Select
+                          value={targetData.employeeId}
+                          onValueChange={(val) =>
+                            setTargetData({ ...targetData, employeeId: val })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Employee" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {staff.map((s) => (
+                              <SelectItem key={s._id} value={s._id}>
+                                {s.fullName}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Target Amount (₹)</Label>
+                        <Input
+                          type="number"
+                          value={targetData.amount}
+                          onChange={(e) =>
+                            setTargetData({
+                              ...targetData,
+                              amount: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        onClick={handleAssignTarget}
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <Loader2 className="animate-spin" />
+                        ) : (
+                          "Assign Target"
+                        )}
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
         </div>
       </div>
 

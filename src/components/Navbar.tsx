@@ -156,7 +156,7 @@ export const Navbar = ({ onToggleSidebar }: { onToggleSidebar?: () => void }) =>
 
                         {/* Logo & Sidebar Trigger (Left) */}
                         <div className="flex items-center gap-2">
-                            {onToggleSidebar && (
+                            {onToggleSidebar ? (
                                 <Button
                                     variant="ghost"
                                     size="icon"
@@ -164,6 +164,20 @@ export const Navbar = ({ onToggleSidebar }: { onToggleSidebar?: () => void }) =>
                                     className="h-10 w-10 text-primary hover:bg-primary/10 lg:hidden"
                                 >
                                     <Menu className="h-6 w-6" />
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                    aria-label="Toggle menu"
+                                    className="h-10 w-10 text-foreground/80 hover:bg-primary/10 transition-colors lg:hidden"
+                                >
+                                    {mobileMenuOpen ? (
+                                        <X className="h-6 w-6 text-primary" />
+                                    ) : (
+                                        <Menu className="h-6 w-6" />
+                                    )}
                                 </Button>
                             )}
                             <Link to="/" className="flex items-center gap-2 transition-opacity duration-300 hover:opacity-90 group">
@@ -254,23 +268,6 @@ export const Navbar = ({ onToggleSidebar }: { onToggleSidebar?: () => void }) =>
                                             {user?.firstName?.[0]}
                                         </AvatarFallback>
                                     </Avatar>
-                                </Button>
-                            )}
-
-                            {/* Mobile Menu Toggle Button (General site only - Disabled in EMS mode) */}
-                            {!onToggleSidebar && (
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                    aria-label="Toggle menu"
-                                    className="h-10 w-10 text-foreground/80 hover:bg-primary/10 transition-colors"
-                                >
-                                    {mobileMenuOpen ? (
-                                        <X className="h-6 w-6 text-primary" />
-                                    ) : (
-                                        <Menu className="h-6 w-6" />
-                                    )}
                                 </Button>
                             )}
                         </div>
