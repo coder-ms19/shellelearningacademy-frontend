@@ -27,7 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import toast from "react-hot-toast";
 import logo from "../assets/logo2.png"
 
-export const Navbar = () => {
+export const Navbar = ({ onToggleSidebar }: { onToggleSidebar?: () => void }) => {
     const { theme, toggleTheme } = useTheme();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -154,15 +154,26 @@ export const Navbar = () => {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 ">
                     <div className="flex h-16 items-center justify-between ">
 
-                        {/* Logo */}
-                        <Link to="/" className="flex items-center gap-2 transition-opacity duration-300 hover:opacity-90 group">
-                            <img loading="lazy" src={logo} alt="Shell E-learning Academy Logo" className="h-10 w-10 sm:h-11 sm:w-11 object-contain" />
-                            <div className="flex flex-col leading-none">
-                                {/* Using Tailwind color variables for the custom green primary color */}
-                                <span className="font-extrabold text-base sm:text-lg text-primary transition-colors">Shell E-Learning</span>
-                                <span className="text-xs font-medium text-muted-foreground hidden sm:block">ISO Verified Academy</span>
-                            </div>
-                        </Link>
+                        {/* Logo & Sidebar Trigger (Left) */}
+                        <div className="flex items-center gap-2">
+                            {onToggleSidebar && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={onToggleSidebar}
+                                    className="h-10 w-10 text-primary hover:bg-primary/10"
+                                >
+                                    
+                                </Button>
+                            )}
+                            <Link to="/" className="flex items-center gap-2 transition-opacity duration-300 hover:opacity-90 group">
+                                <img loading="lazy" src={logo} alt="Shell E-learning Academy Logo" className="h-10 w-10 sm:h-11 sm:w-11 object-contain" />
+                                <div className="flex flex-col leading-none">
+                                    <span className="font-extrabold text-base sm:text-lg text-primary transition-colors">Shell E-Learning</span>
+                                    <span className="text-xs font-medium text-muted-foreground hidden sm:block">ISO Verified Academy</span>
+                                </div>
+                            </Link>
+                        </div>
 
                         {/* Desktop Navigation, Search, and Auth/Theme Buttons */}
                         <div className="hidden items-center gap-8 lg:flex">
@@ -181,8 +192,8 @@ export const Navbar = () => {
                                     </Link>
                                 ))}
 
-                                {/* Dashboard Link - Only show when authenticated */}
-                                {isAuthenticated && (
+                                {/* LMS (Dashboard) Link - Only show for Students/Non-EMS users */}
+                                {isAuthenticated && !["Super Admin", "Manager", "Employee"].includes(user?.accountType) && (
                                     <Link
                                         to="/dashboard"
                                         className={`text-sm font-semibold transition-colors duration-300 ${isActive('/dashboard')
@@ -230,7 +241,6 @@ export const Navbar = () => {
 
                         {/* Mobile/Tablet Controls */}
                         <div className="flex items-center gap-2 lg:hidden">
-
                             {/* User Avatar (Mobile - if logged in) */}
                             {isAuthenticated && (
                                 <Button
@@ -247,20 +257,22 @@ export const Navbar = () => {
                                 </Button>
                             )}
 
-                            {/* Mobile Menu Toggle Button */}
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                aria-label="Toggle menu"
-                                className="h-10 w-10 text-foreground/80 hover:bg-primary/10 transition-colors"
-                            >
-                                {mobileMenuOpen ? (
-                                    <X className="h-6 w-6 text-primary" />
-                                ) : (
-                                    <Menu className="h-6 w-6" />
-                                )}
-                            </Button>
+                            {/* Mobile Menu Toggle Button (General site only - Disabled in EMS mode) */}
+                            {!onToggleSidebar && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                    aria-label="Toggle menu"
+                                    className="h-10 w-10 text-foreground/80 hover:bg-primary/10 transition-colors"
+                                >
+                                    {mobileMenuOpen ? (
+                                        <X className="h-6 w-6 text-primary" />
+                                    ) : (
+                                        <Menu className="h-6 w-6" />
+                                    )}
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -312,8 +324,8 @@ export const Navbar = () => {
                                 </Link>
                             ))}
 
-                            {/* LMS (Dashboard) Link - Only show when authenticated */}
-                            {isAuthenticated && (
+                            {/* LMS (Dashboard) Link - Only show for Students/Non-EMS users */}
+                            {isAuthenticated && !["Super Admin", "Manager", "Employee"].includes(user?.accountType) && (
                                 <Link
                                     to="/dashboard"
                                     className={`block w-full rounded-xl px-4 py-4 text-base font-semibold transition-all duration-300 ease-in-out ${isActive('/dashboard')

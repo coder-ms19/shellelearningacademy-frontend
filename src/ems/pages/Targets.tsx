@@ -4,7 +4,7 @@ import { EmsDashboardSkeleton } from "@/ems/components/EmsDashboardSkeleton";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import { Target, TrendingUp, Award, IndianRupee, Loader2 } from "lucide-react";
+import { Target, TrendingUp, Award, IndianRupee, Loader2, RefreshCw, Calendar } from "lucide-react";
 import { cn } from "@/ems/lib/utils";
 import emsService from "@/service/ems.service";
 import { useSelector } from "react-redux";
@@ -33,7 +33,10 @@ const Targets = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isTargetOpen, setIsTargetOpen] = useState(false);
   const [targetData, setTargetData] = useState({ employeeId: "", amount: "" });
+  const [month, setMonth] = useState((new Date().getMonth() + 1).toString());
+  const [year, setYear] = useState(new Date().getFullYear().toString());
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   // @ts-ignore
   const { user } = useSelector((state: any) => state.auth);
@@ -41,16 +44,15 @@ const Targets = () => {
 
   useEffect(() => {
     fetchStaff();
-  }, [user]);
+  }, [user, month, year]);
 
   const fetchStaff = async () => {
     setIsLoading(true);
     try {
-      // If employee, maybe backend filters it? Or we filter here.
-      // Admin/Manager gets all. Employee gets self?
-      // existing endpoint /admin-ems/staff does filtering based on role?
-      // Let's assume it returns relevant users.
-      const response = await emsService.getAllStaff();
+      const response = await emsService.getAllStaff({
+        month: parseInt(month),
+        year: parseInt(year),
+      });
       if (response.success) {
         let users = response.users;
         // Filter out non-employees if necessary or just show everyone with performance stats
@@ -98,6 +100,32 @@ const Targets = () => {
     }
   };
 
+  const handleResetTargets = async () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to reset all targets for the current month to zero?",
+      )
+    )
+      return;
+
+    setIsResetting(true);
+    try {
+      const response = await emsService.resetTargets();
+      if (response.success) {
+        toast({ title: "Success", description: response.message });
+        fetchStaff();
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to reset",
+        variant: "destructive",
+      });
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   // Calculate totals
   const totalTarget = staff.reduce(
     (sum, s) => sum + (s.employeePerformance?.monthlyTarget || 0),
@@ -127,69 +155,129 @@ const Targets = () => {
             Targets & Commissions
           </h1>
           <p className="text-muted-foreground mt-1 text-sm sm:text-base">
-            Track sales targets and commission payouts
+            Track sales targets and commission payouts for{" "}
+            <span className="font-semibold text-primary">
+              {new Date(parseInt(year), parseInt(month) - 1).toLocaleString(
+                "default",
+                { month: "long", year: "numeric" },
+              )}
+            </span>
           </p>
         </div>
-        {(user?.accountType === "Manager" ||
-          user?.accountType === "Super Admin") && (
-          <Dialog open={isTargetOpen} onOpenChange={setIsTargetOpen}>
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <Target className="w-4 h-4" />
-                Set Targets
+
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Month/Year Filter */}
+          <div className="flex items-center gap-2 bg-muted/50 p-1 rounded-lg border border-border mr-2">
+            <Select value={month} onValueChange={setMonth}>
+              <SelectTrigger className="w-[110px] h-9 border-none bg-transparent focus:ring-0">
+                <SelectValue placeholder="Month" />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 12 }, (_, i) => (
+                  <SelectItem key={i + 1} value={(i + 1).toString()}>
+                    {new Date(2000, i).toLocaleString("default", {
+                      month: "long",
+                    })}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={year} onValueChange={setYear}>
+              <SelectTrigger className="w-[90px] h-9 border-none bg-transparent focus:ring-0">
+                <SelectValue placeholder="Year" />
+              </SelectTrigger>
+              <SelectContent>
+                {[2024, 2025, 2026].map((y) => (
+                  <SelectItem key={y} value={y.toString()}>
+                    {y}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {(user?.accountType === "Manager" ||
+            user?.accountType === "Super Admin") && (
+            <>
+              <Button
+                variant="outline"
+                className="gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
+                onClick={handleResetTargets}
+                disabled={isResetting}
+              >
+                {isResetting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <RefreshCw className="w-4 h-4" />
+                )}
+                <span className="hidden sm:inline">Reset Targets</span>
               </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Set Monthly Target</DialogTitle>
-                <DialogDescription>
-                  Assign sales target to an employee.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4 py-4">
-                <div>
-                  <Label>Employee</Label>
-                  <Select
-                    value={targetData.employeeId}
-                    onValueChange={(val) =>
-                      setTargetData({ ...targetData, employeeId: val })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Employee" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {staff.map((s) => (
-                        <SelectItem key={s._id} value={s._id}>
-                          {s.fullName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label>Target Amount</Label>
-                  <Input
-                    type="number"
-                    value={targetData.amount}
-                    onChange={(e) =>
-                      setTargetData({ ...targetData, amount: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button onClick={handleAssignTarget} disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    "Assign Target"
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        )}
+              <Dialog open={isTargetOpen} onOpenChange={setIsTargetOpen}>
+                <DialogTrigger asChild>
+                  <Button className="gap-2">
+                    <Target className="w-4 h-4" />
+                    Set Targets
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Set Monthly Target</DialogTitle>
+                    <DialogDescription>
+                      Assign sales target to an employee for {new Date(parseInt(year), parseInt(month) - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div>
+                      <Label>Employee</Label>
+                      <Select
+                        value={targetData.employeeId}
+                        onValueChange={(val) =>
+                          setTargetData({ ...targetData, employeeId: val })
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Employee" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {staff.map((s) => (
+                            <SelectItem key={s._id} value={s._id}>
+                              {s.fullName}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Target Amount (₹)</Label>
+                      <Input
+                        type="number"
+                        value={targetData.amount}
+                        onChange={(e) =>
+                          setTargetData({
+                            ...targetData,
+                            amount: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      onClick={handleAssignTarget}
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        "Assign Target"
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Summary Cards */}
@@ -252,8 +340,17 @@ const Targets = () => {
 
       {/* Individual Targets */}
       <div className="bg-card rounded-xl border border-border">
-        <div className="p-6 border-b border-border">
+        <div className="p-6 border-b border-border flex items-center justify-between">
           <h3 className="section-header">Individual Performance</h3>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/30 px-3 py-1 rounded-full">
+            <Calendar className="w-4 h-4" />
+            <span>
+              {new Date(parseInt(year), parseInt(month) - 1).toLocaleString(
+                "default",
+                { month: "long", year: "numeric" },
+              )}
+            </span>
+          </div>
         </div>
         <div className="divide-y divide-border">
           {isLoading ? (

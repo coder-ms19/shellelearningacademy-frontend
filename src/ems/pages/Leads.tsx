@@ -34,6 +34,7 @@ import {
   Loader2,
   UserPlus,
   ArrowRightLeft,
+  Trash2,
 } from "lucide-react";
 import { cn } from "@/ems/lib/utils";
 import emsService from "@/service/ems.service";
@@ -191,14 +192,26 @@ const Leads = () => {
         });
         fetchLeads();
       }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteLead = async (leadId: string) => {
+    if (!window.confirm("Are you sure you want to delete this lead?")) return;
+
+    try {
+      const response = await emsService.deleteLead(leadId);
+      if (response.success) {
+        toast({ title: "Success", description: "Lead deleted successfully" });
+        fetchLeads();
+      }
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.response?.data?.message || "Failed to create lead",
+        description: error.response?.data?.message || "Failed to delete lead",
         variant: "destructive",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -743,14 +756,24 @@ const Leads = () => {
                   </Button>
                   {(user?.accountType === "Super Admin" ||
                     user?.accountType === "Manager") && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => openAssignModal(lead)}
-                    >
-                      <UserPlus className="w-3.5 h-3.5" />
-                    </Button>
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => openAssignModal(lead)}
+                      >
+                        <UserPlus className="w-3.5 h-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => handleDeleteLead(lead._id)}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    </>
                   )}
                 </div>
               </div>

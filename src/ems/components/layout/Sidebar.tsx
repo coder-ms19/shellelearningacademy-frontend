@@ -68,8 +68,8 @@ export function Sidebar({
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
-      {/* Logo */}
-      <div className="h-16 flex items-center px-4 border-b border-sidebar-border flex-shrink-0">
+      {/* Logo - Hidden on desktop when attached to navbar */}
+      <div className="h-16 flex items-center px-4 border-b border-sidebar-border flex-shrink-0 md:hidden">
         <Link to="/" className="flex items-center gap-3 flex-1">
           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
             <GraduationCap className="w-5 h-5 text-primary-foreground" />
@@ -151,7 +151,7 @@ export function Sidebar({
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          "hidden md:flex fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border flex-col transition-all duration-300",
+          "hidden md:flex fixed left-0 top-16 z-30 h-[calc(100vh-4rem)] bg-sidebar border-r border-sidebar-border flex-col transition-all duration-300",
           collapsed ? "w-16" : "w-64",
         )}
       >

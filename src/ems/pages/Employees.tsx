@@ -45,6 +45,7 @@ import {
   Edit,
   Mail,
   Loader2,
+  Trash2,
 } from "lucide-react";
 import { cn } from "@/ems/lib/utils";
 import emsService from "@/service/ems.service";
@@ -129,6 +130,35 @@ const Employees = () => {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteEmployee = async (employeeId: string) => {
+    const isSA = user?.accountType === "Super Admin";
+    const actionPhrase = isSA ? "permanently delete" : "deactivate";
+
+    if (
+      !window.confirm(
+        `Are you sure you want to ${actionPhrase} this employee? This action cannot be undone.`
+      )
+    )
+      return;
+
+    try {
+      const response = await emsService.deleteUser(employeeId, isSA);
+      if (response.success) {
+        toast({
+          title: "Success",
+          description: response.message,
+        });
+        fetchEmployees();
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to delete employee",
+        variant: "destructive",
+      });
     }
   };
 
@@ -265,16 +295,7 @@ const Employees = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="gap-2 flex-1 sm:flex-none">
-              <Filter className="w-4 h-4" />
-              <span className="sm:inline">Filters</span>
-            </Button>
-            <Button variant="outline" className="gap-2 flex-1 sm:flex-none">
-              <Download className="w-4 h-4" />
-              <span className="sm:inline">Export</span>
-            </Button>
-          </div>
+          
         </div>
       </div>
 
@@ -389,27 +410,20 @@ const Employees = () => {
                       </span>
                     </TableCell>
                     <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
+                      <div className="flex items-center justify-end gap-1">
+                        {(user?.accountType === "Super Admin" || (user?.accountType === "Manager" && employee.accountType === "Employee")) && (
+                          <Button 
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8"
+                            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                            onClick={() => handleDeleteEmployee(employee._id)}
+                            title={user?.accountType === "Super Admin" ? "Delete permanently" : "Deactivate"}
                           >
-                            <MoreVertical className="w-4 h-4" />
+                            <Trash2 className="w-4 h-4" />
                           </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="bg-popover">
-                          <DropdownMenuItem className="gap-2">
-                            <Eye className="w-4 h-4" />
-                            View Profile
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="gap-2">
-                            <Edit className="w-4 h-4" />
-                            Edit
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                        )}
+                        
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

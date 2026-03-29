@@ -2,7 +2,7 @@ import axiosInstance from "./axiosInstance";
 
 class EmsService {
     // Staff Management
-    async getAllStaff(params?: { accountType?: string; active?: boolean; page?: number; limit?: number }) {
+    async getAllStaff(params?: { accountType?: string; active?: boolean; page?: number; limit?: number; month?: number; year?: number }) {
         try {
             const { data } = await axiosInstance.get("/admin-ems/staff", { params });
             return data;
@@ -69,6 +69,24 @@ class EmsService {
     async updateLead(leadId: string, updates: any) {
         try {
             const { data } = await axiosInstance.put(`/admin-ems/leads/${leadId}`, updates);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteLead(leadId: string) {
+        try {
+            const { data } = await axiosInstance.delete(`/admin-ems/leads/${leadId}`);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async resetTargets() {
+        try {
+            const { data } = await axiosInstance.post("/admin-ems/reset-targets");
             return data;
         } catch (error) {
             throw error;

@@ -53,22 +53,9 @@ export function Header({ onMenuClick }: HeaderProps) {
         <Menu className="w-5 h-5 text-muted-foreground" />
       </button>
 
-      {/* Search */}
-      <div className="relative flex-1 max-w-xs sm:max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input
-          placeholder="Search..."
-          className="pl-10 bg-muted/50 border-border focus:border-primary focus:ring-primary/20 text-sm"
-        />
-      </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-        {/* Notifications */}
-        <button className="relative p-2 rounded-lg hover:bg-muted transition-colors">
-          <Bell className="w-5 h-5 text-muted-foreground" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
-        </button>
 
         {/* User Menu */}
         <DropdownMenu>
