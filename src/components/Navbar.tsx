@@ -161,9 +161,9 @@ export const Navbar = ({ onToggleSidebar }: { onToggleSidebar?: () => void }) =>
                                     variant="ghost"
                                     size="icon"
                                     onClick={onToggleSidebar}
-                                    className="h-10 w-10 text-primary hover:bg-primary/10"
+                                    className="h-10 w-10 text-primary hover:bg-primary/10 lg:hidden"
                                 >
-                                    
+                                    <Menu className="h-6 w-6" />
                                 </Button>
                             )}
                             <Link to="/" className="flex items-center gap-2 transition-opacity duration-300 hover:opacity-90 group">
